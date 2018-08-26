@@ -1,0 +1,48 @@
+
+
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+xmlns:h="http://xmlns.jcp.org/jsf/html"
+xmlns:f="http://java.sun.com/jsf/core"
+xmlns:p="http://primefaces.org/ui"
+xmlns:ui="http://java.sun.com/jsf/facelets"
+template="#{layoutMB.template}">
+
+<ui:define name="head-end">
+<ui:param name="renderBreadCrumb" value="false"/>
+</ui:define>
+
+<ui:define name="title">
+<p:panel header="Cadastro de TAF" >
+<h:form>
+<h:panelGrid columns="5">
+
+<p:outputLabel for="txtTAF" value="TAF"/>
+<p:inputText id="txtTAF" required="true" style="10px"/>
+
+<p:selectCheckboxMenu label="Exercícios" style="10px" panelStyle="width:250px" required="true" >
+<f:selectItem itemLabel="Exercícios" style="10px" />
+</p:selectCheckboxMenu>
+
+<p:outputLabel for="data" value="Data" />
+<p:calendar id="data" pattern="dd/MM/yyyy" mask="99/99/9999" required="true" navigator="true" style="10px" />
+
+<p:commandButton value="Cadastrar" style="10px" />
+
+</h:panelGrid>
+</h:form>
+</p:panel>
+
+<h:form id="frmTbl">
+<p:dataTable id="tbl" reflow="true" rows="5" paginator="true" >
+
+<p:column headerText="TAF" />
+
+<p:column headerText="Data" />
+
+</p:dataTable>
+</h:form>
+
+</ui:define>
+
+</ui:composition>

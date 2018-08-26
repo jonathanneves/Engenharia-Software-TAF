@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui" xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+    <ul class="sidebar-menu tree" data-widget="tree">
+        <li>
+            <p:link outcome="/index.jsf" onclick="clearBreadCrumbs()">
+                <i class="fa fa-home"></i>
+                <span>Tela Inicial</span>
+            </p:link>
+        </li>
+        <li>
+            <p:link outcome="/ranking.jsf" >
+                <i class="fa fa-trophy "></i>
+                <span>Ranking</span>
+            </p:link>
+        </li>
+        <li class="header">
+            Cadastros
+        </li>
+        <li>
+            <p:link outcome="/cadastro-usuario.jsf">
+                <i class="fa fa-user"></i>
+                <span>Novo usuário</span>
+            </p:link>
+        </li>
+        <li>
+            <p:link outcome="/cadastro-exercicio.jsf">
+                <i class="fa fa-bicycle"></i>
+                <span>Novo exercício</span>
+            </p:link>
+        </li>
+        <li>
+            <p:link outcome="/cadastro-taf.jsf">
+                <i class="fa fa-clock-o"></i>
+                <span>Nova TAF</span>
+            </p:link>
+        </li>
+        <li>
+            <p:link outcome="/cadastro-pontos.jsf">
+                <i class="fa fa-users"></i>
+                <span>Pontuação por Aluno</span>
+            </p:link>
+        </li>
+        <li class="header">
+            Progressos
+        </li>
+        <li>
+            <p:link outcome="/desempenho-TAF.jsf">
+                <i class="fa fa-bar-chart "></i>
+                <span>Desempenho no TAF</span>
+            </p:link>
+        </li>
+        <li>
+            <p:link outcome="/acompanhamento-peso.jsf">
+                <i class="fa fa-link"></i>
+                <span>Acompanhamento de peso</span>
+            </p:link>
+        </li>
+
+    </ul>
+
+</ui:composition>

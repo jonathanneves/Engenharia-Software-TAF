@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui" xmlns:adm="http://github.com/adminfaces"
+                template="/WEB-INF/templates/template.xhtml">
+
+    <ui:define name="head-end">
+        <style type="text/css">
+            .ui-grid-row .ui-grid-col-2,
+            .ui-grid-row .ui-grid-col-10 {
+                padding: 0.5em 0;
+                margin-left: 10px;
+            }
+
+            .ui-orderlist .ui-orderlist-list {
+                height: auto;
+            }
+
+            .ui-orderlist .ui-grid-row .ui-grid-col-2,
+            .ui-orderlist .ui-grid-row .ui-grid-col-10 {
+                padding: 0;
+            }
+            .my-panel-grid tr td {
+			    padding: 3px;
+			}
+        </style>
+    </ui:define>
+
+    <ui:define name="title">
+       	Ranking
+    </ui:define>
+
+    <ui:define name="description">
+        Colocação dos participantes da TAF.
+    </ui:define>
+    
+    <ui:define name="body">
+        <f:metadata>
+        </f:metadata>
+
+ 		<p:messages id="msg" showDetail="true" closable="true" showSummary="true" />
+	
+		<h:form  id="frmTbl">
+				<div class="box box-primary">
+               		<div class="box-header with-border">
+               		
+	               		<h:panelGrid columns="3" id="cad" styleClass="my-panel-grid">
+							<p:outputLabel for="txtPermissao" value="Ranking por Data:" />
+	        				<p:selectOneMenu id="txtPermissao" value="#{tafController.taf.data}">
+					            <f:selectItem itemLabel="Selecione Data do TAF" itemValue="" />
+					            <f:selectItem itemLabel="25/08/2018" itemValue="25/08/2018" />
+					        </p:selectOneMenu>
+	
+					        <p:commandButton value="Visualizar Ranking" update="frmTbl:tbl" styleClass="btn-primary" icon="fa fa-angle-double-right"/>  
+					    </h:panelGrid>
+							
+						<p:dataTable id="tbl" var="u" value="#{usuarioController.usuarios}" emptyMessage="Sem Registro" 
+						reflow="true" rows="10" paginator="true"                     			 	                                 
+	                    paginatorPosition="bottom"	                                 
+	                    paginatorTemplate="{PáginaAtual}  {PrimeiraPáginaLink} {PáginaAnteriorLink} {PáginaLink} {PróximaPáginaLink} {ÚltimaPáginaLink} "
+	                    currentPageReportTemplate=""
+	                    rowsPerPageTemplate="5,10,15,20,30">	                    
+							<p:separator/>
+							
+							<p:column headerText="Aluno" sortBy="#{u.nome}" filterBy="#{u.nome}">
+						        <h:outputText value="#{u.nome}" />
+						    </p:column>
+						
+						 	<p:column headerText="Pontuação" sortBy="#{u.total}" >
+						        <h:outputText value="#{u.total}"/>
+						    </p:column>	     							    				    				    
+						</p:dataTable>	
+										
+					</div>
+				</div>
+		</h:form>
+	
+    </ui:define>
+
+</ui:composition>
