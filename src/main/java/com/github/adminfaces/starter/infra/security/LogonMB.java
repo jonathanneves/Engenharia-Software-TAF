@@ -29,13 +29,12 @@ import static com.github.adminfaces.starter.util.Utils.addDetailMessage;
 public class LogonMB extends AdminSession implements Serializable {
 
     private String currentUser;
-    private String email;
-    private String password;
+    private String cpf;
     private boolean remember;
 
 
     public void login() throws IOException {
-        currentUser = email;
+        currentUser = cpf;
         addDetailMessage("Usuário logado com sucesso");
         Faces.getExternalContext().getFlash().setKeepMessages(true);
         Faces.redirect("index.xhtml");
@@ -47,23 +46,15 @@ public class LogonMB extends AdminSession implements Serializable {
         return currentUser != null;
     }
 
-    public String getEmail() {
-        return email;
-    }
+    public String getCpf() {
+		return cpf;
+	}
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+	public void setCpf(String cpf) {
+		this.cpf = cpf;
+	}
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public boolean isRemember() {
+	public boolean isRemember() {
         return remember;
     }
 

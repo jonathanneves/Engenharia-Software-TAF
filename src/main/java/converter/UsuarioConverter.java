@@ -4,16 +4,16 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
-import model.Aluno;
+import model.Usuario;
 
 
-@FacesConverter("alunoConverter")
-public class AlunoConverter implements Converter {
+@FacesConverter("usuarioConverter")
+public class UsuarioConverter implements Converter {
 
 	@Override
 	public Object getAsObject(FacesContext facesContext, UIComponent uiComponent, String value) {
 		if(value != null && !value.isEmpty()) {
-			return (Aluno) uiComponent.getAttributes().get(value);
+			return (Usuario) uiComponent.getAttributes().get(value);
 		}
 		return null;
 	}
@@ -22,9 +22,9 @@ public class AlunoConverter implements Converter {
 	public String getAsString(FacesContext facesContext, UIComponent uiComponent, Object value) {
 		//Aluno a = (Aluno)value;
 		//return a.toString();
-		if (value instanceof Aluno) {
-			Aluno a = (Aluno) value;
-			if(a != null && a instanceof Aluno && a.getId() != null) {
+		if (value instanceof Usuario) {
+			Usuario a = (Usuario) value;
+			if(a != null && a instanceof Usuario && a.getId() != null) {
 				uiComponent.getAttributes().put( a.getId().toString(), a);
 				return a.getId().toString();
 			}

@@ -18,13 +18,10 @@ public class Usuario implements Serializable {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
 	@Column	private String nome;
-	@Column	private String login;
-	@Column	private String senha;
-	@Column	private String permissao;
-	@Column private String email;
-	@Column private double altura;
-	@Column private double peso;
-	@Column private Date data;
+	@Column private Date nascimento;
+	@Column private String sexo;
+	@Column private String permissao;
+	@Column private String cpf;
 	
 	public Integer getId() {
 		return id;
@@ -38,17 +35,23 @@ public class Usuario implements Serializable {
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-	public String getLogin() {
-		return login;
+	public Date getNascimento() {
+		return nascimento;
 	}
-	public void setLogin(String login) {
-		this.login = login;
+	public void setNascimento(Date nascimento) {
+		this.nascimento = nascimento;
 	}
-	public String getSenha() {
-		return senha;
+	public String getSexo() {
+		return sexo;
 	}
-	public void setSenha(String senha) {
-		this.senha = senha;
+	public void setSexo(String sexo) {
+		this.sexo = sexo;
+	}
+	public String getCpf() {
+		return cpf;
+	}
+	public void setCpf(String cpf) {
+		this.cpf = cpf;
 	}
 	public String getPermissao() {
 		return permissao;
@@ -60,31 +63,7 @@ public class Usuario implements Serializable {
 		return serialVersionUID;
 	}
 	
-	public String getEmail() {
-		return email;
-	}
-	public void setEmail(String email) {
-		this.email = email;
-	}
-	public double getAltura() {
-		return altura;
-	}
-	public void setAltura(double altura) {
-		this.altura = altura;
-	}
-	public double getPeso() {
-		return peso;
-	}
-	public void setPeso(double peso) {
-		this.peso = peso;
-	}
-	
-	public Date getData() {
-		return data;
-	}
-	public void setData(Date data) {
-		this.data = data;
-	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
