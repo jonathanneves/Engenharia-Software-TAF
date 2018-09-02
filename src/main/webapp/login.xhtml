@@ -82,11 +82,13 @@
                     <p:messages closable="true"/>
 
                     <div class="form-group has-feedback">
-                        <p:inputText value="#{logonMB.cpf}" styleClass="form-control" placeholder="Digite seu CPF"
-                                     required="true"
-                                     requiredMessage="CPF obrigatório"/>
+                        <p:inputMask value="#{logonMB.cpf}" styleClass="form-control" placeholder="Digite seu CPF"
+                        	mask="999.999.999-99"
+                            required="true"
+                            requiredMessage="CPF obrigatório"/>
                         <i class="fa fa-user form-control-feedback" ></i>
-                    </div>
+                    </div>	
+		        				
                     <div class="row">
                         <div class="col-xs-12">
                             <p:selectBooleanCheckbox itemLabel="Lembre-me" value="#{logonMB.remember}"/>

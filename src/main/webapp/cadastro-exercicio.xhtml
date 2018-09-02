@@ -41,19 +41,30 @@
  		<p:messages id="msg" showDetail="true" closable="true" showSummary="true" />
 	
 		<h:form  id="frmTbl">
-			<p:panel header="Exercício" >
-				<div class="box box-primary">
-               		<div class="box-header with-border">
+			<div class="box box-primary">
+               	<div class="box-header with-border">
 						<p:dataTable id="tbl" var="e" value="#{exercicioController.exercicios}" emptyMessage="Sem Registro" 
 						reflow="true" rows="10" paginator="true"                     			 	                                 
 	                    paginatorPosition="bottom"	                                 
-	                    paginatorTemplate="{PáginaAtual}  {PrimeiraPáginaLink} {PáginaAnteriorLink} {PáginaLink} {PróximaPáginaLink} {ÚltimaPáginaLink}"
 	                    currentPageReportTemplate=""
 	                    rowsPerPageTemplate="5,10,15,20,30">
 	                    
 							<f:facet name="header">
 								<p:commandButton value="Novo exercicio" oncomplete="PF('dlg').show();" 
 								styleClass="btn-primary" icon="fa fa-plus"/>
+								<p:commandButton value="Excluir" process="@this" actionListener="#{exercicioController.excluir}"
+								    update="frmCad:cad frmTbl:tbl"
+                                    icon="fa fa-trash"
+                                    styleClass="btn-danger" style="margin-left:5px">
+                                    <p:confirm header="Confirmação" message="Você deseja Excluir este Exercicio?" icon="ui-icon-alert"/>
+				    				<f:attribute name="exercicioExclui" value="#{u}"/>
+				    			 </p:commandButton>
+                                 <p:commandButton value="Editar" oncomplete="PF('dlg').show();"
+                                         actionListener="#{exercicioController.editar}" update="frmCad:cad"
+                                         process="@this"
+                                         icon="ui-icon-pencil" style="margin-left:5px">
+                                         <f:attribute name="exercicioEdita" value="#{u}"/>
+                                  </p:commandButton>
 							</f:facet>	
 							
 							<p:separator/>
@@ -62,11 +73,11 @@
 						        <h:outputText value="#{e.nome}" />
 						    </p:column>
 						 
-						 	<p:column headerText="Descrição" sortBy="#{e.descricao}">
+						 	<p:column headerText="Descrição">
 						        <h:outputText value="#{e.descricao}" />
 						    </p:column>
 						    				 
-						 	<p:column headerText="Tipo" sortBy="#{e.tipo}" >
+						 	<p:column headerText="Tipo">
 						        <h:outputText value="#{e.tipo}"/>
 						    </p:column>	     							    				    				    
 						</p:dataTable>	
@@ -77,7 +88,6 @@
 						</p:confirmDialog>
 					</div>
 				</div>
-			</p:panel>
 		</h:form>
 		
 		
@@ -95,7 +105,7 @@
 						<p:outputLabel for="txtTipo" value="Tipo:" />
         				<p:selectOneMenu id="txtTipo" value="#{exercicioController.exercicio.tipo}"
         					require="true" requiredMessage= "Tipo de exercício Obrigatório" appendTo="@this">
-				            <f:selectItem itemLabel="Selecione Tipo" itemValue="" />
+				            <f:selectItem itemLabel="Selecione o Tipo" itemValue="" />
 				            <f:selectItem itemLabel="1RM" itemValue="UmRM" />
 				            <f:selectItem itemLabel="Repetição Máxima" itemValue="RepMax" />
 				            <f:selectItem itemLabel="Volume de Treino" itemValue="VolTreino" />

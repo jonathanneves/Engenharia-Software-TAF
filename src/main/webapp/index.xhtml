@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 template="#{layoutMB.template}">
 
@@ -14,6 +16,41 @@
             <br/>
             <small>Desenvolvido pelos alunos da UNISUL do curso de Ciência da Computação </small>
         </h2>
+
+<h:form>
+    <div class="box box-primary">
+       	<div class="box-header with-border">
+    			<h3 style="margin-top:0">Proximos TAFs</h3>
+    			<p:panelGrid columns="3" layout="grid"> 
+			    <p:tree value="#{treeBasicView.root}" var="node" orientation="vertical">
+			        <p:treeNode>
+			            <h:outputText value="#{node}" />
+			        </p:treeNode>
+			    </p:tree>
+			    
+			     <p:tree value="#{treeBasicView.root2}" var="node" orientation="vertical">
+			        <p:treeNode>
+			            <h:outputText value="#{node}" />
+			        </p:treeNode>
+			    </p:tree>
+			    <p:tree value="#{treeBasicView.root2}" var="node" orientation="vertical">
+			        <p:treeNode>
+			            <h:outputText value="#{node}" />
+			        </p:treeNode>
+			    </p:tree>
+   			 </p:panelGrid>
+    	</div>
+	</div>
+ <!-- 
+    <h3>Destaque do mês</h3>
+    <p:tree value="#{treeBasicView.root}" var="node" dynamic="true" orientation="horizontal">
+        <p:treeNode>
+            <h:outputText value="#{node}" />
+        </p:treeNode>
+    </p:tree>
+     -->
+</h:form>
+
 
     </ui:define>
 

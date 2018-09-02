@@ -27,11 +27,11 @@
     </ui:define>
 
     <ui:define name="title">
-        Desempenho do TAF
+       	Ranking
     </ui:define>
 
     <ui:define name="description">
-        Acompanhe todo o seu progresso de pontuações dos TAFs participados.
+        Colocação dos participantes da TAF.
     </ui:define>
     
     <ui:define name="body">
@@ -41,36 +41,37 @@
  		<p:messages id="msg" showDetail="true" closable="true" showSummary="true" />
 	
 		<h:form  id="frmTbl">
-			<p:panel header="Média de pontuações" >
 				<div class="box box-primary">
                		<div class="box-header with-border">
-               				
-						<p:chart type="bar" model="#{tafController.barModel}" style="height:300px"/>
-						
-						<p:dataTable id="tbl" var="t" value="#{tafController.tafs}" emptyMessage="Sem Registro" 
+               		
+	               		<h:panelGrid columns="3" id="cad" styleClass="my-panel-grid">
+							<p:outputLabel for="txtPermissao" value="Ranking por Data:" />
+	        				<p:selectOneMenu id="txtPermissao" value="#{tafController.taf.data}">
+					            <f:selectItem itemLabel="Selecione Data do TAF" itemValue="" />
+					            <f:selectItem itemLabel="25/08/2018" itemValue="25/08/2018" />
+					        </p:selectOneMenu>
+	
+					        <p:commandButton value="Visualizar Ranking" update="frmTbl:tbl" styleClass="btn-primary" icon="fa fa-angle-double-right"/>  
+					    </h:panelGrid>
+							
+						<p:dataTable id="tbl" var="u" value="#{usuarioController.usuarios}" emptyMessage="Sem Registro" 
 						reflow="true" rows="10" paginator="true"                     			 	                                 
 	                    paginatorPosition="bottom"	                                 
 	                    currentPageReportTemplate=""
-	                    rowsPerPageTemplate="5,10,15,20,30">
-	                    
+	                    rowsPerPageTemplate="5,10,15,20,30">	                    
 							<p:separator/>
-								
-							<p:column headerText="TAF" sortBy="#{t.nome}">
-						        <h:outputText value="#{t.nome}" />
-						    </p:column>		
-						    			 
-						 	<p:column headerText="Data" sortBy="#{t.data}">
-						        <h:outputText value="#{t.data}" />
+							
+							<p:column headerText="Aluno" sortBy="#{u.nome}" filterBy="#{u.nome}">
+						        <h:outputText value="#{u.nome}" />
 						    </p:column>
-						    			 
-						 	<p:column headerText="Pontuação Total">
-						        <h:outputText value="#{t.total}"/>
+						
+						 	<p:column headerText="Pontuação" sortBy="#{u.total}" >
+						        <h:outputText value="#{u.total}"/>
 						    </p:column>	     							    				    				    
 						</p:dataTable>	
 										
 					</div>
 				</div>
-			</p:panel>
 		</h:form>
 	
     </ui:define>

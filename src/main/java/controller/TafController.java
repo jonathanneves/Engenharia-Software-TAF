@@ -118,10 +118,10 @@ public class TafController implements Serializable {
         barModel.setLegendPosition("ne");
          
         Axis xAxis = barModel.getAxis(AxisType.X);
-        xAxis.setLabel("Data");
+        xAxis.setLabel("Data da TAF");
          
         Axis yAxis = barModel.getAxis(AxisType.Y);
-        yAxis.setLabel("Pontos");
+        yAxis.setLabel("Média");
         yAxis.setMin(0);
         yAxis.setMax(200);
     }	

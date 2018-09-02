@@ -1,46 +1,70 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-xmlns:h="http://xmlns.jcp.org/jsf/html"
-xmlns:f="http://java.sun.com/jsf/core"
-xmlns:p="http://primefaces.org/ui"
-xmlns:ui="http://java.sun.com/jsf/facelets"
-template="#{layoutMB.template}">
+				xmlns:h="http://xmlns.jcp.org/jsf/html"
+				xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="#{layoutMB.template}">
 
-<ui:define name="head-end">
-<ui:param name="renderBreadCrumb" value="false"/>
-</ui:define>
+    <ui:define name="head-end">
+        <ui:param name="renderBreadCrumb" value="false"/>
+    </ui:define>
 
-<ui:define name="title">
-<p:panel header="Cadastro de TAF" >
-<h:form>
-<h:panelGrid columns="5">
+    <ui:define name="title">
+        Cadastro de TAF
+    </ui:define>
 
-<p:outputLabel for="txtTAF" value="TAF"/>
-<p:inputText id="txtTAF" required="true" style="10px"/>
+    <ui:define name="description">
+        Agendando novo Teste de Aptidão Física no sistema
+    </ui:define>
+    
+  	<ui:define name="body">
+        <f:metadata>
+        </f:metadata>
+	
+       	<div class="box box-primary">
+           	<div class="box-header with-border">
+				<h:form id="frmCad" enctype="multipart/form-data">
+					<h:panelGrid columns="2" id="cad" styleClass="my-panel-grid">
+												
+						<p:outputLabel for="txtTAF" value="TAF:" style="margin:5px"/>
+						<p:inputText id="txtTAF" required="true" style="margin:5px"/>						
 
-<p:selectCheckboxMenu label="Exercícios" style="10px" panelStyle="width:250px" required="true" >
-<f:selectItem itemLabel="Exercícios" style="10px" />
-</p:selectCheckboxMenu>
-
-<p:outputLabel for="data" value="Data" />
-<p:calendar id="data" pattern="dd/MM/yyyy" mask="99/99/9999" required="true" navigator="true" style="10px" />
-
-<p:commandButton value="Cadastrar" style="10px" />
-
-</h:panelGrid>
-</h:form>
-</p:panel>
-
-<h:form id="frmTbl">
-<p:dataTable id="tbl" reflow="true" rows="5" paginator="true" >
-
-<p:column headerText="TAF" />
-
-<p:column headerText="Data" />
-
-</p:dataTable>
-</h:form>
-
-</ui:define>
+						<p:outputLabel for="txtData" value="Data:" style="margin:5px"/>
+						<p:calendar id="txtData" pattern="dd/MM/yyyy" mask="99/99/9999" 
+						required="true" navigator="true" style="margin:5px"/>
+						
+						<p:outputLabel for="txtExercicio" value="Exercício:" style="margin:5px"/>	
+						<p:selectCheckboxMenu  id="txtExercicio" filter="true" label="Escolha os Exercícios" 
+						required="true" style="margin:5px" >
+							<f:selectItem itemLabel="Supino" />
+							<f:selectItem itemLabel="Abdominal" />
+							<f:selectItem itemLabel="Esteira" />
+						</p:selectCheckboxMenu>
+					
+						<p:commandButton value="Novo TAF" style="margin:5px" 
+							styleClass="btn-primary" icon="fa fa-plus"/>
+										
+						<p:commandButton value="Excluir TAF" process="@this" style="margin:5px"
+							    update="frmCad:cad frmTbl:tbl"
+		                        icon="fa fa-trash"
+		                        styleClass="btn-danger">
+		                       	<p:confirm header="Confirmação" message="Você deseja Excluir este taf?" icon="ui-icon-alert"/>
+						</p:commandButton>
+					</h:panelGrid>
+				</h:form>		
+	
+				<h:form id="frmTbl">
+					<p:dataTable id="tbl" reflow="true" rows="5" paginator="true" >						
+						<p:column headerText="TAF" />							
+						<p:column headerText="Data" />		
+						<p:column headerText="Exercícios" />					
+						</p:dataTable>
+				</h:form>
+			</div>
+		</div>
+	</ui:define>
+			
+		
 
 </ui:composition>

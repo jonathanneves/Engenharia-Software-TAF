@@ -27,16 +27,13 @@ import util.HibernateUtil;
 public class UsuarioController implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
-	private BarChartModel barModel;
-	
+		
 	private Usuario usuario;
 	private List<Usuario> usuarios;
 
 	@PostConstruct
 	public void inicializa() {
 		usuario = new Usuario(); 		
-		graficoPontos();
 		listarUsuarios();
 	}
 	
@@ -90,42 +87,6 @@ public class UsuarioController implements Serializable {
 			sessao.close();
 		}
 	}
-	
-	 private BarChartModel initBarModel() {
-	        BarChartModel model = new BarChartModel();
-	 
-	        ChartSeries peso = new ChartSeries();
-	        peso.setLabel("Peso");
-	        peso.set("20/05/2017", 80.50);
-	        peso.set("05/08/2017", 72.40);
-	        peso.set("26/02/2018", 68.20);
-	        peso.set("03/05/2018", 63.80);
-	        peso.set("25/08/2018", 58.10);	 
-	        peso.set("02/10/2018", 57.30);	 
-	        model.addSeries(peso);
-
-	        return model;
-	 }
-	 
-	 private void graficoPontos() {
-	        createBarModel();
-	 }
-	     
-	 private void createBarModel() {
-	     barModel = initBarModel();
-	      
-	     barModel.setTitle("Acompanhamento de Peso");
-	     barModel.setLegendPosition("ne");
-	      
-	     Axis xAxis = barModel.getAxis(AxisType.X);
-	     xAxis.setLabel("Data");
-	      
-	     Axis yAxis = barModel.getAxis(AxisType.Y);
-	     yAxis.setLabel("Peso");
-	     yAxis.setMin(0);
-	     yAxis.setMax(200);
-	 }	
-	 
 	 
 	public void editar(ActionEvent evt) {
 		usuario = (Usuario)evt.getComponent().getAttributes().get("usuarioEdita");
@@ -155,10 +116,6 @@ public class UsuarioController implements Serializable {
 
 	public void setUsuarios(List<Usuario> usuarios) {
 		this.usuarios = usuarios;
-	}
-
-	public BarChartModel getBarModel() {
-		return barModel;
 	}
 
 	public static long getSerialversionuid() {
