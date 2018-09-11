@@ -1,7 +1,6 @@
-package controller;
+package com.github.adminfaces.starter.service;
 
 import java.io.Serializable;
-
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -14,13 +13,9 @@ import javax.faces.event.ActionEvent;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.primefaces.model.chart.Axis;
-import org.primefaces.model.chart.AxisType;
-import org.primefaces.model.chart.BarChartModel;
-import org.primefaces.model.chart.ChartSeries;
+import com.github.adminfaces.starter.model.Usuario;
+import com.github.adminfaces.starter.util.HibernateUtil;
 
-import model.Usuario;
-import util.HibernateUtil;
 
 @ManagedBean //Classe controladora
 @ViewScoped
@@ -44,7 +39,6 @@ public class UsuarioController implements Serializable {
 			t = sessao.beginTransaction();
 			sessao.merge(usuario);		//merge = Salvar (Insert) Ele identifica o ID direto e ja edita
 			t.commit();
-			sessao.flush();
 			usuario = new Usuario();
 			addMessage("Cadastro", "Aluno(a) cadastrado(a) com sucesso");
 			listarUsuarios();
@@ -83,7 +77,7 @@ public class UsuarioController implements Serializable {
 			Criteria consulta = sessao.createCriteria(Usuario.class);	//Criteria = select (consulta)
 			usuarios = consulta.list();
 		} catch (Exception e) {
-			addMessage("ERRO", "Erro ao listar usuários");
+			addMessage("ERRO", "Erro ao listar alunos");
 		} finally {
 			sessao.close();
 		}

@@ -23,11 +23,6 @@
             .my-panel-grid tr td {
 			    padding: 3px;
 			}
-			@media screen and (max-width: 40em) {
-		    	.ui-dialog.ui-dialog-responsive {
-		        	width: 90% !important;
-		    	}
-			}
         </style>
     </ui:define>
 
@@ -46,11 +41,13 @@
  		<p:messages id="msg" showDetail="true" closable="true" showSummary="true" />
 	
 		<h:form  id="frmTbl">
+			<p:panel header="Cadastro de Usuário" >
 				<div class="box box-primary">
                		<div class="box-header with-border">
 						<p:dataTable id="tbl" var="u" value="#{usuarioController.usuario}" emptyMessage="Sem Registro" 
 						reflow="true" rows="10" paginator="true"                     			 	                                 
-	                    paginatorPosition="bottom"	                                 	                   
+	                    paginatorPosition="bottom"	                                 
+	                    paginatorTemplate="{PáginaAtual}  {PrimeiraPáginaLink} {PáginaAnteriorLink} {PáginaLink} {PróximaPáginaLink} {ÚltimaPáginaLink}"
 	                    currentPageReportTemplate=""
 	                    rowsPerPageTemplate="5,10,15,20,30">
 				
@@ -60,14 +57,14 @@
 								<p:commandButton value="Excluir" process="@this" actionListener="#{usuarioController.excluir}"
 								    update="frmCad:cad frmTbl:tbl"
                                     icon="fa fa-trash"
-                                    styleClass="btn-danger" style="margin-left:5px">
+                                    styleClass="btn-danger">
                                     <p:confirm header="Confirmação" message="Você deseja Excluir este Usuario?" icon="ui-icon-alert"/>
 				    				<f:attribute name="usuarioExclui" value="#{u}"/>
 				    			 </p:commandButton>
                                  <p:commandButton value="Editar" oncomplete="PF('dlg').show();"
                                          actionListener="#{usuarioController.editar}" update="frmCad:cad"
                                          process="@this"
-                                         icon="ui-icon-pencil" style="margin-left:5px">
+                                         icon="ui-icon-pencil">
                                          <f:attribute name="usuarioEdita" value="#{u}"/>
                                   </p:commandButton>
 							</f:facet>	
@@ -79,16 +76,16 @@
 							
 							<p:separator/>
 							
-							<p:column headerText="Nome" sortBy="#{u.nome}" filterBy="#{u.nome}">
-						        <h:outputText value="#{u.nome}" />
+							<p:column headerText="Nome" sortBy="#{u.usuario}" filterBy="#{a.usuario}">
+						        <h:outputText value="#{u.usuario}" />
 						    </p:column>
 						 
 							<p:column headerText="Permissão" sortBy="#{u.permissao}">
 						        <h:outputText value="#{u.permissao}" />
 						    </p:column>	
 						    	
-						    <p:column headerText="CPF" >
-						        <h:outputText value="#{u.cpf}" />
+						    <p:column headerText="E-mail">
+						        <h:outputText value="#{u.email}" />
 						    </p:column>			
 						    		    				 
 						</p:dataTable>
@@ -98,54 +95,65 @@
 						</p:confirmDialog>
 					</div>
 				</div>
+			</p:panel>
 		</h:form>		
 		
 		<p:dialog header="Cadastro de Usuários" widgetVar="dlg" 
-		resizable="false" draggable="false" modal="false" closable="true" height="auto" width="auto" position="center">
+		resizable="false" draggable="false" modal="true" closable="false">
 			<h:form id="frmCad" enctype="multipart/form-data">
 			    <div class="ui-g ui-fluid">
-					<h:panelGrid columns="2" id="cad" styleClass="my-panel-grid"> 
+					<h:panelGrid columns="4" id="cad" styleClass="my-panel-grid"> 
 						
 						<p:outputLabel for="txtNome" value="Nome:"/>
 						<p:inputText id="txtNome" value="#{usuarioController.usuario.nome}"
+						 style="width:auto"
 						 required="true"
 						 requiredMessage="Nome Obrigatório"/>			 	
 	        			
 	        			<p:outputLabel for="txtPermissao" value="Permissão:" />
         				<p:selectOneMenu id="txtPermissao" value="#{usuarioController.usuario.permissao}"
-        					require="true" requiredMessage= "Permissão de Usuário Obrigatória">
+        					require="true" requiredMessage= "Permissão de Usuário Obrigatória" appendTo="@this">
 				            <f:selectItem itemLabel="Selecione Permissão" itemValue="" />
 				            <f:selectItem itemLabel="Professor" itemValue="professor" />
 				            <f:selectItem itemLabel="Aluno" itemValue="aluno" />
 				        </p:selectOneMenu>	
 				        
-				        <p:outputLabel for="txtCPF" value="CPF:"/>
-						<p:inputMask id="txtCPF" value="#{usuarioController.usuario.cpf}"
-						 mask="999.999.999-99"
+	        			<p:outputLabel for="txtLogin" value="Login:"/>
+						<p:inputText id="txtLogin" value="#{usuarioController.usuario.login}"
+						 style="width:auto"
 						 required="true"
-						 requiredMessage="CPF Obrigatório"/>		
-		        				
-	        			<p:outputLabel for="txtSexo" value="Sexo:" />
-        				<p:selectOneMenu id="txtSexo" value="#{usuarioController.usuario.sexo}"
-        					require="true" requiredMessage= "Sexo de Usuário Obrigatória">
-				            <f:selectItem itemLabel="Selecione o Sexo" itemValue="" />
-				            <f:selectItem itemLabel="Masculino" itemValue="M" />
-				            <f:selectItem itemLabel="Feminino" itemValue="F" />
-				            <f:selectItem itemLabel="Outros" itemValue="O" />
-				        </p:selectOneMenu>	
-		        			
-		        		<p:outputLabel for="txtNascimento" value="Data de Nascimento:" />
-		       			<p:calendar id="txtNascimento" value="#{usuarioController.usuario.nascimento}" pattern="dd/MM/yyyy" 
-		       			locale="pt" navigator="true"   
-		       		    mask="99/99/9999"
-						required="true"
-						yearRange="c-100:c+0"
-						requiredMessage="Data de nascimento obrigatório"/>								 								 					     				        					 																   	        			
+						 requiredMessage="Login Obrigatório"/>		
+	        			
+	        			<p:outputLabel for="txtAltura" value="Altura (m):"/>
+						<p:inputMask id="txtAltura" value="#{usuarioController.usuario.altura}"
+							mask="9.99"
+							required="true"
+							requiredMessage="Altura obrigratória"/>   
+										 												  		 	
+				       	<p:outputLabel for="txtSenha" value="Senha: " />
+       				   	<p:password id="txtSenha" value="#{usuarioController.usuario.senha}" 
+       					 required="true"
+						 requiredMessage="Senha Obrigatória"/>	
+						 				       
+        				<p:outputLabel for="txtPeso" value="Peso (Kg):"/>
+						<p:inputMask id="txtPeso" value="#{usuarioController.usuario.peso}"
+							required="true"
+							requiredMessage="Peso obrigratório"/>   						 					     				        
+					 				 
+					    <p:outputLabel for="txtEmail" value="Email:"/>
+						<p:inputText id="txtEmail" value="#{usuarioController.usuario.email}"
+							 style="width:auto"
+							 required="true"
+							 requiredMessage= "Email Obrigatório"
+							 validatorMessage= "Cadastre um email válido">
+							 <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+						</p:inputText>					
+												   	        			
 					</h:panelGrid>   
 				</div>
 				    
-				<p:commandButton value = "Cadastrar" actionListener="#{usuarioController.salvar}" 
-			         oncomplete="PF('dlg').hide();" update="frmTbl:tbl frmCad:cad"
+				<p:commandButton value = "Cadastrar" actionListener="#{usarioController.salvar}" 
+			         oncomplete="PF('dlg').hide();" update="frmTbl:tbl msg frmCad:cad"
 			         style="padding:5px; margin:5px" styleClass="btn-primary" icon="fa fa-plus"/>
 			    <p:commandButton value = "Cancelar" oncomplete="PF('dlg').hide();" style="padding:5px; margin:5px"/>
 			</h:form> 

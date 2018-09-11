@@ -1,16 +1,15 @@
-package model;
+package com.github.adminfaces.starter.model;
 
 import java.io.Serializable;
-import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+
 @Entity
-public class Usuario implements Serializable {
+public class Exercicio implements Serializable {
 	
 	private static final long serialVersionUID = 1L; 
 	
@@ -18,10 +17,8 @@ public class Usuario implements Serializable {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
 	@Column	private String nome;
-	@Column private Date nascimento;
-	@Column private String sexo;
-	@Column private String permissao;
-	@Column private String cpf;
+	@Column private String descricao;
+	@Column private String tipo;
 	
 	public Integer getId() {
 		return id;
@@ -35,35 +32,22 @@ public class Usuario implements Serializable {
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-	public Date getNascimento() {
-		return nascimento;
+	public String getDescricao() {
+		return descricao;
 	}
-	public void setNascimento(Date nascimento) {
-		this.nascimento = nascimento;
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
 	}
-	public String getSexo() {
-		return sexo;
+	public String getTipo() {
+		return tipo;
 	}
-	public void setSexo(String sexo) {
-		this.sexo = sexo;
+	public void setTipo(String tipo) {
+		this.tipo = tipo;
 	}
-	public String getCpf() {
-		return cpf;
-	}
-	public void setCpf(String cpf) {
-		this.cpf = cpf;
-	}
-	public String getPermissao() {
-		return permissao;
-	}
-	public void setPermissao(String permissao) {
-		this.permissao = permissao;
-	}
+	
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-	
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -79,7 +63,7 @@ public class Usuario implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Usuario other = (Usuario) obj;
+		Exercicio other = (Exercicio) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
@@ -87,4 +71,8 @@ public class Usuario implements Serializable {
 			return false;
 		return true;
 	}
+
+	
+
+	
 }

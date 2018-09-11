@@ -9,7 +9,8 @@
 
 		<!-- Configurações de Conexão com o Banco de Dados -->
 		<property name="connection.driver_class">com.mysql.jdbc.Driver</property>
-		<property name="connection.url">jdbc:mysql://192.168.0.115/TAF</property>
+		<!-- <property name="connection.url">jdbc:mysql://localhost/tafsistema</property> -->
+		<property name="connection.url">jdbc:mysql://localhost:3306/tafsistema</property>
 		<property name="connection.username">root</property>
 		<property name="connection.password">oracle</property>
 
@@ -30,10 +31,10 @@
 
 		<!-- Cria as tabelas do banco de dados -->
 		<property name="hbm2ddl.auto">create</property>
-		
+		<property name="hibernate.show_sql">true</property>
+		<property name="hibernate.format_sql">true</property>
 		<!-- Mapeamento das entidades INSIRA TODAS AS CLASSES --> 
- 		<mapping class="model.Usuario"/> 
- 		<mapping class="model.Exercicio"/>
+ 		<mapping class="com.github.adminfaces.starter.model.Usuario"/> 
 	</session-factory>
 
 </hibernate-configuration>
