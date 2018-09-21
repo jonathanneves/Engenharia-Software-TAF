@@ -48,7 +48,7 @@
 		<h:form  id="frmTbl">
 				<div class="box box-primary">
                		<div class="box-header with-border">
-						<p:dataTable id="tbl" var="u" value="#{usuarioController.usuario}" emptyMessage="Sem Registro" 
+						<p:dataTable id="tbl" var="u" value="#{usuarioController.usuarios}" emptyMessage="Sem Registro" 
 						reflow="true" rows="10" paginator="true"                     			 	                                 
 	                    paginatorPosition="bottom"	                                 	                   
 	                    currentPageReportTemplate=""
@@ -89,10 +89,10 @@
 						    	
 						    <p:column headerText="CPF" >
 						        <h:outputText value="#{u.cpf}" />
-						    </p:column>			
-						    		    				 
+						    </p:column>	
+						    					 
 						</p:dataTable>
-						<p:confirmDialog global="true" showEffect="fade" hideEffect="explode">
+						<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
 							<p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
 							<p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
 						</p:confirmDialog>

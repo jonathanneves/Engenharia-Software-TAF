@@ -1,6 +1,7 @@
-package controller;
+package com.github.adminfaces.starter.controller;
 
 import java.io.Serializable;
+
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -11,8 +12,8 @@ import javax.faces.event.ActionEvent;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import model.Exercicio;
-import util.HibernateUtil;
+import com.github.adminfaces.starter.model.Exercicio;
+import com.github.adminfaces.starter.util.HibernateUtil;
 
 @ManagedBean //Classe controladora
 @ViewScoped

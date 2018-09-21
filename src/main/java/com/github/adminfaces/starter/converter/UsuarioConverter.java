@@ -1,11 +1,10 @@
-package converter;
+package com.github.adminfaces.starter.converter;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
-import model.Usuario;
-
+import com.github.adminfaces.starter.model.Usuario;
 
 @FacesConverter("usuarioConverter")
 public class UsuarioConverter implements Converter {

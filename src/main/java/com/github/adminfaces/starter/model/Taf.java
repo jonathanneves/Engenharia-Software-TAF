@@ -1,6 +1,8 @@
-package model;
+package com.github.adminfaces.starter.model;
 
 import java.io.Serializable;
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,56 +10,43 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-public class Endereco implements Serializable {
-
+public class Taf implements Serializable {
+	
 	private static final long serialVersionUID = 1L; 
 	
 	@Id		
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
-	@Column private String rua;
-	@Column private Integer ruaNumero;
-	@Column private String Bairro;
-	@Column private String Cidade;
-	@Column(length=6)private String uf;
+	@Column private String nome;
+	@Column	private Date data;
+	@Column private double pontos;
+	
 	public Integer getId() {
 		return id;
 	}
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	public String getRua() {
-		return rua;
+	public String getNome() {
+		return nome;
 	}
-	public void setRua(String rua) {
-		this.rua = rua;
+	public void setNome(String nome) {
+		this.nome = nome;
 	}
-	public Integer getRuaNumero() {
-		return ruaNumero;
+	public Date getData() {
+		return data;
 	}
-	public void setRuaNumero(Integer ruaNumero) {
-		this.ruaNumero = ruaNumero;
-	}
-	public String getBairro() {
-		return Bairro;
-	}
-	public void setBairro(String bairro) {
-		Bairro = bairro;
-	}
-	public String getCidade() {
-		return Cidade;
-	}
-	public void setCidade(String cidade) {
-		Cidade = cidade;
-	}
-	public String getUf() {
-		return uf;
-	}
-	public void setUf(String uf) {
-		this.uf = uf;
+	public void setData(Date data) {
+		this.data = data;
 	}
 	public static long getSerialversionuid() {
 		return serialVersionUID;
+	}
+	public double getPontos() {
+		return pontos;
+	}
+	public void setPontos(double pontos) {
+		this.pontos = pontos;
 	}
 	@Override
 	public int hashCode() {
@@ -74,7 +63,7 @@ public class Endereco implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Endereco other = (Endereco) obj;
+		Taf other = (Taf) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
@@ -82,4 +71,6 @@ public class Endereco implements Serializable {
 			return false;
 		return true;
 	}
+
+	
 }

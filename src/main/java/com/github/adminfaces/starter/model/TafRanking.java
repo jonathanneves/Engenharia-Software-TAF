@@ -1,9 +1,10 @@
-package model;
+package com.github.adminfaces.starter.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import model.Stats;
+
+import com.github.adminfaces.starter.model.Stats;
  
 public class TafRanking implements Serializable {
  

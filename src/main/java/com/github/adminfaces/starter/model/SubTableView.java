@@ -1,11 +1,12 @@
-package model;
+package com.github.adminfaces.starter.model;
 
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
-import model.TafRanking;
-import model.Stats;
+
+import com.github.adminfaces.starter.model.Stats;
+import com.github.adminfaces.starter.model.TafRanking;
 
  
 @ManagedBean(name="dtSubTableView")

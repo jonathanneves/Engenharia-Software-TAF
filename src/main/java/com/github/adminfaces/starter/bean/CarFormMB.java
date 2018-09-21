@@ -4,8 +4,9 @@
  */
 package com.github.adminfaces.starter.bean;
 
+import com.github.adminfaces.starter.controller.CarService;
 import com.github.adminfaces.starter.model.Car;
-import com.github.adminfaces.starter.service.CarService;
+
 import org.omnifaces.cdi.ViewScoped;
 import org.omnifaces.util.Faces;
 

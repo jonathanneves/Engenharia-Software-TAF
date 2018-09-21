@@ -1,4 +1,4 @@
-package model;
+package com.github.adminfaces.starter.model;
  
 import java.io.Serializable;
 import javax.annotation.PostConstruct;

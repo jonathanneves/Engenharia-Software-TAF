@@ -1,4 +1,4 @@
-package controller;
+package com.github.adminfaces.starter.controller;
 
 import java.io.Serializable;
 
@@ -19,8 +19,8 @@ import org.primefaces.model.chart.AxisType;
 import org.primefaces.model.chart.BarChartModel;
 import org.primefaces.model.chart.ChartSeries;
 
-import model.Taf;
-import util.HibernateUtil;
+import com.github.adminfaces.starter.model.Taf;
+import com.github.adminfaces.starter.util.HibernateUtil;
 
 @ManagedBean //Classe controladora
 @ViewScoped

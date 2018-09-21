@@ -1,4 +1,4 @@
-package com.github.adminfaces.starter.service;
+package com.github.adminfaces.starter.controller;
 
 import java.io.Serializable;
 import java.util.List;
@@ -9,8 +9,10 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaQuery;
 
-import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import com.github.adminfaces.starter.model.Usuario;
@@ -21,11 +23,14 @@ import com.github.adminfaces.starter.util.HibernateUtil;
 @ViewScoped
 public class UsuarioController implements Serializable {
 
+	@PersistenceContext
+	private EntityManager em;
+	
 	private static final long serialVersionUID = 1L;
 		
 	private Usuario usuario;
 	private List<Usuario> usuarios;
-
+	
 	@PostConstruct
 	public void inicializa() {
 		usuario = new Usuario(); 		
@@ -70,19 +75,30 @@ public class UsuarioController implements Serializable {
 		}
 	}
 	
-	@SuppressWarnings("unchecked")	//ADD WARNING para tirar o erro de consulta.list()
+	//@SuppressWarnings("unchecked")	//ADD WARNING para tirar o erro de consulta.list()
 	public void listarUsuarios() {
 		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
 		try {
-			Criteria consulta = sessao.createCriteria(Usuario.class);	//Criteria = select (consulta)
-			usuarios = consulta.list();
+			CriteriaQuery<Usuario> cq = sessao.getCriteriaBuilder().createQuery(Usuario.class);
+			cq.from(Usuario.class);
+			usuarios = sessao.createQuery(cq).getResultList();
+			for (Usuario usuarioName : usuarios) {
+			    System.out.println("Usuario details : "+usuarioName.getNome()+" -- "+usuarioName.getCpf());   
+			}   
+			//CriteriaBuilder builder = sessao.getCriteriaBuilder();
+			//CriteriaQuery<Usuario> criteria = builder.createQuery(Usuario.class);
+			//Criteria consulta = sessao.createCriteria(Usuario.class);	//Criteria = select (consulta)
+			 //TypedQuery<Usuario> query = em.createQuery("select * from usuario", Usuario.class);
+			 //usuarios = query.getResultList();
+			//usuarios = sessao.createQuery(criteria).getResultList();
+			//usuarios = criteria.getResultList();
 		} catch (Exception e) {
-			addMessage("ERRO", "Erro ao listar alunos");
+			addMessage("ERRO", "Erro ao listar usuários");
 		} finally {
 			sessao.close();
 		}
 	}
-	 
+		     
 	public void editar(ActionEvent evt) {
 		usuario = (Usuario)evt.getComponent().getAttributes().get("usuarioEdita");
 	}

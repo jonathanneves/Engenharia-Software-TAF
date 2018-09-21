@@ -1,5 +1,7 @@
 package com.github.adminfaces.starter.infra.security;
 
+import com.github.adminfaces.starter.controller.UsuarioController;
+import com.github.adminfaces.starter.model.Usuario;
 import com.github.adminfaces.template.session.AdminSession;
 import org.omnifaces.util.Faces;
 
@@ -32,17 +34,15 @@ public class LogonMB extends AdminSession implements Serializable {
     private String cpf;
     private boolean remember;
 
-
-    public void login() throws IOException {
-        currentUser = cpf;
-        addDetailMessage("Usuário logado com sucesso");
-        Faces.getExternalContext().getFlash().setKeepMessages(true);
-        Faces.redirect("index.xhtml");
+    public void login() throws IOException {	
+		currentUser = cpf;
+		addDetailMessage("Usuário logado com sucesso");
+		Faces.getExternalContext().getFlash().setKeepMessages(true);
+		Faces.redirect("index.xhtml");
     }
 
     @Override
     public boolean isLoggedIn() {
-
         return currentUser != null;
     }
 
@@ -51,7 +51,7 @@ public class LogonMB extends AdminSession implements Serializable {
 	}
 
 	public void setCpf(String cpf) {
-		this.cpf = cpf;
+		this.cpf = cpf;		
 	}
 
 	public boolean isRemember() {
