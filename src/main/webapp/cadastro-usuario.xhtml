@@ -48,7 +48,9 @@
 		<h:form  id="frmTbl">
 				<div class="box box-primary">
                		<div class="box-header with-border">
-						<p:dataTable id="tbl" var="u" value="#{usuarioController.usuarios}" emptyMessage="Sem Registro" 
+						<p:dataTable id="tbl" var="u" value="#{usuarioController.usuarios}" 
+						selection="#{usuarioController.usuarioSelecionado}"
+						emptyMessage="Sem Registro" 
 						reflow="true" rows="10" paginator="true"                     			 	                                 
 	                    paginatorPosition="bottom"	                                 	                   
 	                    currentPageReportTemplate=""
@@ -57,26 +59,8 @@
 							<f:facet name="header">
 								<p:commandButton value="Novo Usuario" oncomplete="PF('dlg').show();" 
 								styleClass="btn-primary" icon="fa fa-plus"/>
-								<p:commandButton value="Excluir" process="@this" actionListener="#{usuarioController.excluir}"
-								    update="frmCad:cad frmTbl:tbl"
-                                    icon="fa fa-trash"
-                                    styleClass="btn-danger" style="margin-left:5px">
-                                    <p:confirm header="Confirmação" message="Você deseja Excluir este Usuario?" icon="ui-icon-alert"/>
-				    				<f:attribute name="usuarioExclui" value="#{u}"/>
-				    			 </p:commandButton>
-                                 <p:commandButton value="Editar" oncomplete="PF('dlg').show();"
-                                         actionListener="#{usuarioController.editar}" update="frmCad:cad"
-                                         process="@this"
-                                         icon="ui-icon-pencil" style="margin-left:5px">
-                                         <f:attribute name="usuarioEdita" value="#{u}"/>
-                                  </p:commandButton>
 							</f:facet>	
-							
-							<p:confirmDialog global="true" showEffect="fade" hideEffect="explode">
-								<p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
-								<p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
-							</p:confirmDialog>
-							
+												
 							<p:separator/>
 							
 							<p:column headerText="Nome" sortBy="#{u.nome}" filterBy="#{u.nome}">
@@ -90,6 +74,17 @@
 						    <p:column headerText="CPF" >
 						        <h:outputText value="#{u.cpf}" />
 						    </p:column>	
+						    
+							<p:column headerText="Opções" exportable="false" style="width:auto;text-align:center">
+				    			<p:commandButton icon="ui-icon-pencil" actionListener="#{usuarioController.editar}" 
+				    	 		oncomplete="PF('dlg').show();" update="frmCad:cad">
+				    				<f:attribute name="usuarioEdita" value="#{u}"/>		    		
+				    			</p:commandButton>
+				    			<p:commandButton icon="ui-icon-trash" actionListener="#{usuarioController.excluir}" update="frmCad:cad frmTbl:tbl">
+				    				<p:confirm header="Confirmação" message="Você deseja Excluir este Usuario?" icon="ui-icon-alert"/>
+				    				<f:attribute name="usuarioExclui" value="#{u}"/>		    		
+				    			</p:commandButton>
+				  		  </p:column>
 						    					 
 						</p:dataTable>
 						<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">

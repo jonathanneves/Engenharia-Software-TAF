@@ -23,13 +23,11 @@ import com.github.adminfaces.starter.util.HibernateUtil;
 @ViewScoped
 public class UsuarioController implements Serializable {
 
-	@PersistenceContext
-	private EntityManager em;
-	
 	private static final long serialVersionUID = 1L;
 		
 	private Usuario usuario;
 	private List<Usuario> usuarios;
+	private Usuario usuarioSelecionado;
 	
 	@PostConstruct
 	public void inicializa() {
@@ -131,5 +129,13 @@ public class UsuarioController implements Serializable {
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
+	}
+
+	public Usuario getUsuarioSelecionado() {
+		return usuarioSelecionado;
+	}
+
+	public void setUsuarioSelecionado(Usuario usuarioSelecionado) {
+		this.usuarioSelecionado = usuarioSelecionado;
 	}
 }

@@ -35,12 +35,12 @@ public class LogonMB extends AdminSession implements Serializable {
     private boolean remember;
 
     public void login() throws IOException {	
-		currentUser = cpf;
-		addDetailMessage("Usuário logado com sucesso");
-		Faces.getExternalContext().getFlash().setKeepMessages(true);
-		Faces.redirect("index.xhtml");
+    	currentUser = cpf;
+    	addDetailMessage("Usuário logado com sucesso");
+    	Faces.getExternalContext().getFlash().setKeepMessages(true);
+    	Faces.redirect("index.xhtml");
     }
-
+    
     @Override
     public boolean isLoggedIn() {
         return currentUser != null;
