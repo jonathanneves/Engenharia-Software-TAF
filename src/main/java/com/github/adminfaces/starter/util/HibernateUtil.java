@@ -5,6 +5,8 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 
+import com.github.adminfaces.starter.model.Usuario;
+
 //import com.github.adminfaces.starter.model.Usuario;
 
 public class HibernateUtil {
@@ -18,7 +20,7 @@ public class HibernateUtil {
 		try {
 			
 			Configuration configuracao = new Configuration().configure();
-			//configuracao.addAnnotatedClass(Usuario.class);
+			configuracao.addAnnotatedClass(Usuario.class);
 			ServiceRegistry registro = new StandardServiceRegistryBuilder().applySettings(configuracao.getProperties()).build();
 			
 			SessionFactory fabrica = configuracao.buildSessionFactory(registro);

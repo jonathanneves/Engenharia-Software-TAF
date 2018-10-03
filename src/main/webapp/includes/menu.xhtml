@@ -16,38 +16,32 @@
                 <span>Ranking</span>
             </p:link>
         </li>
-        <li class="header">
-            Cadastros
+        <xp:spam class="header">
+        	<h:outputText value="Cadastros" rendered="#{logonMB.isProfessor()}"/>
         </li>
         <li>
-            <p:link outcome="/cadastro-usuario.jsf">
+            <p:link outcome="/cadastro-usuario.jsf" rendered="#{logonMB.isProfessor()}">
                 <i class="fa fa-user"></i>
                 <span>Novo usuário</span>
             </p:link>
         </li>
         <li>
-            <p:link outcome="/cadastro-exercicio.jsf">
-                <i class="fa fa-bicycle"></i>
-                <span>Novo exercício</span>
-            </p:link>
-        </li>
-        <li>
-            <p:link outcome="/cadastro-taf.jsf">
+            <p:link outcome="/cadastro-taf.jsf" rendered="#{logonMB.isProfessor()}">
                 <i class="fa fa-clock-o"></i>
                 <span>Novo TAF</span>
             </p:link>
         </li>
         <li>
-            <p:link outcome="/cadastro-pontos.jsf">
+            <p:link outcome="/cadastro-pontos.jsf" rendered="#{logonMB.isProfessor()}">
                 <i class="fa fa-users"></i>
                 <span>Pontuação por Aluno</span>
             </p:link>
         </li>
         <li class="header">
-            Progressos
+        	<h:outputText value="Progresso" rendered="#{logonMB.isAluno()}"/>
         </li>
         <li>
-            <p:link outcome="/desempenho-TAF.jsf">
+            <p:link outcome="/desempenho-TAF.jsf" rendered="#{logonMB.isAluno()}">
                 <i class="fa fa-bar-chart "></i>
                 <span>Desempenho no TAF</span>
             </p:link>

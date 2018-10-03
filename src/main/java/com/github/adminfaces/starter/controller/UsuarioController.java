@@ -9,8 +9,6 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaQuery;
 
 import org.hibernate.Session;
@@ -29,10 +27,14 @@ public class UsuarioController implements Serializable {
 	private List<Usuario> usuarios;
 	private Usuario usuarioSelecionado;
 	
+    /*private EntityManagerFactory factory = Persistence.createEntityManagerFactory("usuarios");
+    private EntityManager em = factory.createEntityManager();*/
+	
 	@PostConstruct
 	public void inicializa() {
 		usuario = new Usuario(); 		
 		listarUsuarios();
+		//validarUsuario("066.666.666-55");
 	}
 	
 	public void salvar() {
@@ -80,23 +82,35 @@ public class UsuarioController implements Serializable {
 			CriteriaQuery<Usuario> cq = sessao.getCriteriaBuilder().createQuery(Usuario.class);
 			cq.from(Usuario.class);
 			usuarios = sessao.createQuery(cq).getResultList();
-			for (Usuario usuarioName : usuarios) {
-			    System.out.println("Usuario details : "+usuarioName.getNome()+" -- "+usuarioName.getCpf());   
+			for (Usuario user : usuarios) {
+			    System.out.println("Usuario details : "+user.getNome()+" -- "+user.getCpf());   
 			}   
-			//CriteriaBuilder builder = sessao.getCriteriaBuilder();
-			//CriteriaQuery<Usuario> criteria = builder.createQuery(Usuario.class);
-			//Criteria consulta = sessao.createCriteria(Usuario.class);	//Criteria = select (consulta)
-			 //TypedQuery<Usuario> query = em.createQuery("select * from usuario", Usuario.class);
-			 //usuarios = query.getResultList();
-			//usuarios = sessao.createQuery(criteria).getResultList();
-			//usuarios = criteria.getResultList();
 		} catch (Exception e) {
 			addMessage("ERRO", "Erro ao listar usuários");
 		} finally {
 			sessao.close();
 		}
 	}
-		     
+
+	 public Usuario validarUsuario(String cpf) {  
+			Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
+			try {
+				CriteriaQuery<Usuario> cq = sessao.getCriteriaBuilder().createQuery(Usuario.class);
+				cq.from(Usuario.class);
+				usuarios = sessao.createQuery(cq).getResultList();
+				for (Usuario user : usuarios) {
+					if(user.getCpf().equals(cpf)) {
+						return user;
+					} 
+				}   
+				return null;
+           } catch (Exception e) {
+       		   return null;
+           } finally {
+        	   sessao.close();
+           }		
+     }
+	
 	public void editar(ActionEvent evt) {
 		usuario = (Usuario)evt.getComponent().getAttributes().get("usuarioEdita");
 	}
