@@ -1,11 +1,13 @@
 package com.github.adminfaces.starter.util;
 
 import org.hibernate.SessionFactory;
+
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 
 import com.github.adminfaces.starter.model.Usuario;
+import com.github.adminfaces.starter.model.Exercicio;
 
 //import com.github.adminfaces.starter.model.Usuario;
 
@@ -21,6 +23,7 @@ public class HibernateUtil {
 			
 			Configuration configuracao = new Configuration().configure();
 			configuracao.addAnnotatedClass(Usuario.class);
+			configuracao.addAnnotatedClass(Exercicio.class);
 			ServiceRegistry registro = new StandardServiceRegistryBuilder().applySettings(configuracao.getProperties()).build();
 			
 			SessionFactory fabrica = configuracao.buildSessionFactory(registro);

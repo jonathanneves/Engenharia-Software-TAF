@@ -26,6 +26,12 @@
             </p:link>
         </li>
         <li>
+            <p:link outcome="/cadastro-exercicio.jsf" rendered="#{logonMB.isProfessor()}">
+                <i class="fa fa-bicycle"></i>
+                <span>Novo Exercício</span>
+            </p:link>
+        </li>
+        <li>
             <p:link outcome="/cadastro-taf.jsf" rendered="#{logonMB.isProfessor()}">
                 <i class="fa fa-clock-o"></i>
                 <span>Novo TAF</span>

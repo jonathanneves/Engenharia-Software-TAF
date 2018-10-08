@@ -9,9 +9,11 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
-import org.hibernate.Criteria;
+import javax.persistence.criteria.CriteriaQuery;
+
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+
 import com.github.adminfaces.starter.model.Exercicio;
 import com.github.adminfaces.starter.util.HibernateUtil;
 
@@ -26,10 +28,11 @@ public class ExercicioController implements Serializable {
     
 	@PostConstruct
 	public void init() {
-		exercicio = new Exercicio(); 
+		exercicio = new Exercicio();
 		listarTodas();
 	}
 	
+
 	public void salvar () {
 		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
 		Transaction t = null;
@@ -68,12 +71,13 @@ public class ExercicioController implements Serializable {
 		}
 	}
 	
-	@SuppressWarnings("unchecked")	//ADD WARNING para tirar o erro de consulta.list()
 	public void listarTodas() {
 		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
 		try {
-			Criteria consulta = sessao.createCriteria(Exercicio.class);	//Criteria = select (consulta)
-			exercicios = consulta.list();
+		
+			CriteriaQuery<Exercicio> cq = sessao.getCriteriaBuilder().createQuery(Exercicio.class);
+			cq.from(Exercicio.class);
+			exercicios = sessao.createQuery(cq).getResultList();
 		} catch (Exception e) {
 			addMessage("ERRO", "ERRO");
 		} finally {
@@ -81,7 +85,7 @@ public class ExercicioController implements Serializable {
 		}
 	}
 	
-	public void editar(ActionEvent evt) {
+	public void edita(ActionEvent evt) {
 		exercicio = (Exercicio)evt.getComponent().getAttributes().get("exercicioEdita");
 	}
 	

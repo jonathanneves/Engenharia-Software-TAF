@@ -50,21 +50,8 @@
 	                    rowsPerPageTemplate="5,10,15,20,30">
 	                    
 							<f:facet name="header">
-								<p:commandButton value="Novo exercicio" oncomplete="PF('dlg').show();" 
+								<p:commandButton value="Novo exercício" oncomplete="PF('dlg').show();" 
 								styleClass="btn-primary" icon="fa fa-plus"/>
-								<p:commandButton value="Excluir" process="@this" actionListener="#{exercicioController.excluir}"
-								    update="frmCad:cad frmTbl:tbl"
-                                    icon="fa fa-trash"
-                                    styleClass="btn-danger" style="margin-left:5px">
-                                    <p:confirm header="Confirmação" message="Você deseja Excluir este Exercicio?" icon="ui-icon-alert"/>
-				    				<f:attribute name="exercicioExclui" value="#{u}"/>
-				    			 </p:commandButton>
-                                 <p:commandButton value="Editar" oncomplete="PF('dlg').show();"
-                                         actionListener="#{exercicioController.editar}" update="frmCad:cad"
-                                         process="@this"
-                                         icon="ui-icon-pencil" style="margin-left:5px">
-                                         <f:attribute name="exercicioEdita" value="#{u}"/>
-                                  </p:commandButton>
 							</f:facet>	
 							
 							<p:separator/>
@@ -76,15 +63,21 @@
 						 	<p:column headerText="Descrição">
 						        <h:outputText value="#{e.descricao}" />
 						    </p:column>
-						    				 
-						 	<p:column headerText="Tipo">
-						        <h:outputText value="#{e.tipo}"/>
-						    </p:column>	     							    				    				    
+						         
+						    <p:column headerText="Opcoes" width="10%;" style="text-align:center;" >
+				       			<p:commandButton icon="ui-icon-pencil"  oncomplete="PF('dlgEdita').show();" actionListener="#{exercicioController.edita}" update="frmEdita:edita" >
+				       				<f:attribute name="exercicioEdita" value="#{e}" />
+				       			</p:commandButton>
+				       			<p:commandButton icon="ui-icon-trash" actionListener="#{exercicioController.excluir}" update="frmTbl:tbl" >
+				       				<p:confirm header="Confirmacao" message="Excluir exercicio ?" icon="ui-icon-alert" />
+				       				<f:attribute name="exercicioExclui" value="#{e}" />
+				       			</p:commandButton>
+				    		</p:column>							    				    				    
 						</p:dataTable>	
 										
 						<p:confirmDialog global="true" showEffect="fade" hideEffect="explode">
 							<p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
-							<p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
+							<p:commandButton value="N�o" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
 						</p:confirmDialog>
 					</div>
 				</div>
@@ -92,36 +85,84 @@
 		
 		
 		<p:dialog header="Cadastro de exercicios" widgetVar="dlg" 
-		resizable="false" draggable="false" modal="true" closable="false" width="auto" height="auto">
+		resizable="false" draggable="false" modal="false" closable="false" width="auto" height="auto">
 			<h:form id="frmCad" enctype="multipart/form-data">
 			    <div class="ui-g ui-fluid">
-					<h:panelGrid columns="2" id="cad" styleClass="my-panel-grid"> 
+					<h:panelGrid columns="1" id="cad" styleClass="my-panel-grid"> 
 						
 						<p:outputLabel for="txtNome" value="Nome:"/>
-						<p:inputText id="txtNome" value="#{exercicioController.exercicio.nome}"
-						 required="true"
-						 requiredMessage="Nome Obrigatório"/>
-						
-						<p:outputLabel for="txtTipo" value="Tipo:" />
-        				<p:selectOneMenu id="txtTipo" value="#{exercicioController.exercicio.tipo}"
-        					require="true" requiredMessage= "Tipo de exercício Obrigatório" appendTo="@this">
-				            <f:selectItem itemLabel="Selecione o Tipo" itemValue="" />
-				            <f:selectItem itemLabel="1RM" itemValue="UmRM" />
-				            <f:selectItem itemLabel="Repetição Máxima" itemValue="RepMax" />
-				            <f:selectItem itemLabel="Volume de Treino" itemValue="VolTreino" />
-				        </p:selectOneMenu>		        
-						
+						<p:inputText id="txtNome" value="#{exercicioController.exercicio.nome}" required="true" requiredMessage="Nome Obrigat�rio"/>
+			
 						<p:outputLabel for="txtDescricao" value="Descrição:"/>	 	
-						<p:inputTextarea rows="6" cols="36" id="txtDescricao" value="#{exercicioController.exercicio.descricao}"	 		
-						required="true"
-						requiredMessage="Descrição obrigatória"/>	
-						
-					</h:panelGrid>   
+						<p:inputTextarea rows="6" cols="36" id="txtDescricao" value="#{exercicioController.exercicio.descricao}" required="true" requiredMessage="Descri��o obrigat�ria"/>	
+						<h3>Classificação</h3>
+						<br/>		
+							
+							<h:panelGrid columns="3" id="classificacao" styleClass="my-panel-grid"> 
+								<p:outputLabel value="   "/>	<p:outputLabel value="Fraco "/><p:outputLabel value="Forte "/>
+								
+								<p:outputLabel value="1RM "/>
+								<p:inputText id="txtClassificacaoFraco1RM" value="#{exercicioController.exercicio.umrmFraco}"  />
+								<p:inputText id="txtClassificacaoForte1RM" value="#{exercicioController.exercicio.umrmForte}" />
+								
+								<p:outputLabel value="Rep MAX "/>
+								<p:inputText id="txtClassificacaoFracoRM"  value="#{exercicioController.exercicio.rmFraco}" />
+								<p:inputText id="txtClassificacaoForteRM" value="#{exercicioController.exercicio.rmForte}"  />
+								
+								<p:outputLabel value="VT "/>								
+								<p:inputText id="txtClassificacaoFracoVT"  value="#{exercicioController.exercicio.vtFraco}"  />
+								<p:inputText id="txtClassificacaoForteVT" value="#{exercicioController.exercicio.vtForte}"  />
+								
+							</h:panelGrid>
+						</h:panelGrid>
+				   
 				</div>    
 				<p:commandButton value = "Cadastrar" actionListener="#{exercicioController.salvar}" 
-			         oncomplete="PF('dlg').hide();" update="frmTbl:tbl msg frmCad:cad"
+			         oncomplete="PF('dlg').hide();" update="frmTbl:tbl"
 			         style="padding:5px; margin:5px" styleClass="btn-primary" icon="fa fa-plus"/>
 			    <p:commandButton value = "Cancelar" oncomplete="PF('dlg').hide();" style="padding:5px; margin:5px"/>
+			</h:form> 
+ 		</p:dialog>
+ 		
+ 		
+ 		<p:dialog header="Editar exercicio" widgetVar="dlgEdita" 
+		resizable="false" draggable="false" modal="false" closable="false" width="auto" height="auto">
+			<h:form id="frmEdita" enctype="multipart/form-data">
+			    <div class="ui-g ui-fluid">
+					<h:panelGrid columns="1" id="edita" styleClass="my-panel-grid"> 
+						
+						<p:outputLabel for="txtNome" value="Nome:"/>
+						<p:inputText id="txtNome" value="#{exercicioController.exercicio.nome}" required="true" requiredMessage="Nome Obrigat�rio"/>
+			
+						<p:outputLabel for="txtDescricao" value="Descrição:"/>	 	
+						<p:inputTextarea rows="6" cols="36" id="txtDescricao" value="#{exercicioController.exercicio.descricao}" required="true" requiredMessage="Descri��o obrigat�ria"/>	
+						<h3>Classificacao</h3>
+						<br></br>
+									
+							
+							<h:panelGrid columns="3" id="class" styleClass="my-panel-grid"> 
+								<p:outputLabel value="   "/>	<p:outputLabel value="Fraco "/><p:outputLabel value="Forte "/>
+								
+								<p:outputLabel value="1RM "/>
+								<p:inputText id="txtClassificacaoFraco1RM" value="#{exercicioController.exercicio.umrmFraco}"  />
+								<p:inputText id="txtClassificacaoForte1RM" value="#{exercicioController.exercicio.umrmForte}" />
+								
+								<p:outputLabel value="Rep MAX "/>
+								<p:inputText id="txtClassificacaoFracoRM"  value="#{exercicioController.exercicio.rmFraco}" />
+								<p:inputText id="txtClassificacaoForteRM" value="#{exercicioController.exercicio.rmForte}"  />
+								
+								<p:outputLabel value="VT "/>								
+								<p:inputText id="txtClassificacaoFracoVT"  value="#{exercicioController.exercicio.vtFraco}"  />
+								<p:inputText id="txtClassificacaoForteVT" value="#{exercicioController.exercicio.vtForte}"  />
+								
+							</h:panelGrid>
+						</h:panelGrid>
+				   
+				</div>    
+				<p:commandButton value = "Editar" actionListener="#{exercicioController.salvar}" 
+			         oncomplete="PF('dlgEdita').hide();" update="frmTbl:tbl"
+			         style="padding:5px; margin:5px" styleClass="btn-primary"  icon="ui-icon-pencil" />
+			    <p:commandButton value = "Cancelar" oncomplete="PF('dlgEdita').hide();" style="padding:5px; margin:5px"/>
 			</h:form> 
  		</p:dialog>
 

@@ -6,6 +6,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 
 @Entity
@@ -18,8 +23,58 @@ public class Exercicio implements Serializable {
 	private Integer id;
 	@Column	private String nome;
 	@Column private String descricao;
-	@Column private String tipo;
 	
+	@Column	private int umrmFraco;
+	@Column private int umrmForte;
+		
+	@Column	private int rmFraco;
+	@Column private int rmForte;
+	
+	@Column	private int vtFraco;
+	@Column private int vtForte;
+	
+	
+	
+	
+	public int getUmrmFraco() {
+		return umrmFraco;
+	}
+	public void setUmrmFraco(int umrmFraco) {
+		this.umrmFraco = umrmFraco;
+	}
+	public int getUmrmForte() {
+		return umrmForte;
+	}
+	
+	public void setUmrmForte(int umrmForte) {
+		this.umrmForte = umrmForte;
+	}
+	public int getRmFraco() {
+		return rmFraco;
+	}
+	public void setRmFraco(int rmFraco) {
+		this.rmFraco = rmFraco;
+	}
+	
+	public int getRmForte() {
+		return rmForte;
+	}
+	public void setRmForte(int rmForte) {
+		this.rmForte = rmForte;
+	}
+	public int getVtFraco() {
+		return vtFraco;
+	}
+	public void setVtFraco(int vtFraco) {
+		this.vtFraco = vtFraco;
+	}
+	
+	public int getVtForte() {
+		return vtForte;
+	}
+	public void setVtForte(int vtForte) {
+		this.vtForte = vtForte;
+	}
 	public Integer getId() {
 		return id;
 	}
@@ -38,12 +93,7 @@ public class Exercicio implements Serializable {
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
 	}
-	public String getTipo() {
-		return tipo;
-	}
-	public void setTipo(String tipo) {
-		this.tipo = tipo;
-	}
+
 	
 	public static long getSerialversionuid() {
 		return serialVersionUID;
@@ -71,7 +121,8 @@ public class Exercicio implements Serializable {
 			return false;
 		return true;
 	}
-
+	
+	
 	
 
 	
