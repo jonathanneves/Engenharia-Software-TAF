@@ -34,7 +34,6 @@ public class UsuarioController implements Serializable {
 	public void inicializa() {
 		usuario = new Usuario(); 		
 		listarUsuarios();
-		//validarUsuario("066.666.666-55");
 	}
 	
 	public void salvar() {

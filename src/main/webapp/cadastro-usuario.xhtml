@@ -110,8 +110,8 @@
         				<p:selectOneMenu id="txtPermissao" value="#{usuarioController.usuario.permissao}"
         					require="true" requiredMessage= "Permissão de Usuário Obrigatória">
 				            <f:selectItem itemLabel="Selecione Permissão" itemValue="" />
-				            <f:selectItem itemLabel="Professor" itemValue="professor" />
-				            <f:selectItem itemLabel="Aluno" itemValue="aluno" />
+				            <f:selectItem itemLabel="Professor(a)" itemValue="Professor" />
+				            <f:selectItem itemLabel="Aluno(a)" itemValue="Aluno" />
 				        </p:selectOneMenu>	
 				        
 				        <p:outputLabel for="txtCPF" value="CPF:"/>
@@ -132,10 +132,8 @@
 		        		<p:outputLabel for="txtNascimento" value="Data de Nascimento:" />
 		       			<p:calendar id="txtNascimento" value="#{usuarioController.usuario.nascimento}" pattern="dd/MM/yyyy" 
 		       			locale="pt" navigator="true"   
-		       		    mask="99/99/9999"
-						required="true"
-						yearRange="c-100:c+0"
-						requiredMessage="Data de nascimento obrigatório"/>								 								 					     				        					 																   	        			
+		       		    mask="99/99/9999" required="true"
+						yearRange="c-100:c+0" requiredMessage="Data de nascimento obrigatório"/>								 								 					     				        					 																   	        			
 					</h:panelGrid>   
 				</div>
 				    

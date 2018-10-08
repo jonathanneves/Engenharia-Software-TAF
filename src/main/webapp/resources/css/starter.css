@@ -3,6 +3,8 @@
     border: 1px solid #374850;
     margin: 10px 10px;
 }
+
+
 .sidebar-form, .sidebar-menu>li.header {
     overflow: hidden;
     text-overflow: clip;
@@ -28,6 +30,11 @@ a.dropdown-toggle {
 a#logout {
     color: #3c8dbc!important;
     background: transparent;
+}
+
+.panel-heading {
+	border-color: #337ab7!important;
+	border-width: medium;
 }
 
 @media (max-width: 768px) {

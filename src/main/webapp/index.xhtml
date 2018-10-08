@@ -4,52 +4,94 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
                 template="#{layoutMB.template}">
 
     <ui:define name="head-end">
         <ui:param name="renderBreadCrumb" value="false"/>
     </ui:define>
 
+    <ui:define name="head-end">
+        <style type="text/css">
+	      .ui-panel.ui-widget .ui-panel-titlebar {
+		    border-width: 0 0 2px 0;
+		    padding: .7em;
+		    background: #c9d2ff;
+		    border-color: #337ab7;
+		  }  
+		  .ui-panel .ui-panel-footer {
+		    border-width: 2px 0 0 0;
+		    margin: .5em 0 0;
+		    padding: .5em 1em;
+		    text-align: left;
+		    background: #c9d2ff;
+		    border-color: #337ab7;
+		   }
+		</style>
+	</ui:define>
+	
     <ui:define name="title">
         <h2 class="align-center">
-            Bem vindo ao TAF Sistema!
+            Bem vindo 
+            <span class="hidden-xs">#{logonMB.currentUser},</span>
+            ao sistema Box Zero para Teste de Aptidão Física
             <br/>
             <small>Desenvolvido pelos alunos da UNISUL do curso de Ciência da Computação </small>
         </h2>
+	</ui:define>
+	
+    <ui:define name="body">
+        <f:metadata>
+        </f:metadata>
+			<h:form>
 
-<h:form>
-    <div class="box box-primary">
-       	<div class="box-header with-border">
-    			<h3 style="margin-top:0">Proximos TAFs</h3>
-    			<p:panelGrid columns="3" layout="grid"> 
-			    <p:tree value="#{treeBasicView.root}" var="node" orientation="vertical">
-			        <p:treeNode>
-			            <h:outputText value="#{node}" />
-			        </p:treeNode>
-			    </p:tree>
-			    
-			     <p:tree value="#{treeBasicView.root2}" var="node" orientation="vertical">
-			        <p:treeNode>
-			            <h:outputText value="#{node}" />
-			        </p:treeNode>
-			    </p:tree>
-			    <p:tree value="#{treeBasicView.root2}" var="node" orientation="vertical">
-			        <p:treeNode>
-			            <h:outputText value="#{node}" />
-			        </p:treeNode>
-			    </p:tree>
-   			 </p:panelGrid>
-    	</div>
-	</div>
- <!-- 
-    <h3>Destaque do mês</h3>
-    <p:tree value="#{treeBasicView.root}" var="node" dynamic="true" orientation="horizontal">
-        <p:treeNode>
-            <h:outputText value="#{node}" />
-        </p:treeNode>
-    </p:tree>
-     -->
-</h:form>
+		    <div class="box box-primary">
+		    	<div class="box-header with-border">
+		    		<h3 style="margin-top:0">Proximos TAFs</h3>
+		    			<h:panelGrid columns="5" styleClass="my-panel-grid">
+					  		<c:forEach items="#{usuarioController.usuarios}" var="u" >
+								<p:panel id="Usuario" header="#{u.nome}" footer="Professor?"
+								toggleable="true" toggleSpeed="500" style="margin:20px;"
+								class="panel-heading">
+							  		<h:panelGrid columns="2">
+							  		
+						  		        <h:outputText value="CPF: " style="font-weight: bold"/>
+						                <h:outputText value="#{u.cpf}" />
+						                
+						                <h:outputText value="Permissão: " style="font-weight: bold"/>
+						                <h:outputText value="#{u.permissao}" />
+						                
+						                <h:outputText value="Data: " style="font-weight: bold"/>
+						                <h:outputText value="#{u.nascimento}">
+						                	<f:convertDateTime pattern="dd/MM/yyyy" /> 
+						                </h:outputText>
+						                
+							        </h:panelGrid>  
+							              
+						    	</p:panel>
+					    	</c:forEach>
+					    </h:panelGrid>
+		    
+				    <p:tabView>
+				      	<c:forEach items="#{usuarioController.usuarios}" var="u" >
+				        	<p:tab title="#{u.nome}">
+				            	<h:panelGrid columns="2" cellpadding="7">
+				                                  
+					                <h:outputText value="CPF: " style="font-weight: bold"/>
+					                <h:outputText value="#{u.cpf}" />
+					 
+					                <h:outputText value="Permissão: " style="font-weight: bold"/>
+					                <h:outputText value="#{u.permissao}" />
+					 
+					                <h:outputText value="Data: " style="font-weight: bold"/>
+					                <h:outputText value="#{u.nascimento}" />
+				            	</h:panelGrid>
+				        	</p:tab>
+				        </c:forEach>
+				    </p:tabView>
+		    	</div>
+		    </div>
+		</h:form>
 
 
     </ui:define>
