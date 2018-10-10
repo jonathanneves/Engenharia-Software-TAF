@@ -35,6 +35,8 @@
 		<!-- Mapeamento das entidades INSIRA TODAS AS CLASSES --> 
  		<mapping class="com.github.adminfaces.starter.model.Usuario"/> 
  		<mapping class="com.github.adminfaces.starter.model.Exercicio"/> 
+ 		<mapping class="com.github.adminfaces.starter.model.Taf"/> 
+ 		<mapping class="com.github.adminfaces.starter.model.TafExercicio"/>
 	</session-factory>
 
 </hibernate-configuration>

@@ -1,163 +1,109 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-				xmlns:h="http://xmlns.jcp.org/jsf/html"
-				xmlns:f="http://java.sun.com/jsf/core"
-                xmlns:p="http://primefaces.org/ui"
-                xmlns:ui="http://java.sun.com/jsf/facelets"
-                template="#{layoutMB.template}">
-
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+               xmlns:p="http://primefaces.org/ui"
+               xmlns:ui="http://java.sun.com/jsf/facelets"
+               template="#{layoutMB.template}">
+ 
     <ui:define name="head-end">
         <ui:param name="renderBreadCrumb" value="false"/>
     </ui:define>
-
+ 
     <ui:define name="title">
         Cadastro de TAF
     </ui:define>
-
+ 
     <ui:define name="description">
         Agendando novo Teste de Aptidão Física no sistema
     </ui:define>
-    
-  	<ui:define name="body">
+   
+    <ui:define name="body">
         <f:metadata>
         </f:metadata>
-        
-		
-	
-			<h:form  id="frmTblExercicio">
-			<div class="box box-primary">
-               	<div class="box-header with-border">
-						<p:dataTable id="tblExercicio" var="e"  emptyMessage="Sem Registro" 
-						reflow="true" rows="10" paginator="true"                     			 	                                 
-	                    paginatorPosition="bottom"	                                 
-	                    currentPageReportTemplate=""
-	                    rowsPerPageTemplate="5,10,15,20,30">
-	                    
-							<f:facet name="header">
-								
-								<p:commandButton value="Novo exercicio" oncomplete="PF('dlg').show();" 
-								styleClass="btn-primary" icon="fa fa-plus"/>
-								
-								<p:commandButton value="Excluir" process="@this" actionListener="#{exercicioController.excluir}"
-								    update="@all"
-                                    icon="fa fa-trash"
-                                    styleClass="btn-danger" style="margin-left:5px">
-                                    <p:confirm header="Confirmação" message="Você deseja Excluir este Exercicio?" icon="ui-icon-alert"/>
-				    				<f:attribute name="exercicioExclui" value="#{e}" />
-				    			 </p:commandButton>
-                                 <p:commandButton value="Editar" oncomplete="PF('dlg').show();"
-                                         actionListener="#{exercicioController.editar}" update="@all"
-                                         process="@this"
-                                         icon="ui-icon-pencil" style="margin-left:5px">
-                                         <f:attribute name="exercicioEdita" value="#{e}" />
-                                  </p:commandButton>
-							</f:facet>	
-							
-							<p:separator/>
-							
-							<p:column headerText="Exercício">
-						        
-						    </p:column>
-						 
-						 	<p:column headerText="Descrição">
-						        
-						    </p:column>
-						    				 
-						 	<p:column headerText="Tipo">
-						       
-						    </p:column>	     							    				    				    
-						</p:dataTable>	
-						
-						
-										
-						<p:confirmDialog global="true" showEffect="fade" hideEffect="explode">
+   
+          
+    <div class="box box-primary">  
+         <div class="box-header with-border">
+   
+            <h:form  id="frmTblExercicio">
+                 <p:dataTable id="tblExercicio" var="e"  emptyMessage="Sem Registro" value="#{exercicioController.exercicios}"
+                 reflow="true" rows="10" paginator="true"                                                                     
+                 paginatorPosition="bottom"                                   
+                 currentPageReportTemplate=""
+                 rowsPerPageTemplate="5,10,15,20,30"
+                 selection="#{tafController.exerciciosSelecionados}"
+                 rowKey="#{e.id}">
+                
+                 <p:column selectionMode="multiple" style="width:10%;text-align:center"/>
+                     
+                     <p:column headerText="Id" style="width:10%;text-align:center;">
+	                         <h:outputText value="#{e.id}" />
+	                     </p:column>
+	                  
+	                     <p:column headerText="Nome">
+	                         <h:outputText value="#{e.nome}" />
+	                     </p:column>
+	                     
+	                     <p:column headerText="Modalidade">
+	                          <p:selectManyButton >
+	                 <f:selectItem itemLabel="1RM" itemValue="rm1" />
+	                 <f:selectItem itemLabel="Rept. Máx." itemValue="max" />
+	                 <f:selectItem itemLabel="Vol. de treino" itemValue="vol" />
+	                 </p:selectManyButton>                  
+                 </p:column>
+                            
+
+                 </p:dataTable> 
+                
+                 <p:confirmDialog global="true" showEffect="fade" hideEffect="explode">
+                     <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                     <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
+                 </p:confirmDialog>               
+        </h:form>
+               
+                <h:form id="frmTblTAF">
+               
+                <h:panelGrid columns="2" id="cad" styleClass="my-panel-grid" style="width:100%">                               
+                        <p:outputLabel for="txtTAF" value="TAF:" style="margin:5px"/>
+                        <p:inputText id="txtTAF" required="true" style="margin:5px" value="#{tafController.taf.nome}" />   
+                                                              
+                        <p:outputLabel for="txtData" value="Data:" style="margin:5px"/>
+                        <p:calendar id="txtData" pattern="dd/MM/yyyy" mask="99/99/9999"
+                        required="true" navigator="true" style="margin:5px" value="#{tafController.taf.data}"/>   
+                        
+                        <p:commandButton value="Cadastrar TAF" style="float:left"
+                            styleClass="btn-primary" icon="fa fa-plus" process="tblTAF" 
+                            width="50%" actionListener="#{tafController.salvar}"/>                
+                       
+                </h:panelGrid>
+               
+                    <p:dataTable id="tblTAF" reflow="true" rows="5" paginator="true" var="taf" value="#{tafController.tafs}" > 
+                                                          
+                        <p:column headerText="TAF" >
+                            <h:outputText value="#{taf.nome}" />
+                        </p:column>
+                       
+                        <p:column headerText="Data" >
+                            <h:outputText value="#{taf.data}" />
+                        </p:column>            
+                       
+                    	<p:column headerText="Opções" exportable="false" style="width:auto;text-align:center">
+	    					<p:commandButton icon="ui-icon-trash" actionListener="#{tafController.excluir}" update="frmCad:cad frmTbl:tbl">
+	    						<p:confirm header="Confirmação" message="Você deseja Excluir este Taf?" icon="ui-icon-alert"/>
+	    						<f:attribute name="tafExclui" value="#{taf}"/>		    		
+	    					</p:commandButton>
+	  		 			</p:column>
+						    					 
+                    </p:dataTable>
+                    	<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
 							<p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
 							<p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
 						</p:confirmDialog>
-						
-						
-					</div>
-				</div>
-				
-				
-		
-		</h:form>
-		
-       	<div class="box box-primary">
-           	<div class="box-header with-border">
-				
-				<h:form id="frmTblTAF">
-				
-				<h:panelGrid columns="3" id="cad" styleClass="my-panel-grid" style="width:100%">								
-						<p:outputLabel for="txtTAF" value="TAF:" style="margin:5px"/>
-						<p:inputText id="txtTAF" required="true" style="margin:5px" value="" />	
-						
-						<p:commandButton value="Cadastrar TAF" style="float:left" 
-							styleClass="btn-primary" icon="fa fa-plus"/>
-										
-						<p:outputLabel for="txtData" value="Data:" style="margin:5px"/>
-						<p:calendar id="txtData" pattern="dd/MM/yyyy" mask="99/99/9999" 
-						required="true" navigator="true" style="margin:5px"/>	
-						
-						
-										
-						<p:commandButton value="Excluir TAF" process="@this" style="float:left"
-							    update="@all"
-		                        icon="fa fa-trash"
-		                        styleClass="btn-danger">
-		                       	<p:confirm header="Confirmação" message="Você deseja Excluir este taf?" icon="ui-icon-alert"/>
-						</p:commandButton>	
-						
-					</h:panelGrid>
-				
-					<p:dataTable id="tblTAF" reflow="true" rows="5" paginator="true" >						
-						<p:column headerText="TAF" />							
-						<p:column headerText="Data" />		
-						<p:column headerText="Exercícios" />					
-						</p:dataTable>
-				</h:form>
-				
-			
-			</div>
-		</div>
-		
-		
-		<p:dialog header="Cadastro de exercicios" widgetVar="dlg" 
-		resizable="false" draggable="false" modal="true" closable="false" width="auto" height="auto">
-			<h:form id="frmCadEx" enctype="multipart/form-data">
-			    <div class="ui-g ui-fluid">
-					<h:panelGrid columns="2" id="cadEx" styleClass="my-panel-grid"> 
-						
-						<p:outputLabel for="txtNome" value="Nome:"/>
-						<p:inputText id="txtNome" 
-						 required="true"
-						 requiredMessage="Nome Obrigatório"/>
-						
-						<p:outputLabel for="txtTipo" value="Tipo:" />
-        				<p:selectOneMenu id="txtTipo" 
-        					require="true" requiredMessage= "Tipo de exercício Obrigatório" appendTo="@this">
-				            <f:selectItem itemLabel="Selecione o Tipo" itemValue="" />
-				            <f:selectItem itemLabel="1RM" itemValue="UmRM" />
-				            <f:selectItem itemLabel="Repetição Máxima" itemValue="RepMax" />
-				            <f:selectItem itemLabel="Volume de Treino" itemValue="VolTreino" />
-				        </p:selectOneMenu>		        
-						
-						<p:outputLabel for="txtDescricao" value="Descrição:"/>	 	
-						<p:inputTextarea rows="6" cols="36" id="txtDescricao" 	 		
-						required="true"
-						requiredMessage="Descrição obrigatória"/>	
-						
-					</h:panelGrid>   
-				</div>    
-				<p:commandButton value = "Cadastrar" actionListener="#{exercicioController.salvar}" 
-			         oncomplete="PF('dlg').hide();" update="frmTblExercicio:tblExercicio frmTblTAF:tblTAF frmCadEx:cadEx"
-			         style="padding:5px; margin:5px" styleClass="btn-primary" icon="fa fa-plus"/>
-			    <p:commandButton value = "Cancelar" oncomplete="PF('dlg').hide();" style="padding:5px; margin:5px"/>
-			</h:form> 
- 		</p:dialog>
- 		
-	</ui:define>
-			
-		
-
+                </h:form>
+           
+            </div>
+        </div>
+       
+    </ui:define>
 </ui:composition>

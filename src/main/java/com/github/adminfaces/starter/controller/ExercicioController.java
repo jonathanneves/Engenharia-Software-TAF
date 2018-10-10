@@ -15,6 +15,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import com.github.adminfaces.starter.model.Exercicio;
+import com.github.adminfaces.starter.model.Taf;
 import com.github.adminfaces.starter.util.HibernateUtil;
 
 @ManagedBean //Classe controladora
@@ -79,12 +80,12 @@ public class ExercicioController implements Serializable {
 			cq.from(Exercicio.class);
 			exercicios = sessao.createQuery(cq).getResultList();
 		} catch (Exception e) {
-			addMessage("ERRO", "ERRO");
+			addMessage("ERRO", "ERRO ao listar exercicios");
 		} finally {
 			sessao.close();
 		}
 	}
-	
+
 	public void edita(ActionEvent evt) {
 		exercicio = (Exercicio)evt.getComponent().getAttributes().get("exercicioEdita");
 	}

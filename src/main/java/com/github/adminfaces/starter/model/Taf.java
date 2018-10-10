@@ -1,13 +1,21 @@
 package com.github.adminfaces.starter.model;
 
 import java.io.Serializable;
-import java.util.Date;
 
+import java.util.Date;
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+
+
 
 @Entity
 public class Taf implements Serializable {
@@ -19,8 +27,14 @@ public class Taf implements Serializable {
 	private Integer id;
 	@Column private String nome;
 	@Column	private Date data;
-	@Column private double pontos;
-	
+												
+	@OneToMany(mappedBy="taf", cascade=CascadeType.ALL)
+	private List<TafExercicio> tafexercicio;	
+					
+	@Override
+	public String toString() {
+			return getNome();
+	}
 	public Integer getId() {
 		return id;
 	}
@@ -42,11 +56,11 @@ public class Taf implements Serializable {
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-	public double getPontos() {
-		return pontos;
+	public List<TafExercicio> getTafexercicio() {
+		return tafexercicio;
 	}
-	public void setPontos(double pontos) {
-		this.pontos = pontos;
+	public void setTafexercicio(List<TafExercicio> tafexercicio) {
+		this.tafexercicio = tafexercicio;
 	}
 	@Override
 	public int hashCode() {

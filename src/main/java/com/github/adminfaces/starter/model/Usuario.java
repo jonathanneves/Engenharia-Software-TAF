@@ -8,6 +8,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import org.hibernate.annotations.Type;
+
 @Entity
 public class Usuario implements Serializable {
 	
@@ -16,11 +18,17 @@ public class Usuario implements Serializable {
 	@Id		
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
-	@Column	private String nome;
-	@Column private Date nascimento;
-	@Column private String sexo;
-	@Column private String permissao;
-	@Column private String cpf;
+	@Column	
+	private String nome;
+	@Column
+	@Type(type="date")
+	private Date nascimento;
+	@Column 
+	private String sexo;
+	@Column
+	private String permissao;
+	@Column 
+	private String cpf;
 	
 	public Integer getId() {
 		return id;

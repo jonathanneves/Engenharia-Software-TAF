@@ -10,6 +10,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.persistence.criteria.CriteriaQuery;
 
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -19,6 +20,7 @@ import org.primefaces.model.chart.AxisType;
 import org.primefaces.model.chart.BarChartModel;
 import org.primefaces.model.chart.ChartSeries;
 
+import com.github.adminfaces.starter.model.Exercicio;
 import com.github.adminfaces.starter.model.Taf;
 import com.github.adminfaces.starter.util.HibernateUtil;
 
@@ -32,7 +34,8 @@ public class TafController implements Serializable {
 	
 	private Taf taf;
 	private List<Taf> tafs;
-    
+    private List<Exercicio> exerciciosselecionados;
+ 
 	@PostConstruct
 	public void init() {
 		taf = new Taf(); 
@@ -78,18 +81,34 @@ public class TafController implements Serializable {
 		}
 	}
 	
-	@SuppressWarnings("unchecked")	//ADD WARNING para tirar o erro de consulta.list()
 	public void listarTodas() {
 		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
 		try {
-			Criteria consulta = sessao.createCriteria(Taf.class);	//Criteria = select (consulta)
-			tafs = consulta.list();
+		
+			CriteriaQuery<Taf> cq = sessao.getCriteriaBuilder().createQuery(Taf.class);
+			cq.from(Exercicio.class);
+			tafs = sessao.createQuery(cq).getResultList();
 		} catch (Exception e) {
-			addMessage("ERRO", "ERRO");
+			addMessage("ERRO", "ERRO ao listar tafs");
 		} finally {
 			sessao.close();
 		}
 	}
+	
+	public void listarExercicios() {
+		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
+		try {
+		
+			CriteriaQuery<Exercicio> cq = sessao.getCriteriaBuilder().createQuery(Exercicio.class);
+			cq.from(Exercicio.class);
+			exerciciosselecionados = sessao.createQuery(cq).getResultList();
+		} catch (Exception e) {
+			addMessage("ERRO", "ERRO ao listar exercicios");
+		} finally {
+			sessao.close();
+		}
+	}
+	
 	
 	 private BarChartModel initBarModel() {
 	        BarChartModel model = new BarChartModel();
@@ -110,8 +129,16 @@ public class TafController implements Serializable {
 	 private void graficoPontos() {
 	        createBarModel();
 	 }
-	     
-	 private void createBarModel() {
+	  
+	 public List<Exercicio> getExerciciosSelecionados() {
+		return exerciciosselecionados;
+	}
+
+	public void setExerciciosSelecionados(List<Exercicio> exerciciosSelecionados) {
+		this.exerciciosselecionados = exerciciosSelecionados;
+	}
+
+	private void createBarModel() {
         barModel = initBarModel();
          
         barModel.setTitle("Progresso de Pontuação");
