@@ -27,7 +27,7 @@ public class HibernateUtil {
 			configuracao.addAnnotatedClass(Usuario.class);
 			configuracao.addAnnotatedClass(Exercicio.class);
 			configuracao.addAnnotatedClass(Taf.class);	
-			configuracao.addAnnotatedClass(TafExercicio.class);
+			configuracao.addAnnotatedClass(TafExercicio.class);	
 			ServiceRegistry registro = new StandardServiceRegistryBuilder().applySettings(configuracao.getProperties()).build();
 			
 			SessionFactory fabrica = configuracao.buildSessionFactory(registro);

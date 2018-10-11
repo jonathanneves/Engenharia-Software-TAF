@@ -36,7 +36,7 @@
  		<mapping class="com.github.adminfaces.starter.model.Usuario"/> 
  		<mapping class="com.github.adminfaces.starter.model.Exercicio"/> 
  		<mapping class="com.github.adminfaces.starter.model.Taf"/> 
- 		<mapping class="com.github.adminfaces.starter.model.TafExercicio"/>
+ 		<mapping class="com.github.adminfaces.starter.model.TafExercio"/> 
 	</session-factory>
 
 </hibernate-configuration>

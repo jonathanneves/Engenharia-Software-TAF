@@ -7,17 +7,14 @@ import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
-import javax.faces.model.SelectItem;
 import javax.persistence.criteria.CriteriaQuery;
 
-import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import com.github.adminfaces.starter.model.Exercicio;
 import com.github.adminfaces.starter.model.Taf;
 import com.github.adminfaces.starter.model.TafExercicio;
-import com.github.adminfaces.starter.model.Usuario;
 import com.github.adminfaces.starter.util.HibernateUtil;
 
 public class TafExercicioController implements Serializable {
@@ -111,7 +108,17 @@ private static final long serialVersionUID = 1L;
 		tafexercicio = (TafExercicio)evt.getComponent().getAttributes().get("tafExclui");
 		exclui();
 	}
-
+	
+	public void selecionaExercicios(ActionEvent evt) {
+		tafexercicio.setExercicio((Exercicio) (evt.getComponent().getAttributes().get("exercicioSelecionado")));
+		System.out.println("Exercicio: "+tafexercicio.getExercicio().getNome());
+	}
+	
+	public void selecionaTaf(ActionEvent evt) {
+		tafexercicio.setTaf((Taf) (evt.getComponent().getAttributes().get("tafSelecionado")));
+		System.out.println("Taf: "+tafexercicio.getTaf().getNome());
+	}
+	 
 	public TafExercicio getTafexercicio() {
 		return tafexercicio;
 	}

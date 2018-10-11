@@ -55,6 +55,12 @@ public class Exercicio implements Serializable {
 		this.rmFraco = rmFraco;
 	}
 	
+	public List<TafExercicio> getTafexercicio() {
+		return tafexercicio;
+	}
+	public void setTafexercicio(List<TafExercicio> tafexercicio) {
+		this.tafexercicio = tafexercicio;
+	}
 	public int getRmForte() {
 		return rmForte;
 	}

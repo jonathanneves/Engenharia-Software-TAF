@@ -34,7 +34,6 @@ public class TafController implements Serializable {
 	
 	private Taf taf;
 	private List<Taf> tafs;
-    private List<Exercicio> exerciciosselecionados;
  
 	@PostConstruct
 	public void init() {
@@ -64,12 +63,14 @@ public class TafController implements Serializable {
 	
 	public void exclui ()  {
 		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
+		System.out.println("-------------");
 		Transaction t = null;
 		try {
 			t = sessao.beginTransaction();
 			sessao.delete(taf);			
 			t.commit();
 			taf = new Taf();
+			System.out.println("--------------");
 			addMessage("Exclusão", "TAF excluído com sucesso");
 			listarTodas();
 		} catch (Exception e) {
@@ -83,10 +84,9 @@ public class TafController implements Serializable {
 	
 	public void listarTodas() {
 		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
-		try {
-		
+		try {	
 			CriteriaQuery<Taf> cq = sessao.getCriteriaBuilder().createQuery(Taf.class);
-			cq.from(Exercicio.class);
+			cq.from(Taf.class);
 			tafs = sessao.createQuery(cq).getResultList();
 		} catch (Exception e) {
 			addMessage("ERRO", "ERRO ao listar tafs");
@@ -94,21 +94,7 @@ public class TafController implements Serializable {
 			sessao.close();
 		}
 	}
-	
-	public void listarExercicios() {
-		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
-		try {
 		
-			CriteriaQuery<Exercicio> cq = sessao.getCriteriaBuilder().createQuery(Exercicio.class);
-			cq.from(Exercicio.class);
-			exerciciosselecionados = sessao.createQuery(cq).getResultList();
-		} catch (Exception e) {
-			addMessage("ERRO", "ERRO ao listar exercicios");
-		} finally {
-			sessao.close();
-		}
-	}
-	
 	
 	 private BarChartModel initBarModel() {
 	        BarChartModel model = new BarChartModel();
@@ -130,14 +116,6 @@ public class TafController implements Serializable {
 	        createBarModel();
 	 }
 	  
-	 public List<Exercicio> getExerciciosSelecionados() {
-		return exerciciosselecionados;
-	}
-
-	public void setExerciciosSelecionados(List<Exercicio> exerciciosSelecionados) {
-		this.exerciciosselecionados = exerciciosSelecionados;
-	}
-
 	private void createBarModel() {
         barModel = initBarModel();
          
@@ -158,6 +136,7 @@ public class TafController implements Serializable {
 	}
 	
 	public void excluir(ActionEvent evt)  {
+		System.out.println("VAI TOMA NO CU");
 		taf = (Taf)evt.getComponent().getAttributes().get("tafExclui");
 		exclui();
 	}

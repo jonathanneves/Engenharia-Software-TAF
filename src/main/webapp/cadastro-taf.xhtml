@@ -26,13 +26,62 @@
     <div class="box box-primary">  
          <div class="box-header with-border">
    
+      	<h:form id="frmCadTAF" enctype="multipart/form-data">
+               
+              <h:panelGrid columns="5" id="cad" styleClass="my-panel-grid" style="width:100%">   
+                                          
+                  <p:outputLabel for="txtTAF" value="TAF:" style="margin:5px"/>
+                  <p:inputText id="txtTAF" required="true" style="margin:5px" value="#{tafController.taf.nome}" />   
+                                                        
+                  <p:outputLabel for="txtData" value="Data:" style="margin:5px"/>
+                  <p:calendar id="txtData" pattern="dd/MM/yyyy" mask="99/99/9999"
+                  required="true" navigator="true" style="margin:5px" value="#{tafController.taf.data}"/>   
+                  
+                  <p:commandButton value="Cadastrar TAF" style="float:left"
+                      styleClass="btn-primary" icon="fa fa-plus" 
+                      update="frmCadTAF:cad frmCadTAF:tbl" actionListener="#{tafController.salvar}" />                                      
+              </h:panelGrid>
+              
+             	<p:outputLabel value="Selecione um taf da tabela e vários exercícios da outra tabela para cadastrar:"/>
+             	
+                <p:dataTable id="tbl" reflow="true" rows="5" paginator="true" var="t" value="#{tafController.tafs}" > 
+                       
+		               	<p:column headerText="Selecionar" width="10%;" style="text-align:center;">
+					    	<p:commandButton icon="ui-icon-circle-check" actionListener="#{tafExercicioController.selecionaTaf}" 
+					    	immediate="true" style="margin: 0 auto;">
+					    		<f:attribute name="tafSelecionado" value="#{t}"/>		    		
+				    		</p:commandButton>				    		    		
+			    		</p:column>	  
+	    		                          
+                      <p:column headerText="TAF" >
+                          <h:outputText value="#{t.nome}" />
+                      </p:column>
+                                      
+                      <p:column headerText="Data" >
+                          <h:outputText value="#{t.data}">
+                          	<f:convertDateTime pattern="dd/MM/yyyy" /> 
+                          </h:outputText>
+                      </p:column>            
+                     
+                  	<p:column headerText="Opção" exportable="false" width="10%;" style="text-align:center;">
+	   					<p:commandButton icon="ui-icon-trash" actionListener="#{tafController.excluir}" update="frmCadTAF:cad frmCadTAF:tbl">
+	   						<p:confirm header="Confirmação" message="Você deseja Excluir este Taf?" icon="ui-icon-alert"/>
+	   						<f:attribute name="tafExclui" value="#{t}"/>		    		
+	   					</p:commandButton>
+ 		 			</p:column>
+				    					 
+                  </p:dataTable>
+            </h:form>
+                
+            <p:spacer height="10"/>
+            
             <h:form  id="frmTblExercicio">
                  <p:dataTable id="tblExercicio" var="e"  emptyMessage="Sem Registro" value="#{exercicioController.exercicios}"
                  reflow="true" rows="10" paginator="true"                                                                     
                  paginatorPosition="bottom"                                   
                  currentPageReportTemplate=""
                  rowsPerPageTemplate="5,10,15,20,30"
-                 selection="#{tafController.exerciciosSelecionados}"
+                 selection="#{tafExercicioController.exercicios}"
                  rowKey="#{e.id}">
                 
                  <p:column selectionMode="multiple" style="width:10%;text-align:center"/>
@@ -53,55 +102,15 @@
 	                 </p:selectManyButton>                  
                  </p:column>
                             
-
                  </p:dataTable> 
                 
-                 <p:confirmDialog global="true" showEffect="fade" hideEffect="explode">
+                 <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
                      <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
                      <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
                  </p:confirmDialog>               
         </h:form>
                
-                <h:form id="frmTblTAF">
-               
-                <h:panelGrid columns="2" id="cad" styleClass="my-panel-grid" style="width:100%">                               
-                        <p:outputLabel for="txtTAF" value="TAF:" style="margin:5px"/>
-                        <p:inputText id="txtTAF" required="true" style="margin:5px" value="#{tafController.taf.nome}" />   
-                                                              
-                        <p:outputLabel for="txtData" value="Data:" style="margin:5px"/>
-                        <p:calendar id="txtData" pattern="dd/MM/yyyy" mask="99/99/9999"
-                        required="true" navigator="true" style="margin:5px" value="#{tafController.taf.data}"/>   
-                        
-                        <p:commandButton value="Cadastrar TAF" style="float:left"
-                            styleClass="btn-primary" icon="fa fa-plus" process="tblTAF" 
-                            width="50%" actionListener="#{tafController.salvar}"/>                
-                       
-                </h:panelGrid>
-               
-                    <p:dataTable id="tblTAF" reflow="true" rows="5" paginator="true" var="taf" value="#{tafController.tafs}" > 
-                                                          
-                        <p:column headerText="TAF" >
-                            <h:outputText value="#{taf.nome}" />
-                        </p:column>
-                       
-                        <p:column headerText="Data" >
-                            <h:outputText value="#{taf.data}" />
-                        </p:column>            
-                       
-                    	<p:column headerText="Opções" exportable="false" style="width:auto;text-align:center">
-	    					<p:commandButton icon="ui-icon-trash" actionListener="#{tafController.excluir}" update="frmCad:cad frmTbl:tbl">
-	    						<p:confirm header="Confirmação" message="Você deseja Excluir este Taf?" icon="ui-icon-alert"/>
-	    						<f:attribute name="tafExclui" value="#{taf}"/>		    		
-	    					</p:commandButton>
-	  		 			</p:column>
-						    					 
-                    </p:dataTable>
-                    	<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-							<p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
-							<p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
-						</p:confirmDialog>
-                </h:form>
-           
+             
             </div>
         </div>
        
