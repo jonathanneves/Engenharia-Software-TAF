@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.persistence.criteria.CriteriaQuery;
@@ -17,6 +19,8 @@ import com.github.adminfaces.starter.model.Taf;
 import com.github.adminfaces.starter.model.TafExercicio;
 import com.github.adminfaces.starter.util.HibernateUtil;
 
+@ManagedBean
+@ViewScoped
 public class TafExercicioController implements Serializable {
 
 private static final long serialVersionUID = 1L;
@@ -27,31 +31,54 @@ private static final long serialVersionUID = 1L;
 	private List<Exercicio> exercicios;
 	private List<Taf> tafs;
 	
+	private List<String> modalidades;
+	
 	@PostConstruct
 	public void inicializa() {
 		tafexercicio = new TafExercicio(); 
+		listarTodas();
 		listarTafs();
-		listarExercicios();
+		listarExercicios();		
 	}
 	
 	public void salvar () {
 		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
 		Transaction t = null;
-		try {
-			t = sessao.beginTransaction();
-			sessao.merge(tafexercicio);		//merge = Salvar (Insert) Ele identifica o ID direto e ja edita
-			t.commit();
-			tafexercicio = new TafExercicio();
-			addMessage("TAF", "Cadastrado con sucesso");
-			listarTafs();
-		} catch (Exception e) {
-			if(t!=null)
-				t.rollback();
-			throw(e);
-		}finally{
-			sessao.close();
+		Taf Taux = tafexercicio.getTaf();
+			try {				
+				for(Exercicio e : exercicios) {	
+					for(String m : modalidades) {
+						System.out.println("Modalidade: "+ m + " Exercicio: "+e.getNome());
+						if(m.equals("rm")) 
+							tafexercicio.setModalidade1RM("S");
+						else
+							tafexercicio.setModalidade1RM("N");
+						if(m.equals("max")) 
+							tafexercicio.setModalidadeMAX("S");
+						else
+							tafexercicio.setModalidadeMAX("N");
+						if(m.equals("vt")) 
+							tafexercicio.setModalidadeVT("S");
+						else
+							tafexercicio.setModalidadeVT("N");
+						
+					}
+					t = sessao.beginTransaction();
+					tafexercicio.setExercicio(e);
+					tafexercicio.setTaf(Taux);
+					sessao.merge(tafexercicio);		//merge = Salvar (Insert) Ele identifica o ID direto e ja edita
+					t.commit();
+					tafexercicio = new TafExercicio();
+				}
+				addMessage("TAF", "Cadastrado con sucesso");
+			} catch (Exception ex) {
+				if(t!=null)
+					t.rollback();
+				throw(ex);
+			}finally{
+				sessao.close();
+			}
 		}
-	}
 	
 	public void exclui () {
 		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
@@ -71,9 +98,8 @@ private static final long serialVersionUID = 1L;
 			sessao.close();
 		}
 	}
-	
-	@SuppressWarnings("unchecked")	//ADD WARNING para tirar o erro de consulta.list()
-	public void listarTafs() {
+
+	public void listarTodas() {
 		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
 		try {
 			CriteriaQuery<TafExercicio> cq = sessao.getCriteriaBuilder().createQuery(TafExercicio.class);
@@ -86,7 +112,19 @@ private static final long serialVersionUID = 1L;
 		}
 	}
 	
-	@SuppressWarnings("unchecked")	//ADD WARNING para tirar o erro de consulta.list()
+	public void listarTafs() {
+		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
+		try {
+			CriteriaQuery<Taf> cq = sessao.getCriteriaBuilder().createQuery(Taf.class);
+			cq.from(Taf.class);
+			tafs = sessao.createQuery(cq).getResultList();
+		} catch (Exception e) {
+			addMessage("ERRO", "Erro ao listar tafs");
+		} finally {
+			sessao.close();
+		}
+	}
+	
 	public void listarExercicios() {
 		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
 		try {
@@ -109,16 +147,19 @@ private static final long serialVersionUID = 1L;
 		exclui();
 	}
 	
-	public void selecionaExercicios(ActionEvent evt) {
-		tafexercicio.setExercicio((Exercicio) (evt.getComponent().getAttributes().get("exercicioSelecionado")));
-		System.out.println("Exercicio: "+tafexercicio.getExercicio().getNome());
-	}
-	
 	public void selecionaTaf(ActionEvent evt) {
 		tafexercicio.setTaf((Taf) (evt.getComponent().getAttributes().get("tafSelecionado")));
 		System.out.println("Taf: "+tafexercicio.getTaf().getNome());
 	}
-	 
+
+	public List<String> getModalidades() {
+		return modalidades;
+	}
+
+	public void setModalidades(List<String> modalidades) {
+		this.modalidades = modalidades;
+	}
+
 	public TafExercicio getTafexercicio() {
 		return tafexercicio;
 	}

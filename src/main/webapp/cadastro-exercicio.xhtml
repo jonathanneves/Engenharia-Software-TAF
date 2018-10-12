@@ -118,7 +118,7 @@
 				   
 				</div>    
 				<p:commandButton value = "Cadastrar" actionListener="#{exercicioController.salvar}" 
-			         oncomplete="PF('dlg').hide();" update="frmTbl:tbl"
+			         oncomplete="PF('dlg').hide();" update="frmTbl:tbl frmCad:cad"
 			         style="padding:5px; margin:5px" styleClass="btn-primary" icon="fa fa-plus"/>
 			    <p:commandButton value = "Cancelar" oncomplete="PF('dlg').hide();" style="padding:5px; margin:5px"/>
 			</h:form> 
@@ -138,8 +138,7 @@
 						<p:inputTextarea rows="6" cols="36" id="txtDescricao" value="#{exercicioController.exercicio.descricao}" required="true" requiredMessage="Descri��o obrigat�ria"/>	
 						<h3>Classificacao</h3>
 						<br></br>
-									
-							
+												
 							<h:panelGrid columns="3" id="class" styleClass="my-panel-grid"> 
 								<p:outputLabel value="   "/>	<p:outputLabel value="Fraco "/><p:outputLabel value="Forte "/>
 								

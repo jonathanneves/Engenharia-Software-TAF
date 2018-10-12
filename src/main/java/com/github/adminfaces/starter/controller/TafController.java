@@ -141,6 +141,7 @@ public class TafController implements Serializable {
 		exclui();
 	}
 	
+	
 	public void addMessage(String summary, String detail) {
 		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail);
 		FacesContext.getCurrentInstance().addMessage(null, message);

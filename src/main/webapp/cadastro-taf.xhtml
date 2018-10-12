@@ -44,11 +44,13 @@
               
              	<p:outputLabel value="Selecione um taf da tabela e vários exercícios da outra tabela para cadastrar:"/>
              	
+             	<p:outputLabel value="" id="cid"/>	
+             	
                 <p:dataTable id="tbl" reflow="true" rows="5" paginator="true" var="t" value="#{tafController.tafs}" > 
                        
 		               	<p:column headerText="Selecionar" width="10%;" style="text-align:center;">
 					    	<p:commandButton icon="ui-icon-circle-check" actionListener="#{tafExercicioController.selecionaTaf}" 
-					    	immediate="true" style="margin: 0 auto;">
+					    	immediate="true" update="frmCadTAF:cid" style="margin: 0 auto;">
 					    		<f:attribute name="tafSelecionado" value="#{t}"/>		    		
 				    		</p:commandButton>				    		    		
 			    		</p:column>	  
@@ -64,13 +66,18 @@
                       </p:column>            
                      
                   	<p:column headerText="Opção" exportable="false" width="10%;" style="text-align:center;">
-	   					<p:commandButton icon="ui-icon-trash" actionListener="#{tafController.excluir}" update="frmCadTAF:cad frmCadTAF:tbl">
+	   					<p:commandButton icon="ui-icon-trash" actionListener="#{tafController.excluir}" update="frmCadTAF:tbl">
 	   						<p:confirm header="Confirmação" message="Você deseja Excluir este Taf?" icon="ui-icon-alert"/>
 	   						<f:attribute name="tafExclui" value="#{t}"/>		    		
 	   					</p:commandButton>
  		 			</p:column>
 				    					 
                   </p:dataTable>
+                  
+                 <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                     <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                     <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
+                 </p:confirmDialog>    
             </h:form>
                 
             <p:spacer height="10"/>
@@ -84,30 +91,34 @@
                  selection="#{tafExercicioController.exercicios}"
                  rowKey="#{e.id}">
                 
-                 <p:column selectionMode="multiple" style="width:10%;text-align:center"/>
-                     
-                     <p:column headerText="Id" style="width:10%;text-align:center;">
-	                         <h:outputText value="#{e.id}" />
-	                     </p:column>
-	                  
-	                     <p:column headerText="Nome">
-	                         <h:outputText value="#{e.nome}" />
-	                     </p:column>
+	                 <p:column selectionMode="multiple" style="width:10%;text-align:center"/>
 	                     
-	                     <p:column headerText="Modalidade">
-	                          <p:selectManyButton >
-	                 <f:selectItem itemLabel="1RM" itemValue="rm1" />
-	                 <f:selectItem itemLabel="Rept. Máx." itemValue="max" />
-	                 <f:selectItem itemLabel="Vol. de treino" itemValue="vol" />
-	                 </p:selectManyButton>                  
-                 </p:column>
-                            
+	                     	<p:column headerText="Id" style="width:10%;text-align:center;">
+		                         <h:outputText value="#{e.id}" />
+		                     </p:column>
+		                  
+		                     <p:column headerText="Nome">
+		                         <h:outputText value="#{e.nome}" />
+		                     </p:column>
+		                    
+                 
+	                 <f:facet name="footer">
+	                 	<p:commandButton value="Cadastrar" actionListener="#{tafExercicioController.salvar}" 
+				         process="tblExercicio" update="frmTblExercicio:multiExercicio frmTblExercicio:tblExercicio:multi"
+				         icon="fa fa-plus" style="padding:5px; margin:5px" styleClass="btn-primary"/>         	     	
+	        		 </f:facet> 
+	        		 
+       		         <p:column headerText="Modalidade" width="25%" style="text-align:center;padding:5px;">
+                        <p:selectManyButton >
+                		  	<f:selectItem itemLabel="1RM" itemValue="rm" />
+                 			<f:selectItem itemLabel="Rept. Máx." itemValue="max" />
+                 			<f:selectItem itemLabel="Vol. de treino" itemValue="vt" />
+		                </p:selectManyButton>              
+	                </p:column>          
                  </p:dataTable> 
-                
-                 <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-                     <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
-                     <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
-                 </p:confirmDialog>               
+                          
+			      <ui:repeat id="multiExercicio" value="#{tafExercicioController.exercicios}" var="e"/>
+	
         </h:form>
                
              

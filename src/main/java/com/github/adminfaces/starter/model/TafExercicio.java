@@ -28,7 +28,11 @@ public class TafExercicio implements Serializable {
 	private Taf taf;
 	
 	@Column
-	private String modalidade;
+	private String modalidade1RM;
+	@Column
+	private String modalidadeMAX;
+	@Column
+	private String modalidadeVT;
 	
 	public Integer getId() {
 		return id;
@@ -54,12 +58,28 @@ public class TafExercicio implements Serializable {
 		this.taf = taf;
 	}
 	
-	public String getModalidade() {
-		return modalidade;
+	public String getModalidade1RM() {
+		return modalidade1RM;
 	}
-	
-	public void setModalidade(String modalidade) {
-		this.modalidade = modalidade;
+
+	public void setModalidade1RM(String modalidade1rm) {
+		modalidade1RM = modalidade1rm;
+	}
+
+	public String getModalidadeMAX() {
+		return modalidadeMAX;
+	}
+
+	public void setModalidadeMAX(String modalidadeMAX) {
+		this.modalidadeMAX = modalidadeMAX;
+	}
+
+	public String getModalidadeVT() {
+		return modalidadeVT;
+	}
+
+	public void setModalidadeVT(String modalidadeVT) {
+		this.modalidadeVT = modalidadeVT;
 	}
 	
 	@Override
