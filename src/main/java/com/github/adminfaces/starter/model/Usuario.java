@@ -30,10 +30,6 @@ public class Usuario implements Serializable {
 	@Column 
 	private String cpf;
 	
-	public String TESTE() {
-		return "Testando github";
-	}
-	
 	public Integer getId() {
 		return id;
 	}
