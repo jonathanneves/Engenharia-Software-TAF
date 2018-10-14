@@ -1,6 +1,7 @@
 package com.github.adminfaces.starter.model;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,25 +16,45 @@ public class TafExercicio implements Serializable {
 
 	private static final long serialVersionUID = 1L; 
 	
+	
 	@Id		
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
 	
+	@Column private String nome;
+	@Column	private Date data;
+	
 	@ManyToOne
-	@JoinColumn(nullable=true)
+	@JoinColumn(nullable=false)
 	private Exercicio exercicio;
 	
 	@ManyToOne
-	@JoinColumn(nullable=true)
+	@JoinColumn(nullable=false)
 	private Taf taf;
 	
-	@Column
+	@Column (name="modalidade1RM", nullable = false,  columnDefinition = "varchar(1) default 'N'") 
 	private String modalidade1RM;
-	@Column
+	@Column (name="modalidadeMAX", nullable = false,  columnDefinition = "varchar(1) default 'N'") 
 	private String modalidadeMAX;
-	@Column
+	@Column (name="modalidadeVT", nullable = false,  columnDefinition = "varchar(1) default 'N'") 
 	private String modalidadeVT;
 	
+	public String getNome() {
+		return nome;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
+	public Date getData() {
+		return data;
+	}
+
+	public void setData(Date data) {
+		this.data = data;
+	}
+
 	public Integer getId() {
 		return id;
 	}

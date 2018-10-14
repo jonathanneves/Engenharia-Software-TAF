@@ -1,6 +1,8 @@
 package com.github.adminfaces.starter.controller;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -29,15 +31,15 @@ private static final long serialVersionUID = 1L;
 	private List<TafExercicio> tafexercicios;
 	
 	private List<Exercicio> exercicios;
-	private List<Taf> tafs;
+	//private List<Taf> tafs;
 	
-	private List<String> modalidades;
+	//private List<String> modalidades;
 	
 	@PostConstruct
 	public void inicializa() {
 		tafexercicio = new TafExercicio(); 
 		listarTodas();
-		listarTafs();
+	//	listarTafs();
 		listarExercicios();		
 	}
 	
@@ -45,24 +47,18 @@ private static final long serialVersionUID = 1L;
 		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
 		Transaction t = null;
 		Taf Taux = tafexercicio.getTaf();
-			try {				
+			try {		
 				for(Exercicio e : exercicios) {	
-					for(String m : modalidades) {
-						System.out.println("Modalidade: "+ m + " Exercicio: "+e.getNome());
-						if(m.equals("rm")) 
-							tafexercicio.setModalidade1RM("S");
-						else
-							tafexercicio.setModalidade1RM("N");
-						if(m.equals("max")) 
-							tafexercicio.setModalidadeMAX("S");
-						else
-							tafexercicio.setModalidadeMAX("N");
-						if(m.equals("vt")) 
-							tafexercicio.setModalidadeVT("S");
-						else
-							tafexercicio.setModalidadeVT("N");
-						
-					}
+					//System.out.println(getModalidades().size());
+						for(String m : e.getModalidades()) {
+							System.out.println(m);
+							if(m.equals("rm")) 
+								tafexercicio.setModalidade1RM("S");
+							if(m.equals("max")) 
+								tafexercicio.setModalidadeMAX("S");
+							if(m.equals("vt")) 
+								tafexercicio.setModalidadeVT("S");
+						}
 					t = sessao.beginTransaction();
 					tafexercicio.setExercicio(e);
 					tafexercicio.setTaf(Taux);
@@ -70,8 +66,10 @@ private static final long serialVersionUID = 1L;
 					t.commit();
 					tafexercicio = new TafExercicio();
 				}
-				addMessage("TAF", "Cadastrado con sucesso");
+				addMessage("TAF", "Cadastrado con sucesso");				
 			} catch (Exception ex) {
+				if(Taux == null)
+					addMessage("ERRO","Selecione uma TAF");
 				if(t!=null)
 					t.rollback();
 				throw(ex);
@@ -89,7 +87,7 @@ private static final long serialVersionUID = 1L;
 			t.commit();
 			tafexercicio = new TafExercicio();
 			addMessage("Exclusão", "TAF excluído com sucesso");
-			listarTafs();
+			//listarTafs();
 		} catch (Exception e) {
 			if(t!=null)
 				t.rollback();
@@ -112,7 +110,7 @@ private static final long serialVersionUID = 1L;
 		}
 	}
 	
-	public void listarTafs() {
+/*	public void listarTafs() {
 		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
 		try {
 			CriteriaQuery<Taf> cq = sessao.getCriteriaBuilder().createQuery(Taf.class);
@@ -123,7 +121,7 @@ private static final long serialVersionUID = 1L;
 		} finally {
 			sessao.close();
 		}
-	}
+	}*/
 	
 	public void listarExercicios() {
 		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
@@ -147,18 +145,18 @@ private static final long serialVersionUID = 1L;
 		exclui();
 	}
 	
-	public void selecionaTaf(ActionEvent evt) {
+/*	public void selecionaTaf(ActionEvent evt) {
 		tafexercicio.setTaf((Taf) (evt.getComponent().getAttributes().get("tafSelecionado")));
 		System.out.println("Taf: "+tafexercicio.getTaf().getNome());
-	}
+	}*/
 
-	public List<String> getModalidades() {
+/*	public List<String> getModalidades() {
 		return modalidades;
 	}
 
 	public void setModalidades(List<String> modalidades) {
 		this.modalidades = modalidades;
-	}
+	}*/
 
 	public TafExercicio getTafexercicio() {
 		return tafexercicio;
@@ -182,14 +180,6 @@ private static final long serialVersionUID = 1L;
 
 	public void setExercicios(List<Exercicio> exercicios) {
 		this.exercicios = exercicios;
-	}
-
-	public List<Taf> getTafs() {
-		return tafs;
-	}
-
-	public void setTafs(List<Taf> tafs) {
-		this.tafs = tafs;
 	}
 
 	public static long getSerialversionuid() {

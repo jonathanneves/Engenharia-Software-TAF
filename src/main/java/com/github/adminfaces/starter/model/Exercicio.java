@@ -11,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import javax.persistence.OneToMany;
+import javax.persistence.Transient;
 
 @Entity
 public class Exercicio implements Serializable {
@@ -34,6 +35,17 @@ public class Exercicio implements Serializable {
 
 	@OneToMany(mappedBy="exercicio", cascade=CascadeType.ALL)
 	private List<TafExercicio> tafexercicio;	
+	
+	@Transient
+	private List<String> modalidades;
+	
+	
+	public List<String> getModalidades() {
+		return modalidades;
+	}
+	public void setModalidades(List<String> modalidades) {
+		this.modalidades = modalidades;
+	}
 	
 	public int getUmrmFraco() {
 		return umrmFraco;
