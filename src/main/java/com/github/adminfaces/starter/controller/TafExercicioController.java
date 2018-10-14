@@ -31,7 +31,7 @@ private static final long serialVersionUID = 1L;
 	private List<TafExercicio> tafexercicios;
 	
 	private List<Exercicio> exercicios;
-	//private List<Taf> tafs;
+	private List<Taf> tafs;
 	
 	//private List<String> modalidades;
 	
@@ -39,7 +39,7 @@ private static final long serialVersionUID = 1L;
 	public void inicializa() {
 		tafexercicio = new TafExercicio(); 
 		listarTodas();
-	//	listarTafs();
+		listarTafs();
 		listarExercicios();		
 	}
 	
@@ -49,7 +49,9 @@ private static final long serialVersionUID = 1L;
 		Taf Taux = tafexercicio.getTaf();
 			try {		
 				for(Exercicio e : exercicios) {	
-					//System.out.println(getModalidades().size());
+					tafexercicio.setModalidade1RM("N");
+					tafexercicio.setModalidadeMAX("N");
+					tafexercicio.setModalidadeVT("N");
 						for(String m : e.getModalidades()) {
 							System.out.println(m);
 							if(m.equals("rm")) 
@@ -87,7 +89,7 @@ private static final long serialVersionUID = 1L;
 			t.commit();
 			tafexercicio = new TafExercicio();
 			addMessage("Exclusão", "TAF excluído com sucesso");
-			//listarTafs();
+			listarTafs();
 		} catch (Exception e) {
 			if(t!=null)
 				t.rollback();
@@ -110,7 +112,7 @@ private static final long serialVersionUID = 1L;
 		}
 	}
 	
-/*	public void listarTafs() {
+	public void listarTafs() {
 		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
 		try {
 			CriteriaQuery<Taf> cq = sessao.getCriteriaBuilder().createQuery(Taf.class);
@@ -121,7 +123,7 @@ private static final long serialVersionUID = 1L;
 		} finally {
 			sessao.close();
 		}
-	}*/
+	}
 	
 	public void listarExercicios() {
 		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
@@ -145,10 +147,10 @@ private static final long serialVersionUID = 1L;
 		exclui();
 	}
 	
-/*	public void selecionaTaf(ActionEvent evt) {
+	public void selecionaTaf(ActionEvent evt) {
 		tafexercicio.setTaf((Taf) (evt.getComponent().getAttributes().get("tafSelecionado")));
 		System.out.println("Taf: "+tafexercicio.getTaf().getNome());
-	}*/
+	}
 
 /*	public List<String> getModalidades() {
 		return modalidades;
@@ -180,6 +182,14 @@ private static final long serialVersionUID = 1L;
 
 	public void setExercicios(List<Exercicio> exercicios) {
 		this.exercicios = exercicios;
+	}
+
+	public List<Taf> getTafs() {
+		return tafs;
+	}
+
+	public void setTafs(List<Taf> tafs) {
+		this.tafs = tafs;
 	}
 
 	public static long getSerialversionuid() {

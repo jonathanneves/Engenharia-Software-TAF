@@ -25,6 +25,9 @@ public class Taf implements Serializable {
 	private Integer id;
 	@Column private String nome;
 	@Column	private Date data;
+												
+	@OneToMany(mappedBy="taf", cascade=CascadeType.ALL)
+	private List<TafExercicio> tafexercicio;	
 					
 	@Override
 	public String toString() {
@@ -51,7 +54,12 @@ public class Taf implements Serializable {
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-
+	public List<TafExercicio> getTafexercicio() {
+		return tafexercicio;
+	}
+	public void setTafexercicio(List<TafExercicio> tafexercicio) {
+		this.tafexercicio = tafexercicio;
+	}
 	@Override
 	public int hashCode() {
 		final int prime = 31;
