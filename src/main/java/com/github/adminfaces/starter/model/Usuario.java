@@ -1,6 +1,7 @@
 package com.github.adminfaces.starter.model;
 
 import java.io.Serializable;
+
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -20,7 +21,7 @@ public class Usuario implements Serializable {
 	private Integer id;
 	@Column	
 	private String nome;
-	@Column
+	@Column @Type (type="date")
 	private Date nascimento;
 	@Column 
 	private String sexo;

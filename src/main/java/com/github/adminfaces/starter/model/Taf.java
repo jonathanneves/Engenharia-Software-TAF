@@ -31,9 +31,7 @@ public class Taf implements Serializable {
 	@JoinColumn(nullable=false)
 	private Exercicio exercicio;
 	
-	@Column private String modalidade1RM;
-	@Column private String modalidadeMAX;
-	@Column	private String modalidadeVT;
+	@Column private String modalidade;
 	
 	public String getNome() {
 		return nome;
@@ -69,30 +67,14 @@ public class Taf implements Serializable {
 		this.exercicio = exercicio;
 	}
 	
-	public String getModalidade1RM() {
-		return modalidade1RM;
+	public String getModalidade() {
+		return modalidade;
 	}
 
-	public void setModalidade1RM(String modalidade1rm) {
-		modalidade1RM = modalidade1rm;
+	public void setModalidade(String modalidade) {
+		this.modalidade = modalidade;
 	}
 
-	public String getModalidadeMAX() {
-		return modalidadeMAX;
-	}
-
-	public void setModalidadeMAX(String modalidadeMAX) {
-		this.modalidadeMAX = modalidadeMAX;
-	}
-
-	public String getModalidadeVT() {
-		return modalidadeVT;
-	}
-
-	public void setModalidadeVT(String modalidadeVT) {
-		this.modalidadeVT = modalidadeVT;
-	}
-	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
