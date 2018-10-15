@@ -1,6 +1,7 @@
 package com.github.adminfaces.starter.controller;
 
 import java.io.Serializable;
+
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -27,12 +28,10 @@ public class UsuarioController implements Serializable {
 	private List<Usuario> usuarios;
 	private Usuario usuarioSelecionado;
 	
-    /*private EntityManagerFactory factory = Persistence.createEntityManagerFactory("usuarios");
-    private EntityManager em = factory.createEntityManager();*/
 	
 	@PostConstruct
 	public void inicializa() {
-		usuario = new Usuario(); 		
+		usuario = new Usuario(); 
 		listarUsuarios();
 	}
 	
@@ -74,16 +73,12 @@ public class UsuarioController implements Serializable {
 		}
 	}
 	
-	//@SuppressWarnings("unchecked")	//ADD WARNING para tirar o erro de consulta.list()
 	public void listarUsuarios() {
 		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
 		try {
 			CriteriaQuery<Usuario> cq = sessao.getCriteriaBuilder().createQuery(Usuario.class);
 			cq.from(Usuario.class);
 			usuarios = sessao.createQuery(cq).getResultList();
-			for (Usuario user : usuarios) {
-			    System.out.println("Usuario details : "+user.getNome()+" -- "+user.getCpf());   
-			}   
 		} catch (Exception e) {
 			addMessage("ERRO", "Erro ao listar usuários");
 		} finally {

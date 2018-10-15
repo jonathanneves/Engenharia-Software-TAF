@@ -31,97 +31,64 @@
               <h:panelGrid columns="5" id="cad" styleClass="my-panel-grid" style="width:100%">   
                                           
                   <p:outputLabel for="txtTAF" value="TAF:" style="margin:5px"/>
-                  <p:inputText id="txtTAF" required="true" style="margin:5px" value="#{tafController.taf.nome}" />   
+                  <p:inputText id="txtTAF" required="true"
+					requiredMessage="Nome TAF Obrigatório" value="#{tafController.taf.nome}" />   
                                                         
-                  <p:outputLabel for="txtData" value="Data:" style="margin:5px"/>
+                  <p:outputLabel for="txtData" value="Data de Realização:" style="margin:5px"/>
                   <p:calendar id="txtData" pattern="dd/MM/yyyy" mask="99/99/9999"
-                  required="true" navigator="true" style="margin:5px" value="#{tafController.taf.data}"/>   
+                  required="true" navigator="true"
+                  requiredMessage="Data de Realização Obrigatório" value="#{tafController.taf.data}"/>  
                   
-                  <p:commandButton value="Cadastrar TAF" style="float:left"
-                      styleClass="btn-primary" icon="fa fa-plus" 
-                      update="frmCadTAF:cad frmCadTAF:tbl" actionListener="#{tafController.salvar}" />                                      
-              </h:panelGrid>
+              </h:panelGrid> 
               
-             	<p:outputLabel value="Selecione um taf da tabela e vários exercícios da outra tabela para cadastrar:"/>
-             	
-             	<p:outputLabel value="" id="cid"/>	
-             	
-                <p:dataTable id="tbl" reflow="true" rows="5" paginator="true" var="t" value="#{tafController.tafs}" > 
-                       
-		               	<p:column headerText="Selecionar" width="10%;" style="text-align:center;">
-					    	<p:commandButton icon="ui-icon-circle-check" actionListener="#{tafExercicioController.selecionaTaf}" 
-					    	immediate="true" update="frmCadTAF:cid" style="margin: 0 auto;">
-					    		<f:attribute name="tafSelecionado" value="#{t}"/>		    		
-				    		</p:commandButton>				    		    		
-			    		</p:column>	  
-	    		                          
-                      <p:column headerText="TAF" >
-                          <h:outputText value="#{t.nome}" />
-                      </p:column>
-                                      
-                      <p:column headerText="Data" >
-                          <h:outputText value="#{t.data}">
-                          	<f:convertDateTime pattern="dd/MM/yyyy" /> 
-                          </h:outputText>
-                      </p:column>            
-                     
-                  	<p:column headerText="Opção" exportable="false" width="10%;" style="text-align:center;">
-	   					<p:commandButton icon="ui-icon-trash" actionListener="#{tafController.excluir}" update="frmCadTAF:tbl">
-	   						<p:confirm header="Confirmação" message="Você deseja Excluir este Taf?" icon="ui-icon-alert"/>
-	   						<f:attribute name="tafExclui" value="#{t}"/>		    		
-	   					</p:commandButton>
- 		 			</p:column>
-				    					 
-                  </p:dataTable>
+                <br/>
+                
+             	<p:outputLabel value="Selecione os exercícios e suas respectivas modalidades na tabela para cadastrar:"/>            	
                   
                  <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
                      <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
                      <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
-                 </p:confirmDialog>    
-            </h:form>
-                
-            <p:spacer height="10"/>
-            
-            <h:form  id="frmTblExercicio">
-                 <p:dataTable id="tblExercicio" var="e"  emptyMessage="Sem Registro" value="#{exercicioController.exercicios}"
-                 reflow="true" rows="10" paginator="true"                                                                     
-                 paginatorPosition="bottom"                                   
-                 currentPageReportTemplate=""
-                 rowsPerPageTemplate="5,10,15,20,30"
-                 selection="#{tafExercicioController.exercicios}"
-                 rowKey="#{e.id}">
-                
-	                 <p:column selectionMode="multiple" style="width:10%;text-align:center"/>
-	                     
-	                     	<p:column headerText="Id" style="width:10%;text-align:center;">
-		                         <h:outputText value="#{e.id}" />
-		                     </p:column>
-		                  
-		                     <p:column headerText="Nome">
-		                         <h:outputText value="#{e.nome}" />
-		                     </p:column>
-		                    
-		       		         <p:column headerText="Modalidade" width="30%" style="text-align:center;padding:5px;">
-		                        <p:selectManyButton value="#{e.modalidades}">
-		                		  	<f:selectItem itemLabel="1RM" itemValue="rm" />
-		                 			<f:selectItem itemLabel="Rept. Máx." itemValue="max" />
-		                 			<f:selectItem itemLabel="Vol. de treino" itemValue="vt" />
-				                </p:selectManyButton>              
-			                </p:column>   	
-			                
-			                                 
-			             <f:facet name="footer">
-			                <p:commandButton value="Cadastrar" actionListener="#{tafExercicioController.salvar}" 
-					         process="tblExercicio" update="frmTblExercicio:multiExercicio"
-					         icon="fa fa-plus" style="padding:5px; margin:5px" styleClass="btn-primary"/>         	     	
-			       		 </f:facet> 	               			        		        
-                 </p:dataTable> 
-                  
-			      <ui:repeat id="multiExercicio" value="#{tafExercicioController.exercicios}" var="e"/>
+                 </p:confirmDialog>          
 
-	
-        </h:form>
+          		<br/>
+				<br/>
+				
+                <p:dataTable id="tblExercicio" var="e"  emptyMessage="Sem Registro" value="#{exercicioController.exercicios}"
+                reflow="true" rows="10" paginator="true"                                                                     
+                paginatorPosition="bottom"                                   
+                currentPageReportTemplate=""
+                rowsPerPageTemplate="5,10,15,20,30"
+                selection="#{tafController.exercicios}"
+                rowKey="#{e.id}">
                
+                 <p:column selectionMode="multiple" style="width:10%;text-align:center"/>
+                     
+                     	<p:column headerText="Id" style="width:10%;text-align:center;">
+	                         <h:outputText value="#{e.id}" />
+	                     </p:column>
+	                  
+	                     <p:column headerText="Nome">
+	                         <h:outputText value="#{e.nome}" />
+	                     </p:column>
+	                    
+	       		         <p:column headerText="Modalidade" width="50%" style="text-align:center;padding:5px;">
+	                        <p:selectManyButton value="#{e.modalidades}">
+	                		  	<f:selectItem itemLabel="1RM" itemValue="rm" />
+	                 			<f:selectItem itemLabel="Rept. Máx." itemValue="max" />
+	                 			<f:selectItem itemLabel="Vol. de treino" itemValue="vt" />
+			                </p:selectManyButton>              
+		                </p:column>   				                
+		                                 
+		             <f:facet name="footer">
+		                <p:commandButton value="Cadastrar" actionListener="#{tafController.salvar}" 
+				         update="frmCadTAF:multiExercicio frmCadTAF:cad"
+				         icon="fa fa-plus" style="padding:5px; margin:5px" styleClass="btn-primary"/>         	     	
+		       		 </f:facet> 	               			        		        
+                </p:dataTable> 
+                 
+		      <ui:repeat id="multiExercicio" value="#{tafController.exercicios}" var="e"/>
+	
+        	</h:form>
              
             </div>
         </div>

@@ -1,11 +1,8 @@
 package com.github.adminfaces.starter.model;
 
 import java.io.Serializable;
-
 import java.util.Date;
-import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -13,53 +10,89 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+
+import org.hibernate.annotations.Type;
 
 @Entity
 public class Taf implements Serializable {
-	
+
 	private static final long serialVersionUID = 1L; 
 	
 	@Id		
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
+	
 	@Column private String nome;
-	@Column	private Date data;
-												
-	@OneToMany(mappedBy="taf", cascade=CascadeType.ALL)
-	private List<TafExercicio> tafexercicio;	
-					
-	@Override
-	public String toString() {
-			return getNome();
-	}
-	public Integer getId() {
-		return id;
-	}
-	public void setId(Integer id) {
-		this.id = id;
-	}
+	@Column	
+	@Type(type="date")
+	private Date data;
+	
+	@ManyToOne
+	@JoinColumn(nullable=false)
+	private Exercicio exercicio;
+	
+	@Column private String modalidade1RM;
+	@Column private String modalidadeMAX;
+	@Column	private String modalidadeVT;
+	
 	public String getNome() {
 		return nome;
 	}
+
 	public void setNome(String nome) {
+		System.out.println(nome);
 		this.nome = nome;
 	}
+
 	public Date getData() {
 		return data;
 	}
+
 	public void setData(Date data) {
+		System.out.println(nome);
 		this.data = data;
 	}
-	public static long getSerialversionuid() {
-		return serialVersionUID;
+
+	public Integer getId() {
+		return id;
 	}
-	public List<TafExercicio> getTafexercicio() {
-		return tafexercicio;
+	
+	public void setId(Integer id) {
+		this.id = id;
 	}
-	public void setTafexercicio(List<TafExercicio> tafexercicio) {
-		this.tafexercicio = tafexercicio;
+	
+	public Exercicio getExercicio() {
+		return exercicio;
 	}
+	
+	public void setExercicio(Exercicio exercicio) {
+		this.exercicio = exercicio;
+	}
+	
+	public String getModalidade1RM() {
+		return modalidade1RM;
+	}
+
+	public void setModalidade1RM(String modalidade1rm) {
+		modalidade1RM = modalidade1rm;
+	}
+
+	public String getModalidadeMAX() {
+		return modalidadeMAX;
+	}
+
+	public void setModalidadeMAX(String modalidadeMAX) {
+		this.modalidadeMAX = modalidadeMAX;
+	}
+
+	public String getModalidadeVT() {
+		return modalidadeVT;
+	}
+
+	public void setModalidadeVT(String modalidadeVT) {
+		this.modalidadeVT = modalidadeVT;
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -67,6 +100,7 @@ public class Taf implements Serializable {
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		return result;
 	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -84,5 +118,7 @@ public class Taf implements Serializable {
 		return true;
 	}
 
-	
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
 }

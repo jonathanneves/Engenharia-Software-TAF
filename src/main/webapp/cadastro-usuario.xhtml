@@ -49,7 +49,6 @@
 				<div class="box box-primary">
                		<div class="box-header with-border">
 						<p:dataTable id="tbl" var="u" value="#{usuarioController.usuarios}" 
-						selection="#{usuarioController.usuarioSelecionado}"
 						emptyMessage="Sem Registro" 
 						reflow="true" rows="10" paginator="true"                     			 	                                 
 	                    paginatorPosition="bottom"	                                 	                   
@@ -132,7 +131,7 @@
 		        		<p:outputLabel for="txtNascimento" value="Data de Nascimento:" />
 		       			<p:calendar id="txtNascimento" value="#{usuarioController.usuario.nascimento}" pattern="dd/MM/yyyy" 
 		       			locale="pt" navigator="true"   
-		       		    pattern="dd/MM/yyyy" mask="99/99/9999" required="true"
+		       		    mask="99/99/9999" required="true"
 						yearRange="c-100:c+0" requiredMessage="Data de nascimento obrigatório"/>								 								 					     				        					 																   	        			
 					</h:panelGrid>   
 				</div>

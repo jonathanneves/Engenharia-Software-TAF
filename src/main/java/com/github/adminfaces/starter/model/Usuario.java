@@ -21,7 +21,6 @@ public class Usuario implements Serializable {
 	@Column	
 	private String nome;
 	@Column
-	@Type(type="date")
 	private Date nascimento;
 	@Column 
 	private String sexo;

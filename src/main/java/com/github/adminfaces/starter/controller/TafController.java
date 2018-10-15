@@ -1,7 +1,6 @@
 package com.github.adminfaces.starter.controller;
 
 import java.io.Serializable;
-
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -12,65 +11,72 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.persistence.criteria.CriteriaQuery;
 
-import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.primefaces.model.chart.Axis;
-import org.primefaces.model.chart.AxisType;
-import org.primefaces.model.chart.BarChartModel;
-import org.primefaces.model.chart.ChartSeries;
 
 import com.github.adminfaces.starter.model.Exercicio;
 import com.github.adminfaces.starter.model.Taf;
 import com.github.adminfaces.starter.util.HibernateUtil;
 
-@ManagedBean //Classe controladora
+@ManagedBean
 @ViewScoped
 public class TafController implements Serializable {
 
-	private static final long serialVersionUID = 1L;
-	
-	private BarChartModel barModel;
+private static final long serialVersionUID = 1L;
 	
 	private Taf taf;
 	private List<Taf> tafs;
- 
+	
+	private List<Exercicio> exercicios;
+	
 	@PostConstruct
-	public void init() {
+	public void inicializa() {
 		taf = new Taf(); 
-		graficoPontos();
 		listarTodas();
+		listarExercicios();		
 	}
 	
 	public void salvar () {
 		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
 		Transaction t = null;
-		try {
-			t = sessao.beginTransaction();
-			sessao.merge(taf);		//merge = Salvar (Insert) Ele identifica o ID direto e ja edita
-			t.commit();
-			taf = new Taf();
-			addMessage("Cadastro", "TAF cadastrado com sucesso");
-			listarTodas();
-		} catch (Exception e) {
-			if(t!=null)
-				t.rollback();
-			throw(e);
-		}finally{
-			sessao.close();
+			try {		
+				for(Exercicio e : exercicios) {	
+					taf.setModalidade1RM("N");
+					taf.setModalidadeMAX("N");
+					taf.setModalidadeVT("N");
+						for(String m : e.getModalidades()) {
+							System.out.println(m);
+							if(m.equals("rm")) 
+								taf.setModalidade1RM("S");
+							if(m.equals("max")) 
+								taf.setModalidadeMAX("S");
+							if(m.equals("vt")) 
+								taf.setModalidadeVT("S");
+						}
+					t = sessao.beginTransaction();
+					taf.setExercicio(e);
+					sessao.merge(taf);		//merge = Salvar (Insert) Ele identifica o ID direto e ja edita
+					t.commit();
+					taf = new Taf();
+				}
+				addMessage("TAF", "Cadastrado com sucesso");				
+			} catch (Exception ex) {
+				if(t!=null)
+					t.rollback();
+				throw(ex);
+			}finally{
+				sessao.close();
+			}
 		}
-	}
 	
-	public void exclui ()  {
+	public void exclui () {
 		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
-		System.out.println("-------------");
 		Transaction t = null;
 		try {
 			t = sessao.beginTransaction();
-			sessao.delete(taf);			
+			sessao.delete(taf);		
 			t.commit();
 			taf = new Taf();
-			System.out.println("--------------");
 			addMessage("Exclusão", "TAF excluído com sucesso");
 			listarTodas();
 		} catch (Exception e) {
@@ -81,90 +87,72 @@ public class TafController implements Serializable {
 			sessao.close();
 		}
 	}
-	
+
 	public void listarTodas() {
 		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
-		try {	
+		try {
 			CriteriaQuery<Taf> cq = sessao.getCriteriaBuilder().createQuery(Taf.class);
 			cq.from(Taf.class);
 			tafs = sessao.createQuery(cq).getResultList();
 		} catch (Exception e) {
-			addMessage("ERRO", "ERRO ao listar tafs");
+			addMessage("ERRO", "Erro ao listar tafs");
 		} finally {
 			sessao.close();
 		}
 	}
-		
 	
-	 private BarChartModel initBarModel() {
-	        BarChartModel model = new BarChartModel();
-	 
-	        ChartSeries aluno = new ChartSeries();
-	        aluno.setLabel("pontos");
-	        aluno.set("20/05/2017", 120);
-	        aluno.set("05/08/2017", 100);
-	        aluno.set("26/02/2018", 44);
-	        aluno.set("03/05/2018", 150);
-	        aluno.set("25/08/2018", 25);	 
-	 
-	        model.addSeries(aluno);
-
-	        return model;
-	 }
-	 
-	 private void graficoPontos() {
-	        createBarModel();
-	 }
-	  
-	private void createBarModel() {
-        barModel = initBarModel();
-         
-        barModel.setTitle("Progresso de Pontuação");
-        barModel.setLegendPosition("ne");
-         
-        Axis xAxis = barModel.getAxis(AxisType.X);
-        xAxis.setLabel("Data da TAF");
-         
-        Axis yAxis = barModel.getAxis(AxisType.Y);
-        yAxis.setLabel("Média");
-        yAxis.setMin(0);
-        yAxis.setMax(200);
-    }	
-	 
+	public void listarExercicios() {
+		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
+		try {
+			CriteriaQuery<Exercicio> cq = sessao.getCriteriaBuilder().createQuery(Exercicio.class);
+			cq.from(Exercicio.class);
+			exercicios = sessao.createQuery(cq).getResultList();
+		} catch (Exception e) {
+			addMessage("ERRO", "Erro ao listar exercicios");
+		} finally {
+			sessao.close();
+		}
+	}
+			
 	public void editar(ActionEvent evt) {
 		taf = (Taf)evt.getComponent().getAttributes().get("tafEdita");
 	}
 	
-	public void excluir(ActionEvent evt)  {
-		System.out.println("VAI TOMA NO CU");
+	public void excluir(ActionEvent evt) {
 		taf = (Taf)evt.getComponent().getAttributes().get("tafExclui");
 		exclui();
-	}
-	
-	
-	public void addMessage(String summary, String detail) {
-		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail);
-		FacesContext.getCurrentInstance().addMessage(null, message);
-	}
+	}	
+
 	public Taf getTaf() {
 		return taf;
 	}
-	public void setTaf(Taf Taf) {
-		this.taf = Taf;
+
+	public void setTaf(Taf taf) {
+		this.taf = taf;
 	}
+
 	public List<Taf> getTafs() {
 		return tafs;
 	}
-	public void setTafs(List<Taf> Tafs) {
-		this.tafs = Tafs;
+
+	public void setTafs(List<Taf> tafs) {
+		this.tafs = tafs;
+	}
+
+	public List<Exercicio> getExercicios() {
+		return exercicios;
+	}
+
+	public void setExercicios(List<Exercicio> exercicios) {
+		this.exercicios = exercicios;
 	}
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-	public BarChartModel getBarModel() {
-	    return barModel;
-	}
-	     
-}
 
+	public void addMessage(String summary, String detail) {
+		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail);
+		FacesContext.getCurrentInstance().addMessage(null, message);
+	}
+}

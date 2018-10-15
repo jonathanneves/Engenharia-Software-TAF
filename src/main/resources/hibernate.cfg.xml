@@ -10,9 +10,9 @@
 		<!-- Configurações de Conexão com o Banco de Dados -->
 		<property name="connection.driver_class">com.mysql.jdbc.Driver</property>
 		<!-- <property name="connection.url">jdbc:mysql://localhost/tafsistema</property> -->
-		<property name="connection.url">jdbc:mysql://192.168.0.115:3306/aula</property>
+		<property name="connection.url">jdbc:mysql://localhost:3306/aula</property>
 		<property name="connection.username">root</property>
-		<property name="connection.password">oracle</property>
+		<property name="connection.password">root</property>
 
 		<!-- Pool de Conexões -->
 		<property name="connection.pool_size">1</property>
@@ -30,13 +30,12 @@
 		<property name="show_sql">false</property>
 
 		<!-- Cria as tabelas do banco de dados -->
-		<property name="hbm2ddl.auto">create</property>
+		<property name="hbm2ddl.auto">validate</property>
 		
 		<!-- Mapeamento das entidades INSIRA TODAS AS CLASSES --> 
  		<mapping class="com.github.adminfaces.starter.model.Usuario"/> 
  		<mapping class="com.github.adminfaces.starter.model.Exercicio"/> 
- 		<mapping class="com.github.adminfaces.starter.model.Taf"/> 
- 		<mapping class="com.github.adminfaces.starter.model.TafExercio"/> 
+ 		<mapping class="com.github.adminfaces.starter.model.Taf"/>  
 	</session-factory>
 
 </hibernate-configuration>

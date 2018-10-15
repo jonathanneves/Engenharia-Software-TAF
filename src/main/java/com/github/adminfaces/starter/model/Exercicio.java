@@ -34,7 +34,7 @@ public class Exercicio implements Serializable {
 	@Column private int vtForte;
 
 	@OneToMany(mappedBy="exercicio", cascade=CascadeType.ALL)
-	private List<TafExercicio> tafexercicio;	
+	private List<Taf> taf;	
 	
 	@Transient
 	private List<String> modalidades;
@@ -67,11 +67,11 @@ public class Exercicio implements Serializable {
 		this.rmFraco = rmFraco;
 	}
 	
-	public List<TafExercicio> getTafexercicio() {
-		return tafexercicio;
+	public List<Taf> getTaf() {
+		return taf;
 	}
-	public void setTafexercicio(List<TafExercicio> tafexercicio) {
-		this.tafexercicio = tafexercicio;
+	public void setTaf(List<Taf> taf) {
+		this.taf = taf;
 	}
 	public int getRmForte() {
 		return rmForte;
@@ -138,9 +138,5 @@ public class Exercicio implements Serializable {
 			return false;
 		return true;
 	}
-	
-	
-	
-
 	
 }
