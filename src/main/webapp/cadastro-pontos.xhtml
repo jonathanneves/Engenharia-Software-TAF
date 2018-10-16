@@ -28,7 +28,7 @@
 		</p:panel>
 		
 		<h:form id="frmTbl">
-			<p:dataTable id="tbl" var="u" value="#{usuarioController.listarTodos}" filterBy="#{u.nome}" emptyMessage="Tabela vazia" reflow="true" rows="5" paginator="true" >
+			<p:dataTable id="tbl" var="u" value="#{usuarioController.usuarios}" filterBy="#{u.nome}" emptyMessage="Tabela vazia" reflow="true" rows="5" paginator="true" >
 				
 				<p:column style="font-size:15px" headerText="Aluno" >
 					<h:outputText value="#{u.nome}" />
@@ -46,14 +46,14 @@
 						
 			</p:dataTable>
 		
-				<p:commandButton value="Salvar" oncomplete="#{usuarioController.retornaranking}" styleClass="btn-primary" icon="fa fa-plus"/>
+				<p:commandButton value="Salvar" oncomplete="" styleClass="btn-primary" icon="fa fa-plus"/>
 		</h:form>
 		
 		<p:dialog header="Cadastro de Pontuação" widgetVar="dlg" 
 		resizable="false" draggable="false" modal="true" closable="false">
 			<h:form id="frmMod" enctype="multipart/form-data">
 			    <div class="ui-g ui-fluid">
-					<p:dataTable id="tbl" var="u" value="#{usuarioController.listarUsuarios}" emptyMessage="Tabela vazia" reflow="true" rows="5" paginator="true" >
+					<p:dataTable id="tbl" var="u" value="#{usuarioController.usuarios}" emptyMessage="Tabela vazia" reflow="true" rows="5" paginator="true" >
 				
 						<p:column style="font-size:15px" headerText="Exercício" >
 							<h:outputText value="#{u.nome}" />
@@ -61,7 +61,7 @@
 				
 						<p:column headerText="Pontuação" style="font-size:15px" >
 							<p:outputLabel for="txtPonto" />
-   								   <p:inputMask id="txtPonto" value="#{u.pontuacao}" />
+   								   <p:inputMask id="txtPonto" value="" />
 						</p:column>
 						
 					</p:dataTable>		   

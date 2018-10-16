@@ -30,12 +30,13 @@
 		<property name="show_sql">false</property>
 
 		<!-- Cria as tabelas do banco de dados -->
-		<property name="hbm2ddl.auto">validate</property>
+		<property name="hbm2ddl.auto">create</property>
 		
 		<!-- Mapeamento das entidades INSIRA TODAS AS CLASSES --> 
  		<mapping class="com.github.adminfaces.starter.model.Usuario"/> 
  		<mapping class="com.github.adminfaces.starter.model.Exercicio"/> 
- 		<mapping class="com.github.adminfaces.starter.model.Taf"/>  
+ 		<mapping class="com.github.adminfaces.starter.model.Taf"/> 
+ 		<mapping class="com.github.adminfaces.starter.model.TafExercicio"/>  
 	</session-factory>
 
 </hibernate-configuration>

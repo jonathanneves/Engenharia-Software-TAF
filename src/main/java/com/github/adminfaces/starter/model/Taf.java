@@ -2,43 +2,53 @@ package com.github.adminfaces.starter.model;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+
+import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.Type;
 
 @Entity
 public class Taf implements Serializable {
-
+	
 	private static final long serialVersionUID = 1L; 
 	
 	@Id		
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
-	
-	@Column private String nome;
-	@Column	
-	@Type(type="date")
+	@Column	private String nome;
+	@Column @Type (type="date")
 	private Date data;
+		
+	@OneToMany(mappedBy="taf", cascade=CascadeType.ALL)
+	private List<TafExercicio> tafexercicio;
+
 	
-	@ManyToOne
-	@JoinColumn(nullable=false)
-	private Exercicio exercicio;
+	@Override
+	public String toString() {
+		return getNome() + " - " + getData();
+	}
 	
-	@Column private String modalidade;
-	
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
 	public String getNome() {
 		return nome;
 	}
 
 	public void setNome(String nome) {
-		System.out.println(nome);
 		this.nome = nome;
 	}
 
@@ -47,32 +57,19 @@ public class Taf implements Serializable {
 	}
 
 	public void setData(Date data) {
-		System.out.println(nome);
 		this.data = data;
 	}
 
-	public Integer getId() {
-		return id;
-	}
-	
-	public void setId(Integer id) {
-		this.id = id;
-	}
-	
-	public Exercicio getExercicio() {
-		return exercicio;
-	}
-	
-	public void setExercicio(Exercicio exercicio) {
-		this.exercicio = exercicio;
-	}
-	
-	public String getModalidade() {
-		return modalidade;
+	public List<TafExercicio> getTafexercicio() {
+		return tafexercicio;
 	}
 
-	public void setModalidade(String modalidade) {
-		this.modalidade = modalidade;
+	public void setTafexercicio(List<TafExercicio> tafexercicio) {
+		this.tafexercicio = tafexercicio;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
 	}
 
 	@Override
@@ -98,9 +95,6 @@ public class Taf implements Serializable {
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
-	}
-
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
+	}	
 }
+	

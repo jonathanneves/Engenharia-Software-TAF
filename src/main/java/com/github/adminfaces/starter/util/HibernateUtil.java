@@ -2,6 +2,7 @@ package com.github.adminfaces.starter.util;
 
 import org.hibernate.SessionFactory;
 
+
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
@@ -9,7 +10,7 @@ import org.hibernate.service.ServiceRegistry;
 import com.github.adminfaces.starter.model.Usuario;
 import com.github.adminfaces.starter.model.Exercicio;
 import com.github.adminfaces.starter.model.Taf;
-import com.github.adminfaces.starter.model.Taf;
+import com.github.adminfaces.starter.model.TafExercicio;
 
 //import com.github.adminfaces.starter.model.Usuario;
 
@@ -27,6 +28,7 @@ public class HibernateUtil {
 			configuracao.addAnnotatedClass(Usuario.class);
 			configuracao.addAnnotatedClass(Exercicio.class);
 			configuracao.addAnnotatedClass(Taf.class);	
+			configuracao.addAnnotatedClass(TafExercicio.class);	
 			ServiceRegistry registro = new StandardServiceRegistryBuilder().applySettings(configuracao.getProperties()).build();
 			
 			SessionFactory fabrica = configuracao.buildSessionFactory(registro);

@@ -15,7 +15,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import com.github.adminfaces.starter.model.Exercicio;
-import com.github.adminfaces.starter.model.Taf;
+import com.github.adminfaces.starter.model.TafExercicio;
 import com.github.adminfaces.starter.util.HibernateUtil;
 
 @ManagedBean //Classe controladora
