@@ -26,10 +26,13 @@ public class TafController implements Serializable {
 	private Taf taf;
 	private List<Taf> tafs;
     
+	private boolean desativado = true;
+	
 	@PostConstruct
 	public void init() {
 		taf = new Taf();
 		listarTodas();
+		setDesativado(true);
 	}
 	
 
@@ -40,8 +43,8 @@ public class TafController implements Serializable {
 			t = sessao.beginTransaction();
 			sessao.merge(taf);		//merge = Salvar (Insert) Ele identifica o ID direto e ja edita
 			t.commit();
-			taf = new Taf();
 			addMessage("Cadastro", "Taf cadastrado com sucesso");
+			setDesativado(false);
 			listarTodas();
 		} catch (Exception e) {
 			if(t!=null)
@@ -114,6 +117,15 @@ public class TafController implements Serializable {
 		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail);
 		FacesContext.getCurrentInstance().addMessage(null, message);
 	}
+
+	public boolean isDesativado() {
+		return desativado;
+	}
+
+	public void setDesativado(boolean desativado) {
+		this.desativado = desativado;
+	}
+
 
 	public Taf getTaf() {
 		return taf;

@@ -44,7 +44,7 @@
 							</p:column>
 							 <p:column headerText="Excluir" exportable="false" style="width:5%;text-align:center;">
 				    			<p:commandButton icon="ui-icon-trash" actionListener="#{tafController.excluir}"
-				    			 update="frmTbl:tbl">
+				    			 update="frmTbl:tbl" styleClass="btn-danger">
 				    				<p:confirm header="Confirmação" message="Você deseja Excluir este Taf?" icon="ui-icon-alert"/>
 				    				<f:attribute name="tafExclui" value="#{t}"/>		    		
 				    			</p:commandButton>
@@ -78,7 +78,7 @@
                   requiredMessage="Data de Realização Obrigatório" value="#{tafController.taf.data}"/>  
                   
                   <p:commandButton value="Confirmar" actionListener="#{tafController.salvar}" 
-				    update="frmCadTAF:cad frmTbl:tbl"
+				    update="frmCadTAF:cad frmTbl:tbl frmTblTAF"
 				    icon="fa fa-check" styleClass="btn-primary"/>     
               
                	<p:commandButton value="Listar Tafs" oncomplete="PF('dlg').show();" 
@@ -129,8 +129,8 @@
 		                				                	                	
 		           		<f:facet name="footer">		           		
 		           			  <p:commandButton value="Cadastrar" actionListener="#{tafExercicioController.salvar}" 
-					          update="frmTblTAF:multiExercicio"
-							  icon="fa fa-plus" style="padding:5px; margin:5px" styleClass="btn-primary"/>  
+					          update="frmTblTAF:multiExercicio" disabled="#{tafController.desativado}"
+							  icon="fa fa-plus" style="padding:5px; margin:5px" styleClass="btn-success"/>  
 		           		</f:facet>	
 		           			                    	                                   			        		        
                 </p:dataTable> 

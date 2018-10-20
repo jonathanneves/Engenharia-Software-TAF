@@ -71,18 +71,23 @@
 					    	</c:forEach>
 					    </h:panelGrid>				  
 
-	<h:outputText value="Modalidades: " style="font-weight: bold; font-size:130%"/>
-	<br/>
+
+    <p:commandButton value="Informações" icon="fa fa-info-circle"
+     oncomplete="PF('dlg').show();" styleClass="btn-info" />
+ 
+ 	<p:dialog header="Modalidades:  " widgetVar="dlg" 
+	closable="true" modal="true" position="center" appendTo="@(body)" >
+			<h:panelGrid columns="2" styleClass="my-panel-grid">
 	<h:outputText value="1RM: " style="font-weight: bold; font-size:125%"/>
 	<h:outputText value="Uma repetição máxima com peso máximo. Pontos = Peso;" style="font-size:125%"/>
-	<br/>
+
 	<h:outputText value="RM: " style="font-weight: bold; font-size:125%"/>
 	<h:outputText value="(Reptição Máxima) - Quantas repetições são executadas em determinado tempo. Pontos = Repetição;" style="font-size:125%"/>
-	<br/>
+	
 	<h:outputText value="VL: " style="font-weight: bold; font-size:125%"/>
 	<h:outputText value="(Volume de Treino) - Quantas repetições são executadas com determinado peso. Pontos = Repetição X Peso" style="font-size:125%"/>
-	<br/>
-	         
+			</h:panelGrid>
+	</p:dialog> 
 					</h:form>
 			    </div>
 		    </div>

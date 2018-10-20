@@ -65,10 +65,12 @@
 						    </p:column>
 						         
 						    <p:column headerText="Opcoes" width="10%;" style="text-align:center;" >
-				       			<p:commandButton icon="ui-icon-pencil"  oncomplete="PF('dlgEdita').show();" actionListener="#{exercicioController.edita}" update="frmEdita:edita" >
+				       			<p:commandButton icon="ui-icon-pencil"  oncomplete="PF('dlgEdita').show();"
+				       			 actionListener="#{exercicioController.edita}" update="frmEdita:edita" styleClass="btn-info">
 				       				<f:attribute name="exercicioEdita" value="#{e}" />
 				       			</p:commandButton>
-				       			<p:commandButton icon="ui-icon-trash" actionListener="#{exercicioController.excluir}" update="frmTbl:tbl" >
+				       			<p:commandButton icon="ui-icon-trash" actionListener="#{exercicioController.excluir}" 
+				       			update="frmTbl:tbl" styleClass="btn-danger" >
 				       				<p:confirm header="Confirmacao" message="Excluir exercicio ?" icon="ui-icon-alert" />
 				       				<f:attribute name="exercicioExclui" value="#{e}" />
 				       			</p:commandButton>
@@ -119,7 +121,7 @@
 				</div>    
 				<p:commandButton value = "Cadastrar" actionListener="#{exercicioController.salvar}" 
 			         oncomplete="PF('dlg').hide();" update="frmTbl:tbl frmCad:cad"
-			         style="padding:5px; margin:5px" styleClass="btn-primary" icon="fa fa-plus"/>
+			         style="padding:5px; margin:5px" styleClass="btn-success" icon="fa fa-plus"/>
 			    <p:commandButton value = "Cancelar" oncomplete="PF('dlg').hide();" style="padding:5px; margin:5px"/>
 			</h:form> 
  		</p:dialog>
@@ -160,7 +162,7 @@
 				</div>    
 				<p:commandButton value = "Editar" actionListener="#{exercicioController.salvar}" 
 			         oncomplete="PF('dlgEdita').hide();" update="frmTbl:tbl"
-			         style="padding:5px; margin:5px" styleClass="btn-primary"  icon="ui-icon-pencil" />
+			         style="padding:5px; margin:5px" styleClass="btn-info"  icon="ui-icon-pencil" />
 			    <p:commandButton value = "Cancelar" oncomplete="PF('dlgEdita').hide();" style="padding:5px; margin:5px"/>
 			</h:form> 
  		</p:dialog>

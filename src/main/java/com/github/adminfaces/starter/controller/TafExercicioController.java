@@ -69,10 +69,13 @@ private static final long serialVersionUID = 1L;
 						tafexercicio.setTaf(tx);
 						sessao.merge(tafexercicio);		//merge = Salvar (Insert) Ele identifica o ID direto e ja edita
 						t.commit();
+						tc.setDesativado(true);
 						tafexercicio = new TafExercicio();
 					}
 				}
-				addMessage("TAF", "Cadastrado com sucesso");				
+				addMessage("TAF", "Cadastrado com sucesso");		
+			} catch(ArrayIndexOutOfBoundsException exception) {
+				addMessage("ERRO", "Não foi possível cadastrar");
 			} catch (Exception ex) {
 				if(t!=null)
 					t.rollback();
