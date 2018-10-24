@@ -6,7 +6,6 @@
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 template="#{layoutMB.template}">
 
-<<<<<<< HEAD
    	<ui:define name="head-end">
         <style type="text/css">
             .ui-grid-row .ui-grid-col-2,
@@ -57,50 +56,9 @@
 				    <p:commandButton value="OK" styleClass="btn-success" update="frmCad:cad frmMod:tbl" 
 				    icon="ui-icon-circle-check" actionListener="#{tafAlunoController.manterTaf}"/>
 				      				
-=======
-
-	<ui:define name="head-end">
-        <style type="text/css">
-            .ui-grid-row .ui-grid-col-2,
-            .ui-grid-row .ui-grid-col-10 {
-                padding: 0.5em 0;
-                margin-left: 10px;
-            }
-
-            .ui-orderlist .ui-orderlist-list {
-                height: auto;
-            }
-
-            .ui-orderlist .ui-grid-row .ui-grid-col-2,
-            .ui-orderlist .ui-grid-row .ui-grid-col-10 {
-                padding: 0;
-            }
-            .my-panel-grid tr td {
-			    padding: 3px;
-			}
-        </style>
-    </ui:define>
-	
-	<ui:define name="title">
-		Registro de Pontuacao
-	</ui:define>
-   <ui:define name="body">
-        <f:metadata>
-        </f:metadata>
-        <p:panel >
-			<h:form id="frmCad" enctype="multipart/form-data">
-				<h:panelGrid columns="2"  id="cad" styleClass="my-panel-grid">  
-				        <p:outputLabel for="cbTAF" value="TAF" />
-				        <p:selectOneMenu converter="tafConverter" id="cbTAF"
-				         value="#{tafController.taf}" style="margin: 15px">
-				            <f:selectItem itemLabel="Selecione um TAF" itemValue="" />
-				           	  <f:selectItems value="#{tafController.tafs}" />      
-				        </p:selectOneMenu>
->>>>>>> d50fb5d6e35a3a77aa9d97cdad3602f4ebc4534b
 				</h:panelGrid>
 			</h:form>		
 		
-<<<<<<< HEAD
 		<h:form id="frmTbl"  enctype="multipart/form-data">
 			<p:dataTable id="tbl" var="u" value="#{usuarioController.alunosfiltrados}" searching="true"
 			 emptyMessage="Tabela vazia" reflow="true" rows="5" paginator="true" >
@@ -128,37 +86,10 @@
 				</p:column>	
 				
 			</p:dataTable>
-=======
-		<h:form id="frmTbl" enctype="multipart/form-data">
-			<div class="ui-g ui-fluid">
-				<p:dataTable id="tbl" var="u" value="#{usuarioController.usuarios}" 
-				styleClass="my-panel-grid" filterBy="#{u.nome}"  emptyMessage="Tabela vazia" reflow="true" rows="5" paginator="true" >
-					
-					<p:column headerText="Aluno" style="width:30%;">
-						<h:outputText value="#{u.nome}" />
-					</p:column>
-					
-					<p:column headerText="Status" style="width:20%;">
-							<h:outputText value="{u.status)" />
-					</p:column>
-							
-					<p:column style="width:5%;">
-	             		<p:commandButton update="@this" oncomplete="PF('dlg').show()" icon="ui-icon-search" title="View">
-	               			<!-- Pegar o usuário selecionado <f:setPropertyActionListener value="#{car}" target="#{dtSelectionView.selectedCar}" /> -->
-	            		</p:commandButton>
-	       			</p:column>
-							
-				</p:dataTable>
-			
-			</div>
-			<p:commandButton value="Salvar" oncomplete="" styleClass="btn-primary" icon="fa fa-plus"/>
-		
->>>>>>> d50fb5d6e35a3a77aa9d97cdad3602f4ebc4534b
 		</h:form>
 	</div>
 	</div>
 		
-<<<<<<< HEAD
 		<p:dialog header="Registrando Pontuação" widgetVar="dlg" 
 		resizable="false" draggable="false" modal="false" closable="true" height="auto" width="50%" position="center">
 			<h:form id="frmMod" enctype="multipart/form-data">
@@ -188,29 +119,6 @@
 			    
 				<p:commandButton value = "Registrar" actionListener="#{tafAlunoController.salvar}" 
 			         oncomplete="PF('dlg').hide();" update="frmMod:tbl frmMod:multiExercicio"
-=======
-		
-		
-		<p:dialog header="Cadastro de Pontuação" widgetVar="dlg" width="50%"
-		resizable="false" draggable="false" modal="false" closable="false" height="auto">
-			<h:form id="frmPontuacao" enctype="multipart/form-data">
-			    <div class="ui-g ui-fluid">
-					<h:panelGrid columns="2" id="cad">	
-						<p:dataTable id="tbl" var="e" value="#{tafExercicioController.exercicios}" emptyMessage="Tabela vazia" reflow="true" paginator="false" >
-							<p:column style="font-size:15px" headerText="Exercício" >
-								<h:outputText value="#{e.nome}" />
-							</p:column>
-							<p:column headerText="Pontuação" style="font-size:15px;width:25%;" >
-								<p:outputLabel for="txtPonto" />
-	   								   <p:inputMask id="txtPonto" value="" />
-							</p:column>
-						</p:dataTable>		
-					
-					</h:panelGrid>
-				</div>    
-				<p:commandButton value = "Concluir"  
-			         oncomplete="PF('dlg').hide();" update="frmPontuacao:tbl "
->>>>>>> d50fb5d6e35a3a77aa9d97cdad3602f4ebc4534b
 			         style="padding:5px; margin:5px" styleClass="btn-primary" icon="fa fa-plus"/>
 			    <p:commandButton value = "Cancelar" oncomplete="PF('dlg').hide();" style="padding:5px; margin:5px"/>
 		
@@ -218,7 +126,6 @@
 			</h:form> 
 			
  		</p:dialog>
-		
 		
     </ui:define>
 
