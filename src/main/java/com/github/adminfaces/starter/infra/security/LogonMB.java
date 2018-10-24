@@ -49,11 +49,11 @@ public class LogonMB extends AdminSession implements Serializable {
     	user = userCont.validarUsuario(cpf);
     	if(user != null) {
     		currentUser = user.getNome();
-    		addDetailMessage("Usuário logado com sucesso");
+    		addMessage(currentUser, "Usuário logado com sucesso");
     		Faces.getExternalContext().getFlash().setKeepMessages(true);
     		Faces.redirect("index.xhtml");
     	}else {
-    		addMessage("CPF não encontrado!!!","ERRO");
+    		addErro("CPF não encontrado!!!","ERRO");
     		Faces.getExternalContext().getFlash().setKeepMessages(true);
      		Faces.redirect("login.xhtml");
     	}
@@ -79,6 +79,11 @@ public class LogonMB extends AdminSession implements Serializable {
     }
     
 	public void addMessage(String summary, String detail) {
+		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail);
+		FacesContext.getCurrentInstance().addMessage(null, message);
+	}
+	
+	public void addErro(String summary, String detail) {
 		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, summary, detail);
 		FacesContext.getCurrentInstance().addMessage(null, message);
 	}

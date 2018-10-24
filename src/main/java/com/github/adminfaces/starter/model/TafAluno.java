@@ -36,6 +36,7 @@ public class TafAluno implements Serializable {
 
 	public void setPontuacao(Integer pontuacao) {
 		this.pontuacao = pontuacao;
+		System.out.println(getPontuacao()+"<<<<");
 	}
 
 	public Integer getId() {

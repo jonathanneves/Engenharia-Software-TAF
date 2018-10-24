@@ -1,7 +1,8 @@
 package com.github.adminfaces.starter.model;
 
 import java.io.Serializable;
-import java.util.Date;
+
+
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -14,8 +15,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Transient;
-
-import org.hibernate.annotations.Type;
 
 @Entity
 public class TafExercicio implements Serializable {
@@ -46,6 +45,7 @@ public class TafExercicio implements Serializable {
 		return pontuacao;
 	}
 	public void setPontuacao(Integer pontuacao) {
+		System.out.println("pontos: "+getPontuacao());
 		this.pontuacao = pontuacao;
 	}
 	

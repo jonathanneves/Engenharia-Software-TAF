@@ -1,12 +1,12 @@
 package com.github.adminfaces.starter.infra.converter;
 
 import javax.faces.component.UIComponent;
-
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
 import com.github.adminfaces.starter.model.Taf;
+
 
 @FacesConverter("tafConverter")
 public class TafConverter implements Converter {

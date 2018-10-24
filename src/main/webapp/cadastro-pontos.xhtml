@@ -13,11 +13,9 @@
                 padding: 0.5em 0;
                 margin-left: 10px;
             }
-
             .ui-orderlist .ui-orderlist-list {
                 height: auto;
             }
-
             .ui-orderlist .ui-grid-row .ui-grid-col-2,
             .ui-orderlist .ui-grid-row .ui-grid-col-10 {
                 padding: 0;
@@ -47,10 +45,10 @@
 				<h:panelGrid columns="3" id="cad" styleClass="my-panel-grid">
 				
 					<p:outputLabel for="txtTAF" value="Escolha um TAF:" />
-        				<p:selectOneMenu id="txtTAF" converter="tafConverter" style="margin: 15px" value="#{tafAlunoController.tafselecionado}"
+        				<p:selectOneMenu id="txtTAF" converter="entityConverter" style="margin: 15px" value="#{tafAlunoController.tafselecionado}"
         					required="true" requiredMessage= "TAF Obrigatório" >
         					<f:selectItem itemLabel="Selecione um TAF" itemValue="" />
-				            <f:selectItems value="#{tafController.tafs}" var="" itemValue="#{taf}" />
+				            <f:selectItems value="#{tafController.tafs}"/>
 				        </p:selectOneMenu>
 				        
 				    <p:commandButton value="OK" styleClass="btn-success" update="frmCad:cad frmMod:tbl" 
@@ -61,7 +59,7 @@
 		
 		<h:form id="frmTbl"  enctype="multipart/form-data">
 			<p:dataTable id="tbl" var="u" value="#{usuarioController.alunosfiltrados}" searching="true"
-			 emptyMessage="Tabela vazia" reflow="true" rows="5" paginator="true" >
+			 emptyMessage="Tabela vazia" reflow="true" rows="10" paginator="true" >
 				
 				<p:column headerText="Seleciona" style="width:7%; text-align:center; font-size:15px" >
              		<p:commandButton oncomplete="PF('dlg').show()" icon="ui-icon-circle-check" 
@@ -96,8 +94,11 @@
 			    <div class="ui-g ui-fluid">
 			    
 					<p:dataTable id="tbl" var="e" value="#{tafExercicioController.filtrarExercicios(tafAlunoController.tafselecionado)}"
-					 emptyMessage="Tabela vazia" rows="5" paginator="true" >
-					 
+					 emptyMessage="Tabela vazia" rows="5" paginator="true" reflow="true"
+					 selection="#{tafAlunoController.tafexercicios}"
+                	 rowKey="#{e.id}"
+                	 selectionMode="multiple">
+					 					    
 						<p:column style="font-size:15px" headerText="Exercício" >
 							<h:outputText value="#{e.exercicio.nome}" />
 						</p:column>
@@ -110,15 +111,15 @@
 							<p:outputLabel for="txtPonto" />
    								<p:inputMask id="txtPonto" value="#{e.pontuacao}" />
 						</p:column>
-						
+								           			
 					</p:dataTable>	
 						   
-					<ui:repeat id="multiExercicio" value="#{tafExercicioController.tafexercicios}" var="e"/>
+					<ui:repeat id="multiExercicio" value="#{tafAlunoController.tafexercicios}" var="e"/>
 					  	  	    				
 			    </div>
 			    
 				<p:commandButton value = "Registrar" actionListener="#{tafAlunoController.salvar}" 
-			         oncomplete="PF('dlg').hide();" update="frmMod:tbl frmMod:multiExercicio"
+			         oncomplete="PF('dlg').hide();" update="frmMod:multiExercicio"
 			         style="padding:5px; margin:5px" styleClass="btn-primary" icon="fa fa-plus"/>
 			    <p:commandButton value = "Cancelar" oncomplete="PF('dlg').hide();" style="padding:5px; margin:5px"/>
 		

@@ -2,6 +2,7 @@ package com.github.adminfaces.starter.controller;
 
 import java.io.Serializable;
 
+
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -30,6 +31,7 @@ private static final long serialVersionUID = 1L;
 
 	private TafAluno tafaluno;
 	private Taf tafselecionado;
+	private Usuario alunoselecionado;
 	
 	private List<TafAluno> tafalunos;
 	
@@ -50,15 +52,14 @@ private static final long serialVersionUID = 1L;
 		Transaction t = null;
 			try{
 				for(TafExercicio te : tafexercicios) {
-					if(te.getTaf() == tafselecionado) {
-						tafaluno.setTafexercicio(te);
-						tafaluno.setPontuacao(te.getPontuacao());
-					}
+					t = sessao.beginTransaction();
+					tafaluno.setTafexercicio(te);				
+					tafaluno.setPontuacao(te.getPontuacao());
+					tafaluno.setUsuario(alunoselecionado);
+					sessao.merge(tafaluno);		
+					t.commit();
+					tafaluno = new TafAluno();
 				}
-				t = sessao.beginTransaction();
-				sessao.merge(tafaluno);		//merge = Salvar (Insert) Ele identifica o ID direto e ja edita
-				t.commit();
-				tafaluno = new TafAluno();
 				addMessage("Pontuação", "Pontos registrado com sucesso");		
 			} catch(ArrayIndexOutOfBoundsException exception) {
 				addErro("ERRO", "Não foi possível registrar");
@@ -129,8 +130,8 @@ private static final long serialVersionUID = 1L;
 	}
 
 	public void selecionarAluno(ActionEvent evt){
-		tafaluno.setUsuario((Usuario)evt.getComponent().getAttributes().get("alunoSeleciona"));
-		System.out.println(tafaluno.getUsuario().getNome());
+		alunoselecionado = (Usuario)evt.getComponent().getAttributes().get("alunoSeleciona");
+		System.out.println("Aluno: "+ alunoselecionado.getNome());
 	}
 		
 	public List<TafExercicio> getTafexercicios() {
@@ -177,6 +178,14 @@ private static final long serialVersionUID = 1L;
 		this.exercicios = exercicios;
 	}
 	
+	public Usuario getAlunoselecionado() {
+		return alunoselecionado;
+	}
+
+	public void setAlunoselecionado(Usuario alunoselecionado) {
+		this.alunoselecionado = alunoselecionado;
+	}
+
 	public void addErro(String summary, String detail) {
 		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, summary, detail);
 		FacesContext.getCurrentInstance().addMessage(null, message);

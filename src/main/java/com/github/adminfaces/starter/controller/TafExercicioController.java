@@ -66,7 +66,6 @@ private static final long serialVersionUID = 1L;
 							tafexercicio.setModalidade("MAX");
 						else if(m.equals("vt")) 
 							tafexercicio.setModalidade("VT");		
-						System.out.println("salvou");
 						t = sessao.beginTransaction();
 						tafexercicio.setExercicio(e);
 						tafexercicio.setTaf(tx);
@@ -152,7 +151,6 @@ private static final long serialVersionUID = 1L;
 		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
 		try {
 			if(tafAux != null) {
-				System.out.println("OLHA: "+tafAux.getNome());
 				CriteriaQuery<TafExercicio> cq = sessao.getCriteriaBuilder().createQuery(TafExercicio.class);
 				cq.from(TafExercicio.class);
 				exerciciosfiltrados = sessao.createQuery(cq).getResultList();
