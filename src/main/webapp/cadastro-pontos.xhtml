@@ -6,72 +6,125 @@
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 template="#{layoutMB.template}">
 
-    <ui:define name="head-end">
-        <ui:param name="renderBreadCrumb" value="false"/>
+   	<ui:define name="head-end">
+        <style type="text/css">
+            .ui-grid-row .ui-grid-col-2,
+            .ui-grid-row .ui-grid-col-10 {
+                padding: 0.5em 0;
+                margin-left: 10px;
+            }
+
+            .ui-orderlist .ui-orderlist-list {
+                height: auto;
+            }
+
+            .ui-orderlist .ui-grid-row .ui-grid-col-2,
+            .ui-orderlist .ui-grid-row .ui-grid-col-10 {
+                padding: 0;
+            }
+            .my-panel-grid tr td {
+			    padding: 3px;
+			}
+        </style>
     </ui:define>
 
-    <ui:define name="title">
-        <p:panel header="Registro de Pontuação" >
+	<ui:define name="title">
+		Registro de Pontuacao
+	</ui:define>
+	
+	<ui:define name="description">
+        Registrando a pontuação dos alunos participantes no TAF
+    </ui:define>
+    
+   <ui:define name="body">
+        <f:metadata>
+        </f:metadata>
+        	<div class="box box-primary">
+               	<div class="box-header with-border">
+               	
+               	
 			<h:form id="frmCad" enctype="multipart/form-data">
-				<h:panelGrid columns="2"  id="cad" styleClass="my-panel-grid">
+				<h:panelGrid columns="3" id="cad" styleClass="my-panel-grid">
 				
-					<p:outputLabel for="txtTAF" value="TAF:" />
-        				<p:selectOneMenu id="txtTAF" style="margin: 15px"
-        					require="true" requiredMessage= "TAF Obrigatório" >
-				            <f:selectItem itemLabel="Selecione o TAF" itemValue="" />
-				            <f:selectItem itemLabel="TAF1" itemValue="TAF1" />
-				            <f:selectItem itemLabel="TAF2" itemValue="TAF2" />
+					<p:outputLabel for="txtTAF" value="Escolha um TAF:" />
+        				<p:selectOneMenu id="txtTAF" converter="tafConverter" style="margin: 15px" value="#{tafAlunoController.tafselecionado}"
+        					required="true" requiredMessage= "TAF Obrigatório" >
+        					<f:selectItem itemLabel="Selecione um TAF" itemValue="" />
+				            <f:selectItems value="#{tafController.tafs}" var="" itemValue="#{taf}" />
 				        </p:selectOneMenu>
-				
+				        
+				    <p:commandButton value="OK" styleClass="btn-success" update="frmCad:cad frmMod:tbl" 
+				    icon="ui-icon-circle-check" actionListener="#{tafAlunoController.manterTaf}"/>
+				      				
 				</h:panelGrid>
 			</h:form>		
-		</p:panel>
 		
-		<h:form id="frmTbl">
-			<p:dataTable id="tbl" var="u" value="#{usuarioController.usuarios}" filterBy="#{u.nome}" emptyMessage="Tabela vazia" reflow="true" rows="5" paginator="true" >
+		<h:form id="frmTbl"  enctype="multipart/form-data">
+			<p:dataTable id="tbl" var="u" value="#{usuarioController.alunosfiltrados}" searching="true"
+			 emptyMessage="Tabela vazia" reflow="true" rows="5" paginator="true" >
 				
-				<p:column style="font-size:15px" headerText="Aluno" >
+				<p:column headerText="Seleciona" style="width:7%; text-align:center; font-size:15px" >
+             		<p:commandButton oncomplete="PF('dlg').show()" icon="ui-icon-circle-check" 
+             		actionListener="#{tafAlunoController.selecionarAluno}">
+						<f:attribute name="alunoSeleciona" value="#{u}" update="frmTbl:tbl" />
+					</p:commandButton>
+       			</p:column>
+       			
+				<p:column style="font-size:15px" headerText="Aluno" filterBy="#{u.nome}">
 					<h:outputText value="#{u.nome}" />
 				</p:column>
 				
-				<p:column headerText="Status" style="font-size:15px" >
-						<h:outputText value="{u.status)" />
+				<p:column headerText="Sexo" style="font-size:15px" >
+					<h:outputText value="Masculino" rendered="#{u.sexo =='M'}" />  
+   					<h:outputText value="Feminino" rendered="#{u.sexo =='F'}" />  
 				</p:column>
-						
-				<p:column style="width:32px;text-align: center">
-             		<p:commandButton update="@this" oncomplete="PF('dlg').show()" icon="ui-icon-search" title="View">
-               			<!-- Pegar o usuário selecionado <f:setPropertyActionListener value="#{car}" target="#{dtSelectionView.selectedCar}" /> -->
-            		</p:commandButton>
-       			</p:column>
-						
+					
+				<p:column headerText="Data de Nascimento:" style="font-size:15px" >
+			        <h:outputText value="#{u.nascimento}">
+						<f:convertDateTime pattern="dd/MM/yyyy"/>
+					</h:outputText>
+				</p:column>	
+				
 			</p:dataTable>
-		
-				<p:commandButton value="Salvar" oncomplete="" styleClass="btn-primary" icon="fa fa-plus"/>
 		</h:form>
+	</div>
+	</div>
 		
-		<p:dialog header="Cadastro de Pontuação" widgetVar="dlg" 
-		resizable="false" draggable="false" modal="true" closable="false">
+		<p:dialog header="Registrando Pontuação" widgetVar="dlg" 
+		resizable="false" draggable="false" modal="false" closable="true" height="auto" width="50%" position="center">
 			<h:form id="frmMod" enctype="multipart/form-data">
 			    <div class="ui-g ui-fluid">
-					<p:dataTable id="tbl" var="u" value="#{usuarioController.usuarios}" emptyMessage="Tabela vazia" reflow="true" rows="5" paginator="true" >
-				
+			    
+					<p:dataTable id="tbl" var="e" value="#{tafExercicioController.filtrarExercicios(tafAlunoController.tafselecionado)}"
+					 emptyMessage="Tabela vazia" rows="5" paginator="true" >
+					 
 						<p:column style="font-size:15px" headerText="Exercício" >
-							<h:outputText value="#{u.nome}" />
+							<h:outputText value="#{e.exercicio.nome}" />
 						</p:column>
 				
-						<p:column headerText="Pontuação" style="font-size:15px" >
-							<p:outputLabel for="txtPonto" />
-   								   <p:inputMask id="txtPonto" value="" />
+						<p:column style="font-size:15px" headerText="Modalidade" >
+							<h:outputText value="#{e.modalidade}" />
 						</p:column>
 						
-					</p:dataTable>		   
-				</div>
-				    
-				<p:commandButton value = "Concluir"  
-			         oncomplete="PF('dlg').hide();" update="frmTbl:tbl "
+						<p:column headerText="Pontuação" style="font-size:15px" >
+							<p:outputLabel for="txtPonto" />
+   								<p:inputMask id="txtPonto" value="#{e.pontuacao}" />
+						</p:column>
+						
+					</p:dataTable>	
+						   
+					<ui:repeat id="multiExercicio" value="#{tafExercicioController.tafexercicios}" var="e"/>
+					  	  	    				
+			    </div>
+			    
+				<p:commandButton value = "Registrar" actionListener="#{tafAlunoController.salvar}" 
+			         oncomplete="PF('dlg').hide();" update="frmMod:tbl frmMod:multiExercicio"
 			         style="padding:5px; margin:5px" styleClass="btn-primary" icon="fa fa-plus"/>
 			    <p:commandButton value = "Cancelar" oncomplete="PF('dlg').hide();" style="padding:5px; margin:5px"/>
+		
+				    
 			</h:form> 
+			
  		</p:dialog>
 		
     </ui:define>

@@ -10,7 +10,7 @@
 		<!-- Configurações de Conexão com o Banco de Dados -->
 		<property name="connection.driver_class">com.mysql.jdbc.Driver</property>
 		<!-- <property name="connection.url">jdbc:mysql://localhost/tafsistema</property> -->
-		<property name="connection.url">jdbc:mysql://localhost:3306/aula</property>
+		<property name="connection.url">jdbc:mysql://localhost/aula</property>
 		<property name="connection.username">root</property>
 		<property name="connection.password">root</property>
 
@@ -37,6 +37,7 @@
  		<mapping class="com.github.adminfaces.starter.model.Exercicio"/> 
  		<mapping class="com.github.adminfaces.starter.model.Taf"/> 
  		<mapping class="com.github.adminfaces.starter.model.TafExercicio"/>  
+ 		<mapping class="com.github.adminfaces.starter.model.TafAluno"/>  
 	</session-factory>
 
 </hibernate-configuration>

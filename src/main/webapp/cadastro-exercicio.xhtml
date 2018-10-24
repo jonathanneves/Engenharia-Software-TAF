@@ -38,8 +38,6 @@
         <f:metadata>
         </f:metadata>
 
- 		<p:messages id="msg" showDetail="true" closable="true" showSummary="true" />
-	
 		<h:form  id="frmTbl">
 			<div class="box box-primary">
                	<div class="box-header with-border">
@@ -83,8 +81,7 @@
 						</p:confirmDialog>
 					</div>
 				</div>
-		</h:form>
-		
+		</h:form>	
 		
 		<p:dialog header="Cadastro de exercicios" widgetVar="dlg" 
 		resizable="false" draggable="false" modal="false" closable="false" width="auto" height="auto">
@@ -93,10 +90,10 @@
 					<h:panelGrid columns="1" id="cad" styleClass="my-panel-grid"> 
 						
 						<p:outputLabel for="txtNome" value="Nome:"/>
-						<p:inputText id="txtNome" value="#{exercicioController.exercicio.nome}" required="true" requiredMessage="Nome Obrigat�rio"/>
+						<p:inputText id="txtNome" value="#{exercicioController.exercicio.nome}" required="true" requiredMessage="Nome Obrigatório"/>
 			
 						<p:outputLabel for="txtDescricao" value="Descrição:"/>	 	
-						<p:inputTextarea rows="6" cols="36" id="txtDescricao" value="#{exercicioController.exercicio.descricao}" required="true" requiredMessage="Descri��o obrigat�ria"/>	
+						<p:inputTextarea rows="6" cols="36" id="txtDescricao" value="#{exercicioController.exercicio.descricao}" />	
 						<h3>Classificação</h3>
 						<br/>		
 							

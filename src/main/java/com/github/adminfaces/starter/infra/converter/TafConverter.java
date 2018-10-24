@@ -8,7 +8,6 @@ import javax.faces.convert.FacesConverter;
 
 import com.github.adminfaces.starter.model.Taf;
 
-//vai poder ser mapeado em qualquer local necessário
 @FacesConverter("tafConverter")
 public class TafConverter implements Converter {
 
@@ -22,8 +21,6 @@ public class TafConverter implements Converter {
 
 	@Override
 	public String getAsString(FacesContext facesContext, UIComponent uiComponent, Object value) {
-		//Aluno a = (Aluno)value;
-		//return a.toString();
 		if (value instanceof Taf) {
 			Taf a = (Taf) value;
 			if(a != null && a instanceof Taf && a.getId() != null) {

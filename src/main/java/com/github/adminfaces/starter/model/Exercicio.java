@@ -43,12 +43,8 @@ public class Exercicio implements Serializable {
 		return modalidades;
 	}
 	public void setModalidades(List<String> modalidades) {
-		System.out.println("TA SALVANDO?");
-		//for(String m : modalidades)
-		//	System.out.println(m);
 		this.modalidades = modalidades;
 	}
-	
 	public int getUmrmFraco() {
 		return umrmFraco;
 	}
@@ -86,8 +82,7 @@ public class Exercicio implements Serializable {
 	}
 	public void setVtFraco(int vtFraco) {
 		this.vtFraco = vtFraco;
-	}
-	
+	}	
 	public int getVtForte() {
 		return vtForte;
 	}
@@ -111,9 +106,7 @@ public class Exercicio implements Serializable {
 	}
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
-	}
-
-	
+	}	
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}

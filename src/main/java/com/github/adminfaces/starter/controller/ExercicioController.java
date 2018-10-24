@@ -80,7 +80,7 @@ public class ExercicioController implements Serializable {
 			cq.from(Exercicio.class);
 			exercicios = sessao.createQuery(cq).getResultList();
 		} catch (Exception e) {
-			addMessage("ERRO", "ERRO ao listar exercicios");
+			addErro("ERRO", "ERRO ao listar exercicios");
 		} finally {
 			sessao.close();
 		}
@@ -93,6 +93,11 @@ public class ExercicioController implements Serializable {
 	public void excluir(ActionEvent evt)  {
 		exercicio = (Exercicio)evt.getComponent().getAttributes().get("exercicioExclui");
 		exclui();
+	}
+	
+	public void addErro(String summary, String detail) {
+		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, summary, detail);
+		FacesContext.getCurrentInstance().addMessage(null, message);
 	}
 	
 	public void addMessage(String summary, String detail) {

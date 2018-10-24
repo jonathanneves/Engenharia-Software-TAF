@@ -22,8 +22,7 @@
         <f:metadata>
         </f:metadata>
    
-    	
-	<p:dialog header="Cadastro de Usuários" widgetVar="dlg" 
+	<p:dialog header="Lista de Tafs" widgetVar="dlg" 
 	resizable="false" draggable="false" modal="false" closable="true" height="auto" width="50%" position="center">
 		<h:form id="frmTbl" enctype="multipart/form-data">
 		    <div class="ui-g ui-fluid">
@@ -66,22 +65,22 @@
          <div class="box-header with-border">
    
       	<h:form id="frmCadTAF" enctype="multipart/form-data">              	
-              <h:panelGrid columns="6" id="cad" styleClass="my-panel-grid" style="width:50%">   
+              <h:panelGrid columns="6" id="cad" styleClass="my-panel-grid" style="width:auto;padding:5px;">   
                                           
-                  <p:outputLabel for="txtTAF" value="TAF:" style="padding:2px"/>
-                  <p:inputText id="txtTAF" required="true"
+                  <p:outputLabel for="txtTAF" value="TAF:" style="margin:3px"/>
+                  <p:inputText id="txtTAF" required="true" style="margin:3px"
 					requiredMessage="Nome TAF Obrigatório" value="#{tafController.taf.nome}" />   
                                                         
-                  <p:outputLabel for="txtData" value="Data de Realização:" style="padding:2px"/>
+                  <p:outputLabel for="txtData" value="Data de Realização:" style="margin:3px"/>
                   <p:calendar id="txtData" pattern="dd/MM/yyyy" mask="99/99/9999"
-                  required="true" navigator="true"
+                  required="true" navigator="true" style="margin:3px"
                   requiredMessage="Data de Realização Obrigatório" value="#{tafController.taf.data}"/>  
                   
                   <p:commandButton value="Confirmar" actionListener="#{tafController.salvar}" 
-				    update="frmCadTAF:cad frmTbl:tbl frmTblTAF"
+				    update="frmCadTAF:cad frmTbl:tbl frmTblTAF" style="margin:3px"
 				    icon="fa fa-check" styleClass="btn-primary"/>     
               
-               	<p:commandButton value="Listar Tafs" oncomplete="PF('dlg').show();" 
+               	<p:commandButton value="Listar Tafs" oncomplete="PF('dlg').show();" style="margin:3px" 
 				styleClass="btn-info" icon="fa fa-align-justify"/>
 			 </h:panelGrid> 
 				
@@ -130,7 +129,8 @@
 		           		<f:facet name="footer">		           		
 		           			  <p:commandButton value="Cadastrar" actionListener="#{tafExercicioController.salvar}" 
 					          update="frmTblTAF:multiExercicio" disabled="#{tafController.desativado}"
-							  icon="fa fa-plus" style="padding:5px; margin:5px" styleClass="btn-success"/>  
+							  icon="fa fa-plus" style="padding:5px; margin:5px" styleClass="btn-success"
+							  render="@all"/>  
 		           		</f:facet>	
 		           			                    	                                   			        		        
                 </p:dataTable> 

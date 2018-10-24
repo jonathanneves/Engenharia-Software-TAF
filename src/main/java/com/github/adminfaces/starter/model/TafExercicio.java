@@ -2,7 +2,9 @@ package com.github.adminfaces.starter.model;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
 import org.hibernate.annotations.Type;
@@ -31,8 +34,21 @@ public class TafExercicio implements Serializable {
 	@JoinColumn(nullable=false)
 	private Taf taf;
 	
+	@OneToMany(mappedBy="tafexercicio", cascade=CascadeType.ALL)
+	private List<TafAluno> tafaluno;
+
 	@Column private String modalidade;
-		
+	
+	@Transient
+	private Integer pontuacao;
+	
+	public Integer getPontuacao() {
+		return pontuacao;
+	}
+	public void setPontuacao(Integer pontuacao) {
+		this.pontuacao = pontuacao;
+	}
+	
 	public Integer getId() {
 		return id;
 	}
@@ -64,7 +80,14 @@ public class TafExercicio implements Serializable {
 	public void setTaf(Taf taf) {
 		this.taf = taf;
 	}
+	
+	public List<TafAluno> getTafaluno() {
+		return tafaluno;
+	}
 
+	public void setTafaluno(List<TafAluno> tafaluno) {
+		this.tafaluno = tafaluno;
+	}
 
 	@Override
 	public int hashCode() {

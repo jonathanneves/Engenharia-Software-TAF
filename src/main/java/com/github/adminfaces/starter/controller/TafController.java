@@ -43,7 +43,7 @@ public class TafController implements Serializable {
 			t = sessao.beginTransaction();
 			sessao.merge(taf);		//merge = Salvar (Insert) Ele identifica o ID direto e ja edita
 			t.commit();
-			addMessage("Cadastro", "Taf cadastrado com sucesso");
+			addMessage("Cadastro", "Selecione os exercícios desejados e suas modalidades");
 			setDesativado(false);
 			listarTodas();
 		} catch (Exception e) {
@@ -82,7 +82,7 @@ public class TafController implements Serializable {
 			cq.from(Taf.class);
 			tafs = sessao.createQuery(cq).getResultList();
 		} catch (Exception e) {
-			addMessage("ERRO", "ERRO ao listar tafs");
+			addErro("ERRO", "ERRO ao listar tafs");
 		} finally {
 			sessao.close();
 		}
@@ -98,7 +98,7 @@ public class TafController implements Serializable {
 			cq.from(Taf.class);
 			tafs = sessao.createQuery(cq).getResultList();
 		} catch (Exception e) {
-			addMessage("ERRO", "ERRO ao listar tafs");
+			addErro("ERRO", "ERRO ao listar tafs");
 		} finally {
 			sessao.close();
 		}
@@ -115,6 +115,11 @@ public class TafController implements Serializable {
 	
 	public void addMessage(String summary, String detail) {
 		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail);
+		FacesContext.getCurrentInstance().addMessage(null, message);
+	}
+	
+	public void addErro(String summary, String detail) {
+		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, summary, detail);
 		FacesContext.getCurrentInstance().addMessage(null, message);
 	}
 

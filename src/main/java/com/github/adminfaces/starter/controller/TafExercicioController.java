@@ -54,8 +54,11 @@ private static final long serialVersionUID = 1L;
 		Transaction t = null;
 			try {	
 				Taf tx = tc.ultimoTAF();
-				System.out.println("ULTIMO TAF CADASTRADO: " + tx.toString());
+				if (exercicios.isEmpty())
+					throw new NullPointerException();
 				for(Exercicio e : exercicios) {	
+					if(e.getModalidades().isEmpty())
+						throw new NullPointerException();
 					for(String m : e.getModalidades()) {
 						if(m.equals("rm")) 
 							tafexercicio.setModalidade("1RM");
@@ -75,7 +78,9 @@ private static final long serialVersionUID = 1L;
 				}
 				addMessage("TAF", "Cadastrado com sucesso");		
 			} catch(ArrayIndexOutOfBoundsException exception) {
-				addMessage("ERRO", "Não foi possível cadastrar");
+				addErro("ERRO", "Não foi possível cadastrar");
+			} catch(NullPointerException nullExc) {
+				addErro("ERRO", "Selecione pelo menos um exercicio e uma modalidade");
 			} catch (Exception ex) {
 				if(t!=null)
 					t.rollback();
@@ -111,7 +116,7 @@ private static final long serialVersionUID = 1L;
 			cq.from(TafExercicio.class);
 			tafexercicios = sessao.createQuery(cq).getResultList();
 		} catch (Exception e) {
-			addMessage("ERRO", "Erro ao listar tafs");
+			addErro("ERRO", "Erro ao listar tafs exercicios");
 		} finally {
 			sessao.close();
 		}
@@ -124,7 +129,7 @@ private static final long serialVersionUID = 1L;
 			cq.from(Exercicio.class);
 			exercicios = sessao.createQuery(cq).getResultList();
 		} catch (Exception e) {
-			addMessage("ERRO", "Erro ao listar exercicios");
+			addErro("ERRO", "Erro ao listar exercicios");
 		} finally {
 			sessao.close();
 		}
@@ -137,7 +142,7 @@ private static final long serialVersionUID = 1L;
 			cq.from(Taf.class);
 			tafs = sessao.createQuery(cq).getResultList();
 		} catch (Exception e) {
-			addMessage("ERRO", "Erro ao listar tafs");
+			addErro("ERRO", "Erro ao listar tafs de tafsexericios");
 		} finally {
 			sessao.close();
 		}
@@ -146,12 +151,16 @@ private static final long serialVersionUID = 1L;
 	public List<TafExercicio> filtrarExercicios(Taf tafAux) {
 		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
 		try {
-			CriteriaQuery<TafExercicio> cq = sessao.getCriteriaBuilder().createQuery(TafExercicio.class);
-			cq.from(TafExercicio.class);
-			exerciciosfiltrados = sessao.createQuery(cq).getResultList();
-			exerciciosfiltrados.removeIf(s -> s.getTaf().getId() != tafAux.getId());
+			if(tafAux != null) {
+				System.out.println("OLHA: "+tafAux.getNome());
+				CriteriaQuery<TafExercicio> cq = sessao.getCriteriaBuilder().createQuery(TafExercicio.class);
+				cq.from(TafExercicio.class);
+				exerciciosfiltrados = sessao.createQuery(cq).getResultList();
+				exerciciosfiltrados.removeIf(s -> s.getTaf().getId() != tafAux.getId());
+			} else
+				System.out.println("Sem Taf selecionado");	
 		} catch (Exception e) {
-			addMessage("ERRO", "Erro ao filtrar tafs");
+			addErro("ERRO", "Erro ao filtrar tafs");
 		} finally {
 			sessao.close();
 		}	
@@ -207,6 +216,11 @@ private static final long serialVersionUID = 1L;
 		return serialVersionUID;
 	}
 
+	public void addErro(String summary, String detail) {
+		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, summary, detail);
+		FacesContext.getCurrentInstance().addMessage(null, message);
+	}
+	
 	public void addMessage(String summary, String detail) {
 		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail);
 		FacesContext.getCurrentInstance().addMessage(null, message);

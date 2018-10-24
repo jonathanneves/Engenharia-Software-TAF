@@ -28,11 +28,14 @@ public class UsuarioController implements Serializable {
 	private List<Usuario> usuarios;
 	private Usuario usuarioSelecionado;
 	
+	private List<Usuario> alunosfiltrados;
+	
 	
 	@PostConstruct
 	public void inicializa() {
 		usuario = new Usuario(); 
 		listarUsuarios();
+		filtrarAlunos();
 	}
 	
 	public void salvar() {
@@ -105,6 +108,30 @@ public class UsuarioController implements Serializable {
            }		
      }
 	
+	 public List<Usuario> filtrarAlunos() {
+		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
+		try {
+			CriteriaQuery<Usuario> cq = sessao.getCriteriaBuilder().createQuery(Usuario.class);
+			cq.from(Usuario.class);
+			alunosfiltrados = sessao.createQuery(cq).getResultList();
+			alunosfiltrados.removeIf(s -> s.getPermissao().equals("Professor"));
+		} catch (Exception e) {
+			e.getMessage();
+			addMessage("ERRO", "Erro ao filtrar alunos");
+		} finally {
+			sessao.close();
+		}	
+		return alunosfiltrados;
+	}
+	
+	public List<Usuario> getAlunosfiltrados() {
+		return alunosfiltrados;
+	}
+
+	public void setAlunosfiltrados(List<Usuario> alunosfiltrados) {
+		this.alunosfiltrados = alunosfiltrados;
+	}
+
 	public void editar(ActionEvent evt) {
 		usuario = (Usuario)evt.getComponent().getAttributes().get("usuarioEdita");
 	}
