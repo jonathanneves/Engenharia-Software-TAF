@@ -26,13 +26,13 @@ public class TafController implements Serializable {
 	private Taf taf;
 	private List<Taf> tafs;
     
-	private boolean desativado = true;
+	private boolean desativado = false;
 	
 	@PostConstruct
 	public void init() {
 		taf = new Taf();
 		listarTodas();
-		setDesativado(true);
+		setDesativado(false);
 	}
 	
 
@@ -44,7 +44,7 @@ public class TafController implements Serializable {
 			sessao.merge(taf);		//merge = Salvar (Insert) Ele identifica o ID direto e ja edita
 			t.commit();
 			addMessage("Cadastro", "Selecione os exercícios desejados e suas modalidades");
-			setDesativado(false);
+			setDesativado(true);
 			listarTodas();
 		} catch (Exception e) {
 			if(t!=null)
@@ -104,6 +104,12 @@ public class TafController implements Serializable {
 		}
 	}
 
+	public void foiRealizado(Taf tafx) {
+		for(Taf tf : tafs) {
+			if(tafx == tf)
+				taf.setRealizado("S");
+		}
+	}
 	public void edita(ActionEvent evt) {
 		taf = (Taf)evt.getComponent().getAttributes().get("tafEdita");
 	}

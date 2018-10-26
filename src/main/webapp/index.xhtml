@@ -55,8 +55,8 @@
 		    <div class="box-header with-border">
 				<h:form>
 		    		<h3 style="margin-top:0">Proximos TAFs</h3>
-		    			<h:panelGrid columns="4" styleClass="my-panel-grid" style="margin:10px;padding:1px;color:white;">
-					  		<c:forEach items="#{tafController.tafs}" var="taf" >
+		    			<h:panelGrid id="frames" columns="4" styleClass="my-panel-grid" style="margin:10px;padding:1px;color:white;">
+					  		<c:forEach items="#{tafController.tafs}" var="taf" update="@all">
 								<p:panel id="Usuario" header="#{taf.data} '#{taf.nome}'" footer=""
 								toggleable="true" toggleSpeed="500" style="margin:10px; "
 								class="panel-heading">
