@@ -37,16 +37,14 @@ private static final long serialVersionUID = 1L;
 	
 	public TafController tc = new TafController();
 	
-	//private List<TafExercicio> tafsfiltradas;
+
 	public List<TafExercicio> exerciciosfiltrados;
 	
 	@PostConstruct
 	public void inicializa() {
 		tafexercicio = new TafExercicio(); 
 		listarTodas();
-		listarExercicios();	
 		listarTafs();
-	//	filtarTafs();
 	}
 	
 	public void salvar () {
@@ -59,6 +57,8 @@ private static final long serialVersionUID = 1L;
 				for(Exercicio e : exercicios) {	
 					if(e.getModalidades().isEmpty())
 						throw new NullPointerException();
+				}
+				for(Exercicio e : exercicios) {	
 					for(String m : e.getModalidades()) {
 						if(m.equals("rm")) 
 							tafexercicio.setModalidade("1RM");
@@ -69,7 +69,7 @@ private static final long serialVersionUID = 1L;
 						t = sessao.beginTransaction();
 						tafexercicio.setExercicio(e);
 						tafexercicio.setTaf(tx);
-						sessao.merge(tafexercicio);		//merge = Salvar (Insert) Ele identifica o ID direto e ja edita
+						sessao.merge(tafexercicio);		
 						t.commit();
 						tc.setDesativado(true);
 						tafexercicio = new TafExercicio();
@@ -107,7 +107,7 @@ private static final long serialVersionUID = 1L;
 			sessao.close();
 		}
 	}
-
+	
 	public void listarTodas() {
 		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
 		try {

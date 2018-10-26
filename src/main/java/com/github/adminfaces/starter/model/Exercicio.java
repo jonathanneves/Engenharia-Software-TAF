@@ -42,7 +42,7 @@ public class Exercicio implements Serializable {
 	public List<String> getModalidades() {
 		return modalidades;
 	}
-	public void setModalidades(List<String> modalidades) {
+	public void setModalidades(List<String> modalidades) {;
 		this.modalidades = modalidades;
 	}
 	public int getUmrmFraco() {

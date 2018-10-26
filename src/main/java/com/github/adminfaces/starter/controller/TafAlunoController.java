@@ -1,8 +1,7 @@
 package com.github.adminfaces.starter.controller;
 
 import java.io.Serializable;
-
-
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -30,7 +29,8 @@ public class TafAlunoController implements Serializable {
 private static final long serialVersionUID = 1L;
 
 	private TafAluno tafaluno;
-	private Taf tafselecionado;
+	
+	private Taf tafselecionado;;
 	private Usuario alunoselecionado;
 	
 	private List<TafAluno> tafalunos;
@@ -38,8 +38,9 @@ private static final long serialVersionUID = 1L;
 	private List<TafExercicio> tafexercicios;
 	private List<Usuario> usuarios;
 	
-	private List<Exercicio> exercicios;
-	
+	public List<String> listapontos = new ArrayList<String>();
+	private String pontos;
+
 	@PostConstruct
 	public void inicializa() {
 		tafaluno = new TafAluno(); 
@@ -50,13 +51,16 @@ private static final long serialVersionUID = 1L;
 	public void salvar () {
 		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
 		Transaction t = null;
-			try{
-				for(TafExercicio te : tafexercicios) {
+			try {
+				tafselecionado.setRealizado("S");
+				for(TafExercicio te : tafexercicios) {	
+					tafaluno.setPontuacao(Integer.parseInt(listapontos.get(0)));
+					listapontos.remove(0);
 					t = sessao.beginTransaction();
-					tafaluno.setTafexercicio(te);				
-					tafaluno.setPontuacao(te.getPontuacao());
+					tafaluno.setTafexercicio(te);
 					tafaluno.setUsuario(alunoselecionado);
 					sessao.merge(tafaluno);		
+					sessao.merge(tafselecionado);
 					t.commit();
 					tafaluno = new TafAluno();
 				}
@@ -99,7 +103,7 @@ private static final long serialVersionUID = 1L;
 			tafalunos = sessao.createQuery(cq).getResultList();
 		} catch (Exception e) {
 			e.printStackTrace();
-			addErro("ERRO", "Erro ao listar alunos");
+			addErro("ERRO", "Erro ao listar alunos  participantes");
 		} finally {
 			sessao.close();
 		}
@@ -117,10 +121,20 @@ private static final long serialVersionUID = 1L;
 			sessao.close();
 		}
 	}
+	
+	public void editar(ActionEvent evt) {
+		tafaluno = (TafAluno)evt.getComponent().getAttributes().get("tafalunoEdita");
+		System.out.println("editado?"+tafaluno.getId());
+	}
+	
 	public void manterTaf() {
 		System.out.println("Nome: "+getTafselecionado().getNome() +"		Data: "+ getTafselecionado().getData());
 	}
-
+	
+	public void manterPontos() {
+		listapontos.add(getPontos());
+	}
+	
 	public Taf getTafselecionado() {
 		return tafselecionado;
 	}
@@ -166,16 +180,9 @@ private static final long serialVersionUID = 1L;
 		this.tafalunos = tafalunos;
 	}
 
+	
 	public static long getSerialversionuid() {
 		return serialVersionUID;
-	}
-	
-	public List<Exercicio> getExercicios() {
-		return exercicios;
-	}
-
-	public void setExercicios(List<Exercicio> exercicios) {
-		this.exercicios = exercicios;
 	}
 	
 	public Usuario getAlunoselecionado() {
@@ -184,6 +191,14 @@ private static final long serialVersionUID = 1L;
 
 	public void setAlunoselecionado(Usuario alunoselecionado) {
 		this.alunoselecionado = alunoselecionado;
+	}
+	
+	public String getPontos() {
+		return pontos;
+	}
+
+	public void setPontos(String pontos) {
+		this.pontos = pontos;
 	}
 
 	public void addErro(String summary, String detail) {

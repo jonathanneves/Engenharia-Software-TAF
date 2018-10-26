@@ -98,7 +98,7 @@
 		<h:form id="frmTblTAF" enctype="multipart/form-data">  			     
                 <p:dataTable id="tblExercicio" var="e"  emptyMessage="Sem Registro" value="#{exercicioController.exercicios}"
                 reflow="true" rows="10" paginator="true"                                                                     
-                paginatorPosition="bottom"                                   
+                paginatorPosition="bottom" rendered="#{tafController.desativado}"                                   
                 currentPageReportTemplate=""
                 rowsPerPageTemplate="5,10,15,20,30"
                 selection="#{tafExercicioController.exercicios}"
@@ -128,7 +128,7 @@
 		                				                	                	
 		           		<f:facet name="footer">		           		
 		           			  <p:commandButton value="Cadastrar" actionListener="#{tafExercicioController.salvar}" 
-					          update="frmTblTAF:multiExercicio" disabled="#{tafController.desativado}"
+					          update="frmTblTAF:multiExercicio" 
 							  icon="fa fa-plus" style="padding:5px; margin:5px" styleClass="btn-success"
 							  render="@all"/>  
 		           		</f:facet>	
