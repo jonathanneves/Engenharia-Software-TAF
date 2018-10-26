@@ -20,7 +20,7 @@ public class TafAluno implements Serializable {
 	private Integer id;
 	
 	@Column
-	private int pontuacao;
+	private Integer pontuacao;
 	
 	@ManyToOne
 	@JoinColumn(nullable=false)
@@ -30,13 +30,13 @@ public class TafAluno implements Serializable {
 	@JoinColumn(nullable=false)
 	private TafExercicio tafexercicio;
 
-	public int getPontuacao() {
+	public Integer getPontuacao() {
 		return pontuacao;
 	}
-	
-	public void setPontuacao(int pontuacao) {
-		System.out.println("Pontos: "+pontuacao);
+
+	public void setPontuacao(Integer pontuacao) {
 		this.pontuacao = pontuacao;
+		System.out.println(getPontuacao()+"<<<<");
 	}
 
 	public Integer getId() {

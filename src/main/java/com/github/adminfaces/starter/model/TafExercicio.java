@@ -39,22 +39,20 @@ public class TafExercicio implements Serializable {
 	@Column private String modalidade;
 	
 	@Transient
-	private int pontos;
+	private Integer pontuacao;
 	
-	public int getPontos() {
-		System.out.println(pontos+"<<<");
-		return pontos;
+	public Integer getPontuacao() {
+		return pontuacao;
 	}
-
-	public void setPontos(int pontos) {
-		this.pontos = pontos;
-		System.out.println(">>>"+getPontos());
+	public void setPontuacao(Integer pontuacao) {
+		System.out.println("pontos: "+getPontuacao());
+		this.pontuacao = pontuacao;
 	}
-
+	
 	public Integer getId() {
 		return id;
 	}
-
+	
 	public void setId(Integer id) {
 		this.id = id;
 	}
