@@ -51,7 +51,9 @@ private static final long serialVersionUID = 1L;
 	
 	public void setandoUsuario(Usuario u) {
 		System.out.println(u.getNome());
-		setUser(u);	
+		user = u;
+		System.out.println(user.getNome());
+		//setUser(u);	
 	}
 	
 	private BarChartModel initBarModel() {

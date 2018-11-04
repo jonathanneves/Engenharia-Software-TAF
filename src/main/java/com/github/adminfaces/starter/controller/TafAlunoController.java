@@ -53,7 +53,7 @@ private static final long serialVersionUID = 1L;
 	@PostConstruct
 	public void inicializa() {
 		tafaluno = new TafAluno(); 
-		listarTodas();
+		//listarTodas();
 		listarTafExercicios();
 	}
 	
