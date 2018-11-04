@@ -45,29 +45,8 @@
 				<div class="box box-primary">
                		<div class="box-header with-border">
                				
-						<p:chart type="bar" model="#{tafController.barModel}" style="height:300px"/>
-						
-						<p:dataTable id="tbl" var="t" value="#{tafController.tafs}" emptyMessage="Sem Registro" 
-						reflow="true" rows="10" paginator="true"                     			 	                                 
-	                    paginatorPosition="bottom"	                                 
-	                    currentPageReportTemplate=""
-	                    rowsPerPageTemplate="5,10,15,20,30">
-	                    
-							<p:separator/>
-								
-							<p:column headerText="TAF" sortBy="#{t.nome}">
-						        <h:outputText value="#{t.nome}" />
-						    </p:column>		
-						    			 
-						 	<p:column headerText="Data" sortBy="#{t.data}">
-						        <h:outputText value="#{t.data}" />
-						    </p:column>
-						    			 
-						 	<p:column headerText="Pontuação Total">
-						        <h:outputText value="#{t.total}"/>
-						    </p:column>	     							    				    				    
-						</p:dataTable>	
-										
+						<p:chart type="bar" model="#{graficoController.barModel}" style="height:300px"/>
+				
 					</div>
 				</div>
 			</p:panel>

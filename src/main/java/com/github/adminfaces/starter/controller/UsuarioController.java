@@ -28,6 +28,8 @@ public class UsuarioController implements Serializable {
 	private List<Usuario> usuarios;
 	private Usuario usuarioSelecionado;
 	
+	private Usuario userAtual;
+	
 	private List<Usuario> alunosfiltrados;
 	
 	
@@ -97,6 +99,7 @@ public class UsuarioController implements Serializable {
 				usuarios = sessao.createQuery(cq).getResultList();
 				for (Usuario user : usuarios) {
 					if(user.getCpf().equals(cpf)) {
+						setUserAtual(user);
 						return user;
 					} 
 				}   
@@ -141,6 +144,14 @@ public class UsuarioController implements Serializable {
 		exclui();
 	}
 	
+	public Usuario getUserAtual() {
+		return userAtual;
+	}
+
+	public void setUserAtual(Usuario userAtual) {
+		this.userAtual = userAtual;
+	}
+
 	public void addMessage(String summary, String detail) {
 		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail);
 		FacesContext.getCurrentInstance().addMessage(null, message);

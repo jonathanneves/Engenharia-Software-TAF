@@ -3,6 +3,8 @@ package com.github.adminfaces.starter.controller;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -10,12 +12,14 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 
-import com.github.adminfaces.starter.model.Exercicio;
 import com.github.adminfaces.starter.model.Taf;
 import com.github.adminfaces.starter.model.TafAluno;
 import com.github.adminfaces.starter.model.TafExercicio;
@@ -30,17 +34,22 @@ private static final long serialVersionUID = 1L;
 
 	private TafAluno tafaluno;
 	
-	private Taf tafselecionado;;
-	private Usuario alunoselecionado;
+	private Taf tafselecionado;
+	private TafExercicio exercicioSel;
 	
 	private List<TafAluno> tafalunos;
 	
 	private List<TafExercicio> tafexercicios;
 	private List<Usuario> usuarios;
-	
+	private List<TafAluno> exerciciosfiltrados;
+
 	public List<String> listapontos = new ArrayList<String>();
 	private String pontos;
+	private List<Integer> somaTotais;
 
+	UsuarioController tu = new UsuarioController();
+	private List<Usuario> alunosfiltrados;
+	
 	@PostConstruct
 	public void inicializa() {
 		tafaluno = new TafAluno(); 
@@ -52,17 +61,21 @@ private static final long serialVersionUID = 1L;
 		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
 		Transaction t = null;
 			try {
+				alunosfiltrados = tu.filtrarAlunos();
 				tafselecionado.setRealizado("S");
-				for(TafExercicio te : tafexercicios) {	
-					tafaluno.setPontuacao(Integer.parseInt(listapontos.get(0)));
-					listapontos.remove(0);
-					t = sessao.beginTransaction();
-					tafaluno.setTafexercicio(te);
-					tafaluno.setUsuario(alunoselecionado);
-					sessao.merge(tafaluno);		
-					sessao.merge(tafselecionado);
-					t.commit();
-					tafaluno = new TafAluno();
+				System.out.println(listapontos.get(0));
+				for(Usuario u : alunosfiltrados) {
+					if(listapontos.get(0) != null) {
+						t = sessao.beginTransaction();
+						tafaluno.setPontuacao(Integer.parseInt(listapontos.get(0)));
+						listapontos.remove(0);
+						tafaluno.setUsuario(u);
+						tafaluno.setTafexercicio(exercicioSel);
+						sessao.merge(tafaluno);	
+						sessao.merge(tafselecionado);
+						t.commit();
+						tafaluno = new TafAluno();
+					}
 				}
 				addMessage("Pontuação", "Pontos registrado com sucesso");		
 			} catch(ArrayIndexOutOfBoundsException exception) {
@@ -127,14 +140,58 @@ private static final long serialVersionUID = 1L;
 		System.out.println("editado?"+tafaluno.getId());
 	}
 	
+/*	public void somaTotal(TafExercicio tafSel) {
+		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
+		CriteriaBuilder builder = sessao.getCriteriaBuilder();
+		try {
+			CriteriaQuery<Object[]> cq = builder.createQuery(Object[].class);
+			Root<TafAluno> root = cq.from(TafAluno.class);
+			cq.multiselect(root.get("usuario") , builder.sum(root.get("pontuacao")));
+			cq.groupBy(root.get("usuario"));
+			Query<Object[]> query = sessao.createQuery(cq);
+			List<Object[]> list = query.getResultList();
+			for (Object[] objects : list) {
+				Usuario usuario = (Usuario) objects[0];
+				long sum = (Long) objects[1];
+				System.out.println("Usuario: " + usuario.getNome() + "	Pontuação: " + sum);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}*/
+	
+	public List<TafAluno> somaTotal2(Taf tafAux) {
+		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
+		try {
+			if(tafAux != null) {
+				CriteriaQuery<TafAluno> cq = sessao.getCriteriaBuilder().createQuery(TafAluno.class);
+				cq.from(TafAluno.class);
+				exerciciosfiltrados = sessao.createQuery(cq).getResultList();
+				exerciciosfiltrados.removeIf(s -> s.getTafexercicio().getTaf().getId() != tafAux.getId());
+				Map<Usuario, Integer> result = exerciciosfiltrados.stream().collect(Collectors.groupingBy(TafAluno::getUsuario,  Collectors.summingInt(TafAluno::getPontuacao)));
+				System.out.println(result);
+			} else
+				System.out.println("Sem Taf selecionado");	
+		} catch (Exception e) {
+			addErro("ERRO", "Erro ao filtrar tafs");
+		} finally {
+			sessao.close();
+		}	
+		return exerciciosfiltrados;
+	}
+	
 	public void manterTaf() {
+		somaTotal2(getTafselecionado());
 		System.out.println("Nome: "+getTafselecionado().getNome() +"		Data: "+ getTafselecionado().getData());
 	}
 	
 	public void manterPontos() {
 		listapontos.add(getPontos());
 	}
+		
 	
+
 	public Taf getTafselecionado() {
 		return tafselecionado;
 	}
@@ -143,9 +200,9 @@ private static final long serialVersionUID = 1L;
 		this.tafselecionado = tafselecionado;
 	}
 
-	public void selecionarAluno(ActionEvent evt){
-		alunoselecionado = (Usuario)evt.getComponent().getAttributes().get("alunoSeleciona");
-		System.out.println("Aluno: "+ alunoselecionado.getNome());
+	public void selecionarExercicio(ActionEvent evt){
+		exercicioSel = (TafExercicio)evt.getComponent().getAttributes().get("exercicioSeleciona");
+		System.out.println("Exercicio: "+ exercicioSel.getExercicio().getNome());
 	}
 		
 	public List<TafExercicio> getTafexercicios() {
@@ -180,25 +237,40 @@ private static final long serialVersionUID = 1L;
 		this.tafalunos = tafalunos;
 	}
 
-	
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
 	
-	public Usuario getAlunoselecionado() {
-		return alunoselecionado;
+	public TafExercicio getExercicioSel() {
+		return exercicioSel;
 	}
 
-	public void setAlunoselecionado(Usuario alunoselecionado) {
-		this.alunoselecionado = alunoselecionado;
+	public void setExercicioSel(TafExercicio exercicioSel) {
+		this.exercicioSel = exercicioSel;
 	}
-	
+
 	public String getPontos() {
 		return pontos;
+	}
+	
+	public List<Integer> getSomaTotais() {
+		return somaTotais;
+	}
+
+	public void setSomaTotais(List<Integer> somaTotais) {
+		this.somaTotais = somaTotais;
 	}
 
 	public void setPontos(String pontos) {
 		this.pontos = pontos;
+	}
+
+	public List<Usuario> getAlunosfiltrados() {
+		return alunosfiltrados;
+	}
+
+	public void setAlunosfiltrados(List<Usuario> alunosfiltrados) {
+		this.alunosfiltrados = alunosfiltrados;
 	}
 
 	public void addErro(String summary, String detail) {

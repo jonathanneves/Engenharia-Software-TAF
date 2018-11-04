@@ -1,6 +1,7 @@
 package com.github.adminfaces.starter.infra.security;
 
 import com.github.adminfaces.starter.controller.UsuarioController;
+import com.github.adminfaces.starter.controller.GraficoController;
 import com.github.adminfaces.starter.model.Usuario;
 import com.github.adminfaces.starter.util.HibernateUtil;
 import com.github.adminfaces.template.session.AdminSession;
@@ -8,9 +9,11 @@ import com.github.adminfaces.template.session.AdminSession;
 import org.hibernate.Session;
 import org.omnifaces.util.Faces;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
 import javax.enterprise.inject.Specializes;
 import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.inject.Named;
@@ -38,18 +41,20 @@ import static com.github.adminfaces.starter.util.Utils.addDetailMessage;
 @Specializes
 public class LogonMB extends AdminSession implements Serializable {
 
+	private static final long serialVersionUID = 1L;
+
     private String currentUser;
     private String cpf;
     private boolean remember;
 	private UsuarioController userCont = new UsuarioController();
-	private Usuario user = new Usuario();
+	private Usuario user;
 
     public void login() throws IOException {
     	try {
     	user = userCont.validarUsuario(cpf);
     	if(user != null) {
     		currentUser = user.getNome();
-    		addMessage(currentUser, "Usuário logado com sucesso");
+    		//addMessage(currentUser, "Usuário logado com sucesso");
     		Faces.getExternalContext().getFlash().setKeepMessages(true);
     		Faces.redirect("index.xhtml");
     	}else {
@@ -93,7 +98,15 @@ public class LogonMB extends AdminSession implements Serializable {
         return currentUser != null;
     }
 
-    public String getCpf() {
+    public Usuario getUser() {
+		return user;
+	}
+
+	public void setUser(Usuario user) {
+		this.user = user;
+	}
+
+	public String getCpf() {
 		return cpf;
 	}
 
@@ -116,4 +129,12 @@ public class LogonMB extends AdminSession implements Serializable {
     public void setCurrentUser(String currentUser) {
         this.currentUser = currentUser;
     }
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+    
+    
+    
+    
 }

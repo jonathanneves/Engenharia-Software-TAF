@@ -30,6 +30,7 @@
                 <pe:gravatar id="userImage"
                              value="nonexisting"/>
                 <span class="hidden-xs">#{logonMB.currentUser}</span>
+             
             </a>
             <ul class="dropdown-menu">
                 <li class="user-header">
@@ -40,10 +41,14 @@
                     <p>
                         #{logonMB.currentUser}
                     </p>
+                    <p>
+                        #{logonMB.cpf}
+                    </p>
                 </li>
                 <li class="user-footer">
                     <h:form prependId="false">
                         <div class="pull-right">
+                        	<p:outputLabel style="padding-right:5px; font-size:15px;">Sair</p:outputLabel>
                             <p:commandLink id="logout" action="#{logoutMB.doLogout}" title="Sair">
                                 <i class="fa fa-sign-out fa-2x"></i>
                             </p:commandLink>

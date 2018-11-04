@@ -79,6 +79,21 @@
 			</p:dataTable>
 		</h:form>
 		
+		<h:form id="frmAlu"  enctype="multipart/form-data">
+			<p:dataTable id="tbl" var="a" value="#{tafAlunoController.tafalunos}" searching="true"
+			 emptyMessage="Tabela vazia" reflow="true" rows="10" paginator="true" >
+       			
+				<p:column style="font-size:15px" headerText="Aluno" filterBy="#{a.nome}">
+					<h:outputText value="#{a.usuario.nome}" />
+				</p:column>
+					
+				<p:column headerText="Pontuação" style="font-size:15px" >
+			        <h:outputText value="#{TafAlunoController.somaTotais}" />
+				</p:column>	
+				
+			</p:dataTable>
+		</h:form>
+		
 	</div>
 	</div>
 
@@ -108,7 +123,8 @@
 								<f:convertDateTime pattern="dd/MM/yyyy"/>
 							</h:outputText>
 						</p:column>	
-								 								 					 					    
+								 			
+					 					 					    
 						<p:column headerText="Pontuação" style="font-size:15px" >	      		
    							<p:inputText id="txtPontos" value="#{tafAlunoController.pontos}">
    								<p:ajax listener="#{tafAlunoController.manterPontos}" />   

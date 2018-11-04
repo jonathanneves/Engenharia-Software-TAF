@@ -41,6 +41,11 @@ public class TafExercicio implements Serializable {
 	@Transient
 	private int pontos;
 	
+	@Override
+	public String toString() {
+		return getExercicio().getNome() + " - " + getModalidade();
+	}
+	
 	public int getPontos() {
 		System.out.println(pontos+"<<<");
 		return pontos;
