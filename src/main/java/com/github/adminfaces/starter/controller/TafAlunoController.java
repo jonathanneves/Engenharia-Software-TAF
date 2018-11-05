@@ -41,30 +41,24 @@ private static final long serialVersionUID = 1L;
 	
 	private List<TafExercicio> tafexercicios;
 	private List<Usuario> usuarios;
-	private List<TafAluno> exerciciosfiltrados;
 
 	public List<String> listapontos = new ArrayList<String>();
 	private String pontos;
-	private List<Integer> somaTotais;
 
 	UsuarioController tu = new UsuarioController();
-	private List<Usuario> alunosfiltrados;
 	
 	@PostConstruct
 	public void inicializa() {
 		tafaluno = new TafAluno(); 
-		//listarTodas();
-		listarTafExercicios();
 	}
 	
 	public void salvar () {
 		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
 		Transaction t = null;
 			try {
-				alunosfiltrados = tu.filtrarAlunos();
 				tafselecionado.setRealizado("S");
 				System.out.println(listapontos.get(0));
-				for(Usuario u : alunosfiltrados) {
+				for(Usuario u : tu.filtrarAlunos()) {
 					if(listapontos.get(0) != null) {
 						t = sessao.beginTransaction();
 						tafaluno.setPontuacao(Integer.parseInt(listapontos.get(0)));
@@ -139,58 +133,14 @@ private static final long serialVersionUID = 1L;
 		tafaluno = (TafAluno)evt.getComponent().getAttributes().get("tafalunoEdita");
 		System.out.println("editado?"+tafaluno.getId());
 	}
-	
-/*	public void somaTotal(TafExercicio tafSel) {
-		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
-		CriteriaBuilder builder = sessao.getCriteriaBuilder();
-		try {
-			CriteriaQuery<Object[]> cq = builder.createQuery(Object[].class);
-			Root<TafAluno> root = cq.from(TafAluno.class);
-			cq.multiselect(root.get("usuario") , builder.sum(root.get("pontuacao")));
-			cq.groupBy(root.get("usuario"));
-			Query<Object[]> query = sessao.createQuery(cq);
-			List<Object[]> list = query.getResultList();
-			for (Object[] objects : list) {
-				Usuario usuario = (Usuario) objects[0];
-				long sum = (Long) objects[1];
-				System.out.println("Usuario: " + usuario.getNome() + "	Pontuação: " + sum);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-	}*/
-	
-	public List<TafAluno> somaTotal2(Taf tafAux) {
-		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
-		try {
-			if(tafAux != null) {
-				CriteriaQuery<TafAluno> cq = sessao.getCriteriaBuilder().createQuery(TafAluno.class);
-				cq.from(TafAluno.class);
-				exerciciosfiltrados = sessao.createQuery(cq).getResultList();
-				exerciciosfiltrados.removeIf(s -> s.getTafexercicio().getTaf().getId() != tafAux.getId());
-				Map<Usuario, Integer> result = exerciciosfiltrados.stream().collect(Collectors.groupingBy(TafAluno::getUsuario,  Collectors.summingInt(TafAluno::getPontuacao)));
-				System.out.println(result);
-			} else
-				System.out.println("Sem Taf selecionado");	
-		} catch (Exception e) {
-			addErro("ERRO", "Erro ao filtrar tafs");
-		} finally {
-			sessao.close();
-		}	
-		return exerciciosfiltrados;
-	}
-	
+			
 	public void manterTaf() {
-		somaTotal2(getTafselecionado());
 		System.out.println("Nome: "+getTafselecionado().getNome() +"		Data: "+ getTafselecionado().getData());
 	}
 	
 	public void manterPontos() {
 		listapontos.add(getPontos());
 	}
-		
-	
 
 	public Taf getTafselecionado() {
 		return tafselecionado;
@@ -253,24 +203,8 @@ private static final long serialVersionUID = 1L;
 		return pontos;
 	}
 	
-	public List<Integer> getSomaTotais() {
-		return somaTotais;
-	}
-
-	public void setSomaTotais(List<Integer> somaTotais) {
-		this.somaTotais = somaTotais;
-	}
-
 	public void setPontos(String pontos) {
 		this.pontos = pontos;
-	}
-
-	public List<Usuario> getAlunosfiltrados() {
-		return alunosfiltrados;
-	}
-
-	public void setAlunosfiltrados(List<Usuario> alunosfiltrados) {
-		this.alunosfiltrados = alunosfiltrados;
 	}
 
 	public void addErro(String summary, String detail) {

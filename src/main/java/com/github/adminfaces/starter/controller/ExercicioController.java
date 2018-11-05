@@ -32,7 +32,6 @@ public class ExercicioController implements Serializable {
 		exercicio = new Exercicio();
 		listarTodas();
 	}
-	
 
 	public void salvar () {
 		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();

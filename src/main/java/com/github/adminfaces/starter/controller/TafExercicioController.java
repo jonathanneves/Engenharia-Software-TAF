@@ -1,7 +1,7 @@
 package com.github.adminfaces.starter.controller;
 
 import java.io.Serializable;
-
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -36,9 +36,6 @@ private static final long serialVersionUID = 1L;
 	private List<Taf> tafs;
 	
 	public TafController tc = new TafController();
-	
-
-	public List<TafExercicio> exerciciosfiltrados;
 	
 	@PostConstruct
 	public void inicializa() {
@@ -148,7 +145,8 @@ private static final long serialVersionUID = 1L;
 	}
 	
 	public List<TafExercicio> filtrarExercicios(Taf tafAux) {
-		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
+		List<TafExercicio> exerciciosfiltrados = new ArrayList<TafExercicio>();
+ 		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
 		try {
 			if(tafAux != null) {
 				CriteriaQuery<TafExercicio> cq = sessao.getCriteriaBuilder().createQuery(TafExercicio.class);
@@ -200,14 +198,6 @@ private static final long serialVersionUID = 1L;
 
 	public void setTafs(List<Taf> tafs) {
 		this.tafs = tafs;
-	}
-
-	public List<TafExercicio> getExerciciosfiltrados() {
-		return exerciciosfiltrados;
-	}
-
-	public void setExerciciosfiltrados(List<TafExercicio> exerciciosfiltrados) {
-		this.exerciciosfiltrados = exerciciosfiltrados;
 	}
 
 	public static long getSerialversionuid() {

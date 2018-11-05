@@ -70,7 +70,6 @@ public class LogonMB extends AdminSession implements Serializable {
     }
 	
     public boolean isProfessor() {
-    	user = userCont.validarUsuario(cpf);
     	if(user.getPermissao().equals("Professor")) 
     		return true;
     	else
@@ -78,7 +77,6 @@ public class LogonMB extends AdminSession implements Serializable {
     }
     
     public boolean isAluno() {
-    	user = userCont.validarUsuario(cpf);
     	if(user.getPermissao().equals("Aluno"))
     		return true;
     	else

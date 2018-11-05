@@ -137,11 +137,9 @@ public class TafController implements Serializable {
 		this.desativado = desativado;
 	}
 
-
 	public Taf getTaf() {
 		return taf;
 	}
-
 
 	public void setTaf(Taf taf) {
 		this.taf = taf;

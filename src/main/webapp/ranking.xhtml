@@ -29,6 +29,10 @@
 				color: blue !important;
 				font-weight: bold !important;
 			}
+			.myOneMenu.ui-selectonemenu {
+			   box-sizing: border-box;
+			}
+
         </style>
     </ui:define>
 
@@ -47,51 +51,47 @@
  		<p:messages id="msg" showDetail="true" closable="true" showSummary="true" />
 	
 	<div class="box box-primary">
-		<h:form id="frm">
-				<div class="ui-g ui-fluid">
-					<h:panelGrid columns="3" id="filtros" styleClass="my-panel-grid" style="margin: 15px">  
-	
+		<div class="ui-g ui-fluid">
+			<h:form id="frm">
+					<h:panelGrid columns="2" id="filtros" layout="grid" style="margin:7px">  
 						<p:outputLabel value="1º Escolha um TAF:" />
-        				<p:selectOneMenu id="txtTAF" converter="entityConverter" style="margin: 15px" value="#{rankingController.tafselecionado}"
+        				<p:selectOneMenu id="txtTAF" converter="entityConverter" style="width:auto;margin:5px" value="#{rankingController.tafselecionado}"
         					required="true" requiredMessage= "TAF Obrigatório" >
         					<p:ajax listener="#{rankingController.manterTaf}" update="frmTotal:tbl txtExercicio frmRanking:ranking"/>   
         					<f:selectItem itemLabel="Selecione um TAF" itemValue="" />
-				            <f:selectItems value="#{rankingController.tafsrealizadas}"/>
+				            <f:selectItems value="#{rankingController.listarTafsRealizadas()}"/>
 				        </p:selectOneMenu>
-				        <p:outputLabel value=""> </p:outputLabel>	
 
 				       <p:outputLabel value="2º Escolha um Exercicio:" />
-        				<p:selectOneMenu id="txtExercicio" converter="entityConverter" style="margin: 15px" value="#{rankingController.exercicioSel}"
-        					required="true" requiredMessage= "Exercicio Obrigatorio" >
+        				<p:selectOneMenu id="txtExercicio" converter="entityConverter" style="width:auto; margin:5px" value="#{rankingController.exercicioSel}"
+        					required="true" requiredMessage= "Exercicio Obrigatorio">
     					 	<p:ajax listener="#{rankingController.manterExercicio}" update="btnExer btnPont"/>   
         					<f:selectItem itemLabel="Selecione um Exercicio" itemValue="" />
-				            <f:selectItems value="#{rankingController.tafexercicios}"/>	       		   
+				            <f:selectItems value="#{rankingController.listarTafExercicios()}"/>	       		   
 				        </p:selectOneMenu>
-				    
-				        <p:commandButton id="btnExer" disabled="#{rankingController.desativadoExer}" value="Filtrar" icon="fa fa-search" update="frmExe:tbl"
-    					oncomplete="PF('dlgExe').show();" styleClass="btn-info"  style="margin: 15px" />
     					
 				        <p:outputLabel value="3º  Classificação Pontual: " />
 				        <p:selectOneMenu id="txtClassificacao" require="true" requiredMessage= "Filtro Obrigatório"
-				         value="#{rankingController.filtroSel}" style="margin: 15px">
+				         value="#{rankingController.filtroSel}" style="width:auto;margin:5px">
 				         <p:ajax listener="#{rankingController.manterFiltro}" update="frmMod:tbl btnPont" />   
 				      	    <f:selectItem itemLabel="Selecione uma Classificação" itemValue="" />
-				            <f:selectItem itemLabel="Fraco" itemValue="Fraco" />
-				            <f:selectItem itemLabel="Medio" itemValue="Médio" />
-				            <f:selectItem itemLabel="Forte" itemValue="Forte" />				           	    
+				            <f:selectItem itemLabel="Frangote" itemValue="Fraco" />
+				            <f:selectItem itemLabel="Mediano" itemValue="Médio" />
+				            <f:selectItem itemLabel="Monstro" itemValue="Forte" />				           	    
 				        </p:selectOneMenu>
 				        
-				        <p:commandButton id="btnPont" disabled="#{rankingController.desativadoPont}" value="Filtrar" icon="fa fa-search" update="frmMod:tbl"
-    					oncomplete="PF('dlg').show();" styleClass="btn-info"  style="margin: 15px" />
+				        <p:commandButton id="btnExer" disabled="#{rankingController.desativadoExer}" value="Filtrar Exercício" icon="fa fa-search" update="frmExe:tbl"
+    					oncomplete="PF('dlgExe').show();" styleClass="btn-info"  style="width:auto; margin:5px;"/>
+				        <p:commandButton id="btnPont" disabled="#{rankingController.desativadoPont}" value="Filtrar Classificação" icon="fa fa-search" update="frmMod:tbl"
+    					oncomplete="PF('dlg').show();" styleClass="btn-info"  style="width:auto; margin:5px;"/>
     					
 			        </h:panelGrid>
-			    	</div>
 		    </h:form>
 		    
 		    <h:form id="frmTotal" enctype="multipart/form-data">	
 				<p:dataTable id="tbl" var="e" value="#{rankingController.listarTotalPontos()}"
-				 emptyMessage="Tabela Vazia" rows="5" paginator="true" reflow="true" tableStyle="width:auto">
-				 		
+				 emptyMessage="Tabela Vazia" resizableColumns="true" paginator="true" reflow="true">
+				 						    
 				 	<p:column style="width:10%; text-align:center; font-size:20px; font-weight:bold" 
 				 	headerText="Posição" sortBy="#{e.posicao}">
 						<h:outputText value="#{e.posicao}" />
@@ -106,27 +106,18 @@
 					</p:column>
 											        				        		
 				</p:dataTable>						
-			</h:form> 
-			
-			<h:form id="frmRanking">
-				<div class="ui-g ui-fluid">
-					<h:panelGrid columns="1" id="ranking" styleClass="my-panel-grid" style="margin: 15px">  
-			       		<p:outputLabel id="cabecalho" value="#{rankingController.criarCabecalho()}"
-			       		style="font-size:20px;"/>
-			       		<c:forEach id="corpo" items="#{rankingController.ranqueandoAluno()}" var="t" style="font-size:125%;">
-						       <p:outputLabel value="#{t.texto} #{t.totalpontos}" style="font-size:20px;"/>					               		
-						</c:forEach>
-			        </h:panelGrid>
-	       		</div>
-	        </h:form>
+			</h:form>
+		</div>
+			<p:commandButton styleClass="btn-success" oncomplete="PF('dlgAll').show();" 
+			    style="padding:5px; margin:5px; float: right;"  icon="fa fa-list-ol" /> 
 		</div>
 
 		<p:dialog header="Alunos Filtrados" widgetVar="dlg"
 		resizable="false" draggable="false" modal="false" closable="true" height="auto" width="50%" position="center">
 		
+		<h:form id="frmMod" enctype="multipart/form-data">
 			<div class="box box-primary">
 			<div class="ui-g ui-fluid">  
-				<h:form id="frmMod" enctype="multipart/form-data">
 	
 					<p:dataTable id="tbl" var="e" value="#{rankingController.filtrarAlunosClassificados()}"
 					 emptyMessage="Ninguem alcançou a pontuação" rows="5" paginator="true" reflow="true">
@@ -139,23 +130,24 @@
 							<h:outputText value="#{e.pontuacao}" />
 						</p:column>
 												        				        		
-					</p:dataTable>	
+					</p:dataTable>
 					
-				</h:form> 
-			    <p:commandButton value = "Fechar" styleClass="btn-success" oncomplete="PF('dlg').hide();" 
-			    style="padding:5px; margin:5px"  icon="fa fa-times" /> 
-			
-			</div>
-			</div>	    
+					<f:facet name="footer">
+						<p:commandButton value = "Fechar" styleClass="btn-info" oncomplete="PF('dlg').hide();" 
+			    		style="width:250px; margin: 0 auto 0 auto;"  icon="fa fa-times" /> 
+			    	</f:facet>			
+				</div>
+				</div>	
+			</h:form>     
 		</p:dialog>	
 		
 		<p:dialog header="Exercício Filtrado" widgetVar="dlgExe"
 		resizable="false" draggable="false" modal="false" closable="true" height="auto" width="50%" position="center">
 		
-			<div class="box box-primary">
-			<div class="ui-g ui-fluid">  
-				<h:form id="frmExe" enctype="multipart/form-data">
-	
+			<h:form id="frmExe" enctype="multipart/form-data">	
+				<div class="box box-primary">
+				<div class="ui-g ui-fluid">  
+		
 					<p:dataTable id="tbl" var="e" value="#{rankingController.filtrarPorExercicio()}"
 					 emptyMessage="Não existe alunos registrado neste exercício" rows="5" paginator="true" reflow="true">
 					 					 					    
@@ -166,18 +158,37 @@
 						<p:column style="font-size:15px" sortBy="#{e.pontuacao}" headerText="#{rankingController.exercicioSel.exercicio.nome} - #{rankingController.exercicioSel.modalidade}" >
 							<h:outputText value="#{e.pontuacao}" />
 						</p:column>
-												        				        		
-					</p:dataTable>	
-					
-				</h:form> 
-			    <p:commandButton value = "Fechar" styleClass="btn-success" oncomplete="PF('dlg').hide();" 
-			    style="padding:5px; margin:5px"  icon="fa fa-times" /> 
-			
-			</div>
-			</div>	    
+						
+						<f:facet name="footer">	
+							<p:commandButton value = "Fechar" styleClass="btn-info" oncomplete="PF('dlgExe').hide();" 
+			    			style="width:250px; margin: 0 auto 0 auto;"  icon="fa fa-times" /> 
+						</f:facet>						        				        		
+					</p:dataTable>					
+				</div>
+				</div>	
+			</h:form>    
 		</p:dialog>	
-			
-				
+		
+		<p:dialog header="Todos os registros por Aluno" widgetVar="dlgAll"
+		resizable="false" draggable="false" modal="false" closable="true" height="auto" width="50%" position="center">
+			<h:form id="frmRanking">
+				<div class="box box-primary">
+				<div class="ui-g ui-fluid">
+
+						<h:panelGrid columns="1" id="ranking" styleClass="my-panel-grid" style="margin: 15px">  
+				       		<p:outputLabel id="cabecalho" value="#{rankingController.criarCabecalho()}"
+				       		style="font-size:20px;"/>
+				       		<c:forEach id="corpo" items="#{rankingController.ranqueandoAluno()}" var="t" style="font-size:125%;">
+							       <p:outputLabel value="#{t.texto} #{t.totalpontos}" style="font-size:20px;"/>					               		
+							</c:forEach>
+				        </h:panelGrid>	
+				        <p:commandButton value = "Fechar" styleClass="btn-success" oncomplete="PF('dlgAll').hide();" 
+				 	style="width:250px; margin: 0 auto 0 auto;"  icon="fa fa-times" />	  
+		        </div>
+			    </div>
+		    </h:form>
+		</p:dialog>	
+			    	
 		<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
 			<p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
 			<p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>

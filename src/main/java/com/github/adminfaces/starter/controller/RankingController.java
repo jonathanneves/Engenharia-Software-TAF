@@ -38,62 +38,30 @@ private static final long serialVersionUID = 1L;
 	private List<TafAluno> tafalunos;
 	private List<TafExercicio> tafexercicios;
 	private List<Usuario> usuarios;
-	
-	private List<Taf> tafsrealizadas;			//tafs que foram realizadas 'S'
-	private List<TafAluno> alunosparticipantes;	//alunos que participaram da taf selecionada;
-	private List<TafAluno> alunosclassificados; //alunos com filtro forte fraco ou medio
-	private List<TafAluno> alunosporexercicio; //alunos por exercicio
-	
-	//private List<Integer> somaTotais;
-	//private String cabecalho;
-	//private List<String> corpo;
-	
+
 	private boolean desativadoPont = true;			//desativar Botao antes de selecionar 3 combo
 	private boolean desativadoExer = true;
 	private int desativarBotaoPont = 0;
 	private int desativarBotaoExer = 0;
-	
-	/*private List<ColumnModel> colunas;
-	private List<String[]> rankingAluno;
-	private String colunaNome;*/
 	     
 	@PostConstruct
 	public void inicializa() {
-		listarTodas();
-		listarTafExercicios();
-		listarTafsRealizadas();
+		tafselecionado = listarTafsRealizadas().get(listarTafsRealizadas().size() -1);
 		filtrarAlunosTaf();
-		tafselecionado = tafsrealizadas.get(0);
-		criarCabecalho();
-		ranqueandoAluno();
-		//addRanking();
-	    //createDynamicColumns();
+		listarTafExercicios();
 	}
 	
-	public void listarTodas() {
-		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
-		try {
-			CriteriaQuery<TafAluno> cq = sessao.getCriteriaBuilder().createQuery(TafAluno.class);
-			cq.from(TafAluno.class);
-			tafalunos = sessao.createQuery(cq).getResultList();
-		} catch (Exception e) {
-			e.printStackTrace();
-			addErro("ERRO", "Erro ao listar alunos  participantes");
-		} finally {
-			sessao.close();
-		}
-	}
-	
+	//Listar apenas os TAFExercicio da taf selecionada
 	public List<TafExercicio> listarTafExercicios() {
+		List<TafExercicio> listaexercicios = new ArrayList<TafExercicio>();
 		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
 		try {
 			if(tafselecionado != null) {
 				CriteriaQuery<TafExercicio> cq = sessao.getCriteriaBuilder().createQuery(TafExercicio.class);
 				cq.from(TafExercicio.class);
-				tafexercicios = sessao.createQuery(cq).getResultList();
-				tafexercicios.removeIf(s -> s.getTaf().getId() != tafselecionado.getId());
-				for(TafExercicio t : tafexercicios)
-					System.out.println(t.getExercicio().getNome());
+				listaexercicios = sessao.createQuery(cq).getResultList();
+				listaexercicios.removeIf(s -> s.getTaf().getId() != tafselecionado.getId());
+				tafexercicios = listaexercicios;	
 			}else
 				System.out.println("TAF SELECIONADO É NULO");
 		} catch (Exception e) {
@@ -103,8 +71,10 @@ private static final long serialVersionUID = 1L;
 		}
 		return tafexercicios;
 	}
-		
+	
+	//Listar apenas TAF que foram realizadas
 	public List<Taf> listarTafsRealizadas() {
+		List<Taf> tafsrealizadas = new ArrayList<Taf>();
 		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
 		try {
 			CriteriaQuery<Taf> cq = sessao.getCriteriaBuilder().createQuery(Taf.class);
@@ -119,7 +89,9 @@ private static final long serialVersionUID = 1L;
 		return tafsrealizadas;
 	}
 	
+	//Listar todos os alunos que participaram do TAF
 	public List<TafAluno> filtrarAlunosTaf(){
+		List<TafAluno> alunosparticipantes = new ArrayList<TafAluno>();
 		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
 		try {
 			if(tafselecionado != null) {
@@ -127,6 +99,7 @@ private static final long serialVersionUID = 1L;
 				cq.from(TafAluno.class);
 				alunosparticipantes = sessao.createQuery(cq).getResultList();
 				alunosparticipantes.removeIf(s -> s.getTafexercicio().getTaf().getId() != tafselecionado.getId());
+				tafalunos = alunosparticipantes;
 			} else
 				System.out.println("Nenhuma taf selecionado");
 		} catch (Exception e) {
@@ -137,33 +110,27 @@ private static final long serialVersionUID = 1L;
 		return alunosparticipantes;
 	}
 	 
+	//Filtrar todos os alunos que realizaram o exercicio
 	public List<TafAluno> filtrarPorExercicio(){
-		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
+		List<TafAluno> alunosporexercicio = new ArrayList<TafAluno>();
 		try {
 			if(tafselecionado != null) {
-				CriteriaQuery<TafAluno> cq = sessao.getCriteriaBuilder().createQuery(TafAluno.class);
-				cq.from(TafAluno.class);
-				alunosporexercicio = sessao.createQuery(cq).getResultList();
-				alunosporexercicio.removeIf(s -> s.getTafexercicio().getTaf().getId() != tafselecionado.getId());
+				alunosporexercicio = tafalunos;
 				alunosporexercicio.removeIf(s -> s.getTafexercicio().getId() != exercicioSel.getId());
 				alunosporexercicio.sort(Comparator.comparing(TafAluno::getPontuacao).reversed());
 			} else
 				System.out.println("Nenhuma taf selecionado");
 		} catch (Exception e) {
 			addErro("ERRO", "Erro ao filtrar tafs");
-		} finally {
-			sessao.close();
-		}	
+		}
 		return alunosporexercicio;
 	}
 	 
+	//Filtrar alunos por fraco forte e médio
 	public List<TafAluno> filtrarAlunosClassificados(){
-		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
+		List<TafAluno> alunosclassificados = new ArrayList<TafAluno>();
 		try {
-			CriteriaQuery<TafAluno> cq = sessao.getCriteriaBuilder().createQuery(TafAluno.class);
-			cq.from(TafAluno.class);
-			alunosclassificados = sessao.createQuery(cq).getResultList();
-			alunosclassificados.removeIf(s -> s.getTafexercicio().getTaf().getId() != tafselecionado.getId());
+			alunosclassificados = tafalunos;
 			alunosclassificados.removeIf(s -> s.getTafexercicio().getId() != exercicioSel.getId());
 			if(filtroSel.equals("Fraco")) {
 				if(exercicioSel.getModalidade().equals("1RM"))
@@ -196,23 +163,21 @@ private static final long serialVersionUID = 1L;
 			alunosclassificados.sort(Comparator.comparing(TafAluno::getPontuacao));
 		} catch (Exception e) {
 			addErro("ERRO", "Erro ao classficar alunos");
-		} finally {
-			sessao.close();
-		}	
+		} 
 		return alunosclassificados;
 	}
 	 
-	  public List<Ranking> listarTotalPontos() {
+	//Listando o ponto total de  todos alunos
+	public List<Ranking> listarTotalPontos() {
 		  List<Ranking>listaTotal = new ArrayList<Ranking>();
 		  String texto="";
 		  int saida=0;
 		  boolean novoAluno = true;
 		  int total = 0; 
-		  alunosparticipantes = filtrarAlunosTaf();
-		  tafexercicios = listarTafExercicios();
-		  Collections.sort(alunosparticipantes, (o1, o2) -> o1.getUsuario().getId().compareTo(o2.getUsuario().getId()));
+		  List<TafAluno> alunos = tafalunos;
+		  Collections.sort(alunos, (o1, o2) -> o1.getUsuario().getId().compareTo(o2.getUsuario().getId()));
 		  
-		  for(TafAluno te : alunosparticipantes) {
+		  for(TafAluno te : alunos) {
 			  if(novoAluno) {
 				  texto = te.getUsuario().getNome();
 			  	  novoAluno = false;
@@ -235,18 +200,17 @@ private static final long serialVersionUID = 1L;
 		  return listaTotal;
 	  }
 	  
-	  
+	  //TEXTO mostrando todos alunos e seus pontos
 	  public List<Ranking> ranqueandoAluno() {
 		  List<Ranking>corpo = new ArrayList<Ranking>();
 		  String texto="";
 		  int saida=0;
 		  boolean novoAluno = true;
 		  int total = 0; 
-		  alunosparticipantes = filtrarAlunosTaf();
-		  tafexercicios = listarTafExercicios();
-		  Collections.sort(alunosparticipantes, (o1, o2) -> o1.getUsuario().getId().compareTo(o2.getUsuario().getId()));
+		  List<TafAluno> alunos = tafalunos;
+		  Collections.sort(alunos, (o1, o2) -> o1.getUsuario().getId().compareTo(o2.getUsuario().getId()));
 		  
-		  for(TafAluno te : alunosparticipantes) {
+		  for(TafAluno te : alunos) {
 			  if(novoAluno) {
 				  texto = te.getUsuario().getNome()+" |   ";
 			  	  novoAluno = false;
@@ -270,94 +234,16 @@ private static final long serialVersionUID = 1L;
 		  return corpo;
 	  }
 	  
-	   public String criarCabecalho() {
-		   
-		   String cab = "Pos |  Aluno  |";	       
-
-		   tafexercicios = listarTafExercicios();
-		   for(TafExercicio te : tafexercicios) {
-		    		cab +=  " "+te.getExercicio().getNome()+"-"+te.getModalidade()+" | ";
-		    }
-		   cab += " Total";
-		   System.out.println(cab);
-		   return cab;
-	   } 
+	public String criarCabecalho() {
 	   
-
-/*    private void addRanking() {
-    	   
-    	rankingAluno = new ArrayList<String[]>();
-    	if(tafselecionado != null) {
-			Collections.sort(alunosparticipantes, (o1, o2) -> o1.getUsuario().getId().compareTo(o2.getUsuario().getId()));
-			
-			for(TafAluno ta : alunosparticipantes) {
-				System.out.println(ta.getUsuario().getNome() +" = "+ ta.getPontuacao());
-			}
-	  
-		    Taf tafprimeira = null;
-		    boolean primeiraVez = true;
-		    int index=0;
-		    Usuario alunoNome = null;
-		    String[] vetor = new String[tafexercicios.size()];
-	
-		    for(TafExercicio ta : tafexercicios) {
-			   tafprimeira	= ta.getTaf();
-			   break;
-		    }
-		    
-		    for(TafAluno ta : alunosparticipantes) {
-		    	System.out.println("TESTANDO");
-		    	if(primeiraVez) {
-		    	    vetor =  new String[tafexercicios.size()];
-		    		alunoNome = ta.getUsuario();
-		    		System.out.println("NOVO ALUNO "+ta.getUsuario().getNome());
-		    		tafprimeira = ta.getTafexercicio().getTaf();
-		    		vetor[index] = alunoNome.getNome();
-		    		index++;
-		    		primeiraVez = false;
-		    	}
-		    	System.out.println("ATUAL"+alunoNome.getNome());
-		    	if(ta.getTafexercicio().getTaf() == tafprimeira) {
-		        	System.out.println("Alo"+ta.getPontuacao());
-		        	vetor[index] = Integer.toString(ta.getPontuacao());	     
-		        	index++;
-		    		if(alunoNome != ta.getUsuario()) {
-		    			System.out.println("teste");
-		      			index = 0;
-		      			primeiraVez = true;
-		      			rankingAluno.add(vetor); 			
-		    		}
-		    	}else
-		      		break;    		
-		    }
-		    for(String[] x : rankingAluno) {
-		    	for(int i=0; i<x.length; i++)
-		    		System.out.println("NOME: "+x[i]);
-		    	System.out.println("PROXIMO");
-		    }
-    	}else
-    		System.out.println("Selecione TAF");
-    }
-	
-   private void createDynamicColumns() {
- 
-	   int index = 0;
-       colunas = new ArrayList<ColumnModel>();
-       //System.out.println(">>>>"+rankingAluno.get(0)[0]+"--"+rankingAluno.get(0)[1]);
-       colunas.add(new ColumnModel("Aluno", rankingAluno.get(0)[index]));		  
-       index++; 
-       
+	   String cab = "Pos |  Aluno  |";	       
 
 	   for(TafExercicio te : tafexercicios) {
-	    	if(te.getTaf() == tafselecionado) {
-	    		colunas.add(new ColumnModel(te.getExercicio().getNome()+"-"+te.getModalidade(),rankingAluno.get(0)));
-	    		index++;
-	    	} else
-	    		break;
+	    		cab +=  " "+te.getExercicio().getNome()+"-"+te.getModalidade()+" | ";
 	    }
-	   
-	   colunas.add(new ColumnModel("Total",rankingAluno.get(0)));
-    } */
+	   cab += " Total";
+	   return cab;
+	} 
 	    
 	public void manterTaf() {
 		System.out.println("Nome: "+getTafselecionado().getNome() +"  Data: "+ getTafselecionado().getData());
@@ -393,14 +279,6 @@ private static final long serialVersionUID = 1L;
 		System.out.println("Exercicio: "+ exercicioSel.getExercicio().getNome());
 	}
 		
-	public List<TafExercicio> getTafexercicios() {
-		return tafexercicios;
-	}
-
-	public void setTafexercicios(List<TafExercicio> tafexercicios) {
-		this.tafexercicios = tafexercicios;
-	}
-
 	public List<Usuario> getUsuarios() {
 		return usuarios;
 	}
@@ -437,30 +315,6 @@ private static final long serialVersionUID = 1L;
 		this.exercicioSel = exercicioSel;
 	}
 
-	public List<Taf> getTafsrealizadas() {
-		return tafsrealizadas;
-	}
-
-	public void setTafsrealizadas(List<Taf> tafsrealizadas) {
-		this.tafsrealizadas = tafsrealizadas;
-	}
-
-	public List<TafAluno> getAlunosparticipantes() {
-		return alunosparticipantes;
-	}
-
-	public void setAlunosparticipantes(List<TafAluno> alunosparticipantes) {
-		this.alunosparticipantes = alunosparticipantes;
-	}
-
-	public List<TafAluno> getAlunosclassificados() {
-		return alunosclassificados;
-	}
-
-	public void setAlunosclassificados(List<TafAluno> alunosclassificados) {
-		this.alunosclassificados = alunosclassificados;
-	}
-
 	public int getDesativarBotaoPont() {
 		return desativarBotaoPont;
 	}
@@ -495,14 +349,6 @@ private static final long serialVersionUID = 1L;
 		this.filtroSel = filtroSel;
 	}
 
-	public List<TafAluno> getAlunosporexercicio() {
-		return alunosporexercicio;
-	}
-
-	public void setAlunosporexercicio(List<TafAluno> alunosporexercicio) {
-		this.alunosporexercicio = alunosporexercicio;
-	}
-
 	public boolean isDesativadoPont() {
 		return desativadoPont;
 	}
@@ -519,23 +365,11 @@ private static final long serialVersionUID = 1L;
 		this.desativadoExer = desativadoExer;
 	}
 
+	public List<TafExercicio> getTafexercicios() {
+		return tafexercicios;
+	}
 
-	static public class ColumnModel implements Serializable {
-    	 
-        private String header;
-        private String[] property;
- 
-        public ColumnModel(String header, String[] property) {
-            this.header = header;
-            this.property = property;
-        }
- 
-        public String getHeader() {
-            return header;
-        }
-
-		public String[] getProperty() {
-			return property;
-		}     
-    }
+	public void setTafexercicios(List<TafExercicio> tafexercicios) {
+		this.tafexercicios = tafexercicios;
+	}
 }

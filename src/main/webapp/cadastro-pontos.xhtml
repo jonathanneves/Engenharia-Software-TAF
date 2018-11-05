@@ -87,7 +87,7 @@
 		resizable="false" draggable="false" modal="false" closable="true" height="auto" width="50%" position="center">
 			    <div class="ui-g ui-fluid">
 			   			    
-					<p:dataTable id="tbl" var="u" value="#{usuarioController.alunosfiltrados}"
+					<p:dataTable id="tbl" var="u" value="#{usuarioController.filtrarAlunos()}"
 					 emptyMessage="Tabela Vaiza (Não existe alunos cadastrados)" rows="5" paginator="true" reflow="true"
 					 selection="#{tafAlunoController.tafexercicios}"
                 	 rowKey="#{u.id}" 
@@ -121,13 +121,7 @@
 				<p:commandButton value = "Registrar" actionListener="#{tafAlunoController.salvar}" 
 			         	oncomplete="PF('dlg').hide();" update="frmMod:tbl"
 			         	style="padding:5px; margin:5px" styleClass="btn-primary" icon="fa fa-plus"/>    
-			         	
-				<p:commandButton value = "Editar" icon="ui-icon-pencil" actionListener="#{tafAlunoController.editar}" 
-				 oncomplete="PF('dlg').hide();" update="frmMod:tbl" 
-				 styleClass="btn-info" style="color:white;">
-				 	<f:attribute name="tafalunoEdita" value="#{u}"/>		    		
-				</p:commandButton>
-				
+			         					
 			    <p:commandButton value = "Cancelar" oncomplete="PF('dlg').hide();" style="padding:5px; margin:5px"/>
 		
 			</p:dialog>	    
