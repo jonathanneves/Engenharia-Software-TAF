@@ -16,6 +16,12 @@
                 <span>Ranking</span>
             </p:link>
         </li>
+        <li>
+            <p:link outcome="/desempenho-TAF.jsf">
+                <i class="fa fa-bar-chart "></i>
+                <span>Desempenho</span>
+            </p:link>
+        </li>
         <li class="header">
         	<h:outputText value="Cadastros" rendered="#{logonMB.isProfessor()}"/>
         </li>
@@ -41,15 +47,6 @@
             <p:link outcome="/cadastro-pontos.jsf" rendered="#{logonMB.isProfessor()}">
                 <i class="fa fa-users"></i>
                 <span>Pontuação por Aluno</span>
-            </p:link>
-        </li>
-        <li class="header">
-        	<h:outputText value="Progresso" rendered="#{logonMB.isAluno()}"/>
-        </li>
-        <li>
-            <p:link outcome="/desempenho-TAF.jsf" rendered="#{logonMB.isAluno()}">
-                <i class="fa fa-bar-chart "></i>
-                <span>Desempenho no TAF</span>
             </p:link>
         </li>
     </ul>

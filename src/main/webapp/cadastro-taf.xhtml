@@ -29,10 +29,8 @@
 				<h:panelGrid columns="2" styleClass="my-panel-grid"> 
 						<p:dataTable id="tbl" var="t" value="#{tafController.tafs}" 
 						emptyMessage="Sem Registro" 
-						reflow="true" rows="10" paginator="true"                     			 	                                 
-	                    paginatorPosition="bottom"	                                 	                   
-	                    currentPageReportTemplate=""
-	                    rowsPerPageTemplate="5,10,15,20,30">
+						reflow="true" rows="20" paginator="true"                     			 	                                 
+	                    paginatorPosition="bottom">
 		                    
 		                    <p:column headerText="TAF" sortBy="#{t.nome}" filterBy="#{t.nome}" style="width:25%;">
 							      <h:outputText value="#{t.nome}" />
@@ -48,14 +46,18 @@
 				    				<f:attribute name="tafExclui" value="#{t}"/>		    		
 				    			</p:commandButton>
 					  		</p:column>
+					  		
+					  		<f:facet name="footer">
+								<p:commandButton value = "Fechar" styleClass="btn-info" oncomplete="PF('dlg').hide();" 
+			    				style="width:250px; margin: 0 auto 0 auto;"  icon="fa fa-times" /> 
+			    			</f:facet>
+			    					
 						</p:dataTable>
 				<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
 					<p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
 					<p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
 				</p:confirmDialog>
-				
-				<p:commandButton value = "Fechar" oncomplete="PF('dlg').hide();" 
-				style="width:250px; margin: 0 auto 0 auto;"	styleClass="btn-info"/>						    				
+								    				
 				</h:panelGrid>
 			</div>
 		</h:form>
@@ -97,10 +99,8 @@
 		</h:form>
 		<h:form id="frmTblTAF" enctype="multipart/form-data">  			     
                 <p:dataTable id="tblExercicio" var="e"  emptyMessage="Sem Registro" value="#{exercicioController.exercicios}"
-                reflow="true" rows="10" paginator="true"                                                                     
+                reflow="true" rows="20" paginator="true"                                                                     
                 paginatorPosition="bottom" rendered="#{tafController.desativado}"                                   
-                currentPageReportTemplate=""
-                rowsPerPageTemplate="5,10,15,20,30"
                 selection="#{tafExercicioController.exercicios}"
                 rowKey="#{e.id}">
                

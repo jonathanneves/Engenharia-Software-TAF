@@ -40,16 +40,23 @@
 
  		<p:messages id="msg" showDetail="true" closable="true" showSummary="true" />
 	
-		<h:form  id="frmTbl">
-			<p:panel header="Média de pontuações" >
-				<div class="box box-primary">
-               		<div class="box-header with-border">
-               				
-						<p:chart type="bar" model="#{graficoController.barModel}" style="height:300px"/>
-				
-					</div>
+		<h:form  id="frm">
+			<div class="box box-primary">		
+			  	<div class="box-header with-border">
+					<p:panel header="Média de pontuações" >
+					<h:panelGrid columns="2" id="filtros" layout="grid" style="margin:7px">  
+					<p:outputLabel value="Escolha o Aluno:  " />
+						<p:selectOneMenu id="txtAluno" converter="entityConverter" value="#{graficoController.alunoselecionado}"
+	        					required="true" requiredMessage= "Selecione um Aluno"  style="width:auto;margin:5px">
+	        					<p:ajax listener="#{graficoController.manterAluno}" update="frm:graph"/>   
+	        					<f:selectItem itemLabel="Selecione um Aluno" itemValue="" />
+					            <f:selectItems value="#{usuarioController.filtrarAlunos()}"/>
+					    </p:selectOneMenu>
+				    </h:panelGrid>
+				    <p:chart id="graph" type="bar" model="#{graficoController.barModel}" style="height:300px"/>
+					</p:panel>			
 				</div>
-			</p:panel>
+			</div>
 		</h:form>
 	
     </ui:define>

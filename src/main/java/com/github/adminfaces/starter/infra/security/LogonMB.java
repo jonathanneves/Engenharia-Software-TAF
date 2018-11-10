@@ -47,13 +47,11 @@ public class LogonMB extends AdminSession implements Serializable {
     private String cpf;
     private boolean remember;
 	private UsuarioController userCont = new UsuarioController();
-	private GraficoController grafCont = new GraficoController();
 	private Usuario user;
 
     public void login() throws IOException {
     	try {
     	user = userCont.validarUsuario(cpf);
-    	grafCont.setandoUsuario(user);
     	if(user != null) {
     		currentUser = user.getNome();
     		//addMessage(currentUser, "Usuário logado com sucesso");

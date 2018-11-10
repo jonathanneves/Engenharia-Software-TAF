@@ -31,6 +31,12 @@ public class Usuario implements Serializable {
 	@Column 
 	private String cpf;
 	
+	
+	@Override
+	public String toString() {
+		return nome;
+	}
+	
 	public Integer getId() {
 		return id;
 	}

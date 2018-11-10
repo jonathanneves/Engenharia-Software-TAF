@@ -57,7 +57,7 @@
 		
 		<h:form id="frmTbl"  enctype="multipart/form-data">
 			<p:dataTable id="tbl" var="e" value="#{tafExercicioController.filtrarExercicios(tafAlunoController.tafselecionado)}" searching="true"
-			 emptyMessage="Tabela vazia, Selecione uma TAF" reflow="true" rows="10" paginator="true" >
+			 emptyMessage="Tabela vazia, Selecione uma TAF" reflow="true" rows="20" paginatorPosition="bottom" paginator="true" >
 				
 				<p:column headerText="Selecionar" style="width:7%; text-align:center; font-size:15px" >
              		<p:commandButton oncomplete="PF('dlg').show()" icon="ui-icon-circle-check" 
@@ -73,9 +73,7 @@
 				<p:column style="font-size:15px" headerText="Modalidade" >
 					<h:outputText value="#{e.modalidade}" />
 				</p:column>
-							
-				
-       			
+							   			
 			</p:dataTable>
 		</h:form>
 		
@@ -88,7 +86,8 @@
 			    <div class="ui-g ui-fluid">
 			   			    
 					<p:dataTable id="tbl" var="u" value="#{usuarioController.filtrarAlunos()}"
-					 emptyMessage="Tabela Vaiza (Não existe alunos cadastrados)" rows="5" paginator="true" reflow="true"
+					 emptyMessage="Tabela Vaiza (Não existe alunos cadastrados)" rows="20" paginator="true" 
+					 paginatorPosition="bottom" reflow="true"
 					 selection="#{tafAlunoController.tafexercicios}"
                 	 rowKey="#{u.id}" 
                 	 selectionMode="multiple">
@@ -110,19 +109,21 @@
 						</p:column>	
 								 								 					 					    
 						<p:column headerText="Pontuação" style="font-size:15px" >	      		
-   							<p:inputText id="txtPontos" value="#{tafAlunoController.pontos}">
+   							<p:inputText id="txtPontos" value="#{tafAlunoController.pontos}" autocomplete="off" >
    								<p:ajax listener="#{tafAlunoController.manterPontos}" />   
    							</p:inputText>		
-   						</p:column>   					        				        		
+   						</p:column>   			        				        		
 					</p:dataTable>	
-					  	  	    				
-			    </div>
-			    
-				<p:commandButton value = "Registrar" actionListener="#{tafAlunoController.salvar}" 
-			         	oncomplete="PF('dlg').hide();" update="frmMod:tbl"
-			         	style="padding:5px; margin:5px" styleClass="btn-primary" icon="fa fa-plus"/>    
-			         					
-			    <p:commandButton value = "Cancelar" oncomplete="PF('dlg').hide();" style="padding:5px; margin:5px"/>
+											  	  	    				
+			    </div>		
+			    		    
+			    	<h:panelGrid columns="2" id="cad" styleClass="my-panel-grid" style="margin: 0 auto;">
+  						<p:commandButton value = "Registrar" actionListener="#{tafAlunoController.salvar}" 
+		         		oncomplete="PF('dlg').hide();" update="@form"
+		         		styleClass="btn-primary" icon="fa fa-plus"/>    
+		         					
+		   				<p:commandButton value = "Cancelar" oncomplete="PF('dlg').hide();" icon="fa fa-close"/>
+			   		</h:panelGrid>	  
 		
 			</p:dialog>	    
 		</h:form> 

@@ -52,6 +52,10 @@ private static final long serialVersionUID = 1L;
 		tafaluno = new TafAluno(); 
 	}
 	
+	public void limpar() {
+		tafaluno.setPontuacao(0);
+	}
+	
 	public void salvar () {
 		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
 		Transaction t = null;
@@ -80,6 +84,7 @@ private static final long serialVersionUID = 1L;
 				throw(ex);
 			}finally{
 				sessao.close();
+				limpar();
 			}
 		}
 	

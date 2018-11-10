@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-configuration PUBLIC
         "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
         "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
@@ -9,7 +9,6 @@
 
 		<!-- Configurações de Conexão com o Banco de Dados -->
 		<property name="connection.driver_class">com.mysql.jdbc.Driver</property>
-		<!-- <property name="connection.url">jdbc:mysql://localhost/tafsistema</property> -->
 		<property name="connection.url">jdbc:mysql://localhost:3306/aula</property>
 		<property name="connection.username">root</property>
 		<property name="connection.password">root</property>
@@ -32,12 +31,13 @@
 		<!-- Cria as tabelas do banco de dados -->
 		<property name="hbm2ddl.auto">validate</property>
 		
-		<!-- Mapeamento das entidades INSIRA TODAS AS CLASSES --> 
- 		<mapping class="com.github.adminfaces.starter.model.Usuario"/> 
- 		<mapping class="com.github.adminfaces.starter.model.Exercicio"/> 
- 		<mapping class="com.github.adminfaces.starter.model.Taf"/> 
- 		<mapping class="com.github.adminfaces.starter.model.TafExercicio"/>  
- 		<mapping class="com.github.adminfaces.starter.model.TafAluno"/>  
+		<!-- Mapeamento das entidades --> 
+ 		<mapping class="model.Disciplina"/>
+ 		<mapping class="model.Exercico"/>
+ 		<mapping class="model.Taf"/>
+ 		<mapping class="model.TafExercicio"/>
+ 		<mapping class="model.TafAluno"/>
+ 		
 	</session-factory>
 
 </hibernate-configuration>

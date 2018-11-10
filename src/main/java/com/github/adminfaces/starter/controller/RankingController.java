@@ -32,9 +32,11 @@ private static final long serialVersionUID = 1L;
 	private TafAluno tafaluno;
  
 	private Taf tafselecionado;
+	private Ranking rankingSel;
 	private TafExercicio exercicioSel;
 	private String filtroSel;
 	
+	private List<Ranking> rankinglista;
 	private List<TafAluno> tafalunos;
 	private List<TafExercicio> tafexercicios;
 	private List<Usuario> usuarios;
@@ -49,6 +51,7 @@ private static final long serialVersionUID = 1L;
 		tafselecionado = listarTafsRealizadas().get(listarTafsRealizadas().size() -1);
 		filtrarAlunosTaf();
 		listarTafExercicios();
+		rankinglista = ranqueandoAluno();
 	}
 	
 	//Listar apenas os TAFExercicio da taf selecionada
@@ -71,7 +74,7 @@ private static final long serialVersionUID = 1L;
 		}
 		return tafexercicios;
 	}
-	
+		
 	//Listar apenas TAF que foram realizadas
 	public List<Taf> listarTafsRealizadas() {
 		List<Taf> tafsrealizadas = new ArrayList<Taf>();
@@ -99,7 +102,6 @@ private static final long serialVersionUID = 1L;
 				cq.from(TafAluno.class);
 				alunosparticipantes = sessao.createQuery(cq).getResultList();
 				alunosparticipantes.removeIf(s -> s.getTafexercicio().getTaf().getId() != tafselecionado.getId());
-				tafalunos = alunosparticipantes;
 			} else
 				System.out.println("Nenhuma taf selecionado");
 		} catch (Exception e) {
@@ -110,12 +112,25 @@ private static final long serialVersionUID = 1L;
 		return alunosparticipantes;
 	}
 	 
+	//Listar apenas os TAFExercicio da taf selecionada
+	public List<TafAluno> listarPontosExercicio() {
+		List<TafAluno> listafiltrada = new ArrayList<TafAluno>();
+		try {
+			listafiltrada = filtrarAlunosTaf();
+			listafiltrada.removeIf(s -> !s.getUsuario().getNome().equals(rankingSel.getTexto()));
+		} catch (Exception e) {
+			addErro("ERRO", "Erro ao listar pontos por exercício");
+		} finally {
+		}
+		return listafiltrada;
+	}
+	
 	//Filtrar todos os alunos que realizaram o exercicio
 	public List<TafAluno> filtrarPorExercicio(){
 		List<TafAluno> alunosporexercicio = new ArrayList<TafAluno>();
 		try {
 			if(tafselecionado != null) {
-				alunosporexercicio = tafalunos;
+				alunosporexercicio = filtrarAlunosTaf();
 				alunosporexercicio.removeIf(s -> s.getTafexercicio().getId() != exercicioSel.getId());
 				alunosporexercicio.sort(Comparator.comparing(TafAluno::getPontuacao).reversed());
 			} else
@@ -130,7 +145,7 @@ private static final long serialVersionUID = 1L;
 	public List<TafAluno> filtrarAlunosClassificados(){
 		List<TafAluno> alunosclassificados = new ArrayList<TafAluno>();
 		try {
-			alunosclassificados = tafalunos;
+			alunosclassificados = filtrarAlunosTaf();
 			alunosclassificados.removeIf(s -> s.getTafexercicio().getId() != exercicioSel.getId());
 			if(filtroSel.equals("Fraco")) {
 				if(exercicioSel.getModalidade().equals("1RM"))
@@ -174,7 +189,7 @@ private static final long serialVersionUID = 1L;
 		  int saida=0;
 		  boolean novoAluno = true;
 		  int total = 0; 
-		  List<TafAluno> alunos = tafalunos;
+		  List<TafAluno> alunos = filtrarAlunosTaf();
 		  Collections.sort(alunos, (o1, o2) -> o1.getUsuario().getId().compareTo(o2.getUsuario().getId()));
 		  
 		  for(TafAluno te : alunos) {
@@ -207,7 +222,7 @@ private static final long serialVersionUID = 1L;
 		  int saida=0;
 		  boolean novoAluno = true;
 		  int total = 0; 
-		  List<TafAluno> alunos = tafalunos;
+		  List<TafAluno> alunos = filtrarAlunosTaf();
 		  Collections.sort(alunos, (o1, o2) -> o1.getUsuario().getId().compareTo(o2.getUsuario().getId()));
 		  
 		  for(TafAluno te : alunos) {
@@ -229,15 +244,14 @@ private static final long serialVersionUID = 1L;
 		  int pos = 0;
 		  for(Ranking m : corpo) {
 			  pos++;
-			  m.setTexto(" "+pos+"º "+m.getTexto()); 
+			  m.setPosicao(pos+"º "); 
 		  }
 		  return corpo;
 	  }
 	  
 	public String criarCabecalho() {
 	   
-	   String cab = "Pos |  Aluno  |";	       
-
+		String cab = "          Aluno  |";	       
 	   for(TafExercicio te : tafexercicios) {
 	    		cab +=  " "+te.getExercicio().getNome()+"-"+te.getModalidade()+" | ";
 	    }
@@ -248,6 +262,7 @@ private static final long serialVersionUID = 1L;
 	public void manterTaf() {
 		System.out.println("Nome: "+getTafselecionado().getNome() +"  Data: "+ getTafselecionado().getData());
 		listarTafExercicios();
+		rankinglista = ranqueandoAluno();
 	}
 
 	public void manterExercicio() {
@@ -266,6 +281,27 @@ private static final long serialVersionUID = 1L;
 		if(desativarBotaoPont == 2)
 			setDesativadoPont(false);
 	}
+	
+	public void selecionarRanking(ActionEvent evt){
+		rankingSel = (Ranking)evt.getComponent().getAttributes().get("rankingSeleciona");
+	}
+	
+	public List<Ranking> getRankinglista() {
+		return rankinglista;
+	}
+
+	public void setRankinglista(List<Ranking> rankinglista) {
+		this.rankinglista = rankinglista;
+	}
+
+	public Ranking getRankingSel() {
+		return rankingSel;
+	}
+
+	public void setRankingSel(Ranking rankingSel) {
+		this.rankingSel = rankingSel;
+	}
+
 	public Taf getTafselecionado() {
 		return tafselecionado;
 	}
