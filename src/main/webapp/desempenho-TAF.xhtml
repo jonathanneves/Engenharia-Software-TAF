@@ -27,11 +27,11 @@
     </ui:define>
 
     <ui:define name="title">
-        Desempenho do TAF
+        Desempenho TAF
     </ui:define>
 
     <ui:define name="description">
-        Acompanhe todo o seu progresso de pontuações dos TAFs participados.
+        Acompanhe todo o seu progresso conquistado nos TAFs participados.
     </ui:define>
     
     <ui:define name="body">
@@ -47,8 +47,8 @@
 					<h:panelGrid columns="2" id="filtros" layout="grid" style="margin:7px">  
 					<p:outputLabel value="Escolha o Aluno:  " />
 						<p:selectOneMenu id="txtAluno" converter="entityConverter" value="#{graficoController.alunoselecionado}"
-	        					required="true" requiredMessage= "Selecione um Aluno"  style="width:auto;margin:5px">
-	        					<p:ajax listener="#{graficoController.manterAluno}" update="frm:graph"/>   
+						 style="width:auto;margin:5px">
+	        					<p:ajax listener="#{graficoController.atualizarGrafico}" update="frm:graph"/>   
 	        					<f:selectItem itemLabel="Selecione um Aluno" itemValue="" />
 					            <f:selectItems value="#{usuarioController.filtrarAlunos()}"/>
 					    </p:selectOneMenu>

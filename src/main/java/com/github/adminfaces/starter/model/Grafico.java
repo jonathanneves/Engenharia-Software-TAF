@@ -5,14 +5,8 @@ public class Grafico {
 	private Usuario aluno;
 	private Taf taf;
 	private int total;
-	private double porcentagem;
-	
-	public Grafico(Taf taf, Usuario aluno, int total) {
-		this.aluno = aluno;
-		this.taf = taf;
-		this.total = total;
-	}
-	
+	private double porcentagem = 0;
+		
 	public Usuario getAluno() {
 		return aluno;
 	}

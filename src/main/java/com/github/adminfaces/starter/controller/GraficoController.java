@@ -1,17 +1,17 @@
 package com.github.adminfaces.starter.controller;
 
 import java.io.Serializable;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaQuery;
 
 import org.hibernate.Session;
@@ -21,7 +21,6 @@ import org.primefaces.model.chart.BarChartModel;
 import org.primefaces.model.chart.ChartSeries;
 
 import com.github.adminfaces.starter.model.Grafico;
-import com.github.adminfaces.starter.model.Ranking;
 import com.github.adminfaces.starter.model.Taf;
 import com.github.adminfaces.starter.model.TafAluno;
 import com.github.adminfaces.starter.model.TafExercicio;
@@ -39,17 +38,17 @@ private static final long serialVersionUID = 1L;
 	private Usuario alunoselecionado;
 	
 	private List<TafAluno> tafalunos;
-	String nomeAluno = "";
 	private List<TafExercicio> tafexercicios;
 	private List<Usuario> usuarios;
 	
 	private BarChartModel barModel;
+	public String nomeAluno;
 	
 	@PostConstruct
 	public void inicializa() {
 		listarTodas();
-		createBarModels();	
-		//listarTotalPontos()  DESBLOQUEIA ISSO E VEJA A MAGICA ACONTECER CORRIJA OS ERROS
+		nomeAluno = " ";
+		createBarModels();
 	}
 
 	public void listarTodas() {
@@ -67,17 +66,17 @@ private static final long serialVersionUID = 1L;
 	}
 	
 	//filtrar determinado aluno
-	public List<TafAluno> filtrarAlunosTaf(){
-		List<TafAluno> tafsdoaluno = new ArrayList<TafAluno>();
+	public List<Grafico> filtrarPorAluno(){
+		List<Grafico> tafsdoaluno = new ArrayList<Grafico>();
+		tafsdoaluno = grupandoDados();
 		try {
 			if(alunoselecionado != null) {
-				tafsdoaluno = tafalunos;
-				tafsdoaluno.removeIf(s -> s.getUsuario().getNome() != alunoselecionado.getNome());
+				tafsdoaluno.removeIf(s -> s.getAluno().getId() != alunoselecionado.getId());
 			} else
 				System.out.println("Nenhum aluno selecionado");
 		} catch (Exception e) {
 			e.printStackTrace();
-		} 
+		} 	
 		return tafsdoaluno;
 	}
 
@@ -102,84 +101,56 @@ private static final long serialVersionUID = 1L;
 		return tafexercicios;
 	}
 	
-	//Listando o ponto total de  todos alunos
-	public void listarTotalPontos() {
-		  List<Grafico>listaTotal = new ArrayList<Grafico>();
-		  int total = 0; 
-		  
-		  Taf taf = null;
-		  Usuario aluno = null;
-
-		  boolean novoAluno = true;
-		  boolean novoTaf = true;
-		  List<TafAluno> alunos = tafalunos;
-		  Collections.sort(alunos, (o1, o2) -> o1.getUsuario().getId().compareTo(o2.getUsuario().getId()));
-		  
-		  for(TafAluno te : alunos) {
-			  
-			  if(taf != te.getTafexercicio().getTaf() && taf != null)
-				  novoTaf = true;
-			  
-			  if(aluno != te.getUsuario() && aluno != null) {
-				  System.out.println("Aluno: "+aluno.getNome()+" TAF: "+taf.getNome()+" Total: "+total);
-				  Grafico graf = new Grafico(te.getTafexercicio().getTaf(), aluno, total);
-				  listaTotal.add(graf);
-				  novoAluno = true;
-				  total=0;
-			  }
-			  
-			  if(novoAluno) {
-				  aluno = te.getUsuario();
-				  System.out.println("Aluno atual: "+aluno.getNome());
-			  	  novoAluno = false;
-			  }
-			  
-			  if(novoTaf) {
-				  taf = te.getTafexercicio().getTaf();
-				  System.out.println("Taf atual: "+taf.getNome()+" - "+taf.getData());
-				  novoTaf = false;
-			  }
-			  total += te.getPontuacao();
-
-			/*  if(listarTafExercicios(taf).size() == saida) {
-				  Grafico rank = new Grafico(te.getTafexercicio().getTaf(), aluno, total);
-				  listaTotal.add(rank);
-				  novoAluno = true;
-				  total=0; saida=0;
-			  }*/
-		  }
-		  listaTotal.sort(Comparator.comparing(Grafico::getTotal).reversed());
-		  
-		  boolean novaEntrada = true;
-		  int max=0;
-		  Taf tafAux=null;
-		  int index=0; 
-		  
-		  for(Grafico g : listaTotal) {
-			  index++;
-			  if(g.getTaf() != tafAux)
-				  
-				  novaEntrada = true;
-			  
-			  if(novaEntrada) {
-				tafAux = g.getTaf();
-				max = g.getTotal();
-			  	novaEntrada = false;			  	
-			  }
-			  double percentual = ((g.getTotal()*100)/max);
-			  System.out.println("Percentual "+percentual);
-			  g.setPorcentagem(percentual);
-			  listaTotal.set(index, g);
+	public List<Grafico> grupandoDados() {
+		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
 		
-		  }
-		  
-		  System.out.println("================");
-		  for(Grafico x : listaTotal)
-			  System.out.println(x.getTaf().getNome()+" - "+x.getAluno().getNome()+" - "+x.getTotal()+" - "+x.getPorcentagem());
-		  //return listaTotal;
-	  }
+		String sql = "SELECT t.taf, a.usuario, SUM(a.pontuacao) as total FROM TafAluno a, TafExercicio t " + 
+				"WHERE a.tafexercicio = t.id " + 
+				"GROUP BY t.taf, a.usuario " +
+				"ORDER BY t.taf, total DESC";
+		
+		Query query = sessao.createQuery(sql);
+		@SuppressWarnings("unchecked")
+		List<Object[]> resultados = query.getResultList();
+		
+		List<Grafico> dados = new ArrayList<Grafico>();
+		for(Object[]c:resultados) {
+			Grafico graf = new Grafico();
+			graf.setTaf((Taf) c[0]);
+			graf.setAluno((Usuario) c[1]);
+			graf.setTotal(Math.round((Long) c[2]));
+			dados.add(graf);
+		}
+		int index = 0;
+		boolean novaTaf = true;
+		Taf tafAux = null;
+		int max = 0;
+		
+		for(Grafico d : dados) {		
+			if(d.getTaf() != tafAux)	{	  
+				novaTaf = true;
+				max = 0;
+			}			  
+			if(novaTaf) {
+				tafAux = d.getTaf();
+				max = d.getTotal();
+				novaTaf = false;			  	
+			}
+			DecimalFormat df = new DecimalFormat("#.#");
+			df.setRoundingMode(RoundingMode.CEILING);
+			double percentual = Double.parseDouble(df.format(((d.getTotal()*100)/max)));
+			d.setPorcentagem(percentual);
+			dados.set(index, d);
+			index++;
+		}	
+
+		for(Grafico d : dados) 
+			System.out.println(d.getTaf().getNome()+" - "+d.getAluno().getNome()+" - "+d.getTotal()+" - "+d.getPorcentagem());
+
+		return dados;
+	}
 	  
-	public void manterAluno() {
+	public void atualizarGrafico() {
 		System.out.println("Aluno escolhido: "+alunoselecionado.getNome());
 		nomeAluno = alunoselecionado.getNome();
 		createBarModels();	
@@ -187,39 +158,41 @@ private static final long serialVersionUID = 1L;
 		
 	private BarChartModel initBarModel() {
         BarChartModel model = new BarChartModel();
- 
         ChartSeries aluno = new ChartSeries();
-        aluno.setLabel("Pontos em %");
-        aluno.set("2004", 60);
-        aluno.set("2005", 90);
-        aluno.set("2006", 44);
-        aluno.set("2007", 80);
-        aluno.set("2008", 25);
+        aluno.setLabel("Pontos em %"); 
+	    
+		if(alunoselecionado != null) {
+			List<Grafico> dados = filtrarPorAluno();
+	        for(Grafico d : dados) {
+	        	aluno.set(d.getTaf().toString(), d.getPorcentagem());       
+	        	System.out.println(d.getTaf().toString()+" - "+d.getPorcentagem());	       
+	        }
+		}else {
+			aluno.set("VAZIO", 0);
+		}
  
-        model.addSeries(aluno);
-           
-        return model;
+       model.addSeries(aluno);
+       barModel = model;
+       
+       barModel.setTitle("Gráfico de Desempenho de "+nomeAluno);
+       barModel.setLegendPosition("box zero");
+       barModel.setAnimate(true);
+        
+       Axis xAxis = barModel.getAxis(AxisType.X);
+       xAxis.setLabel("Data do TAF");
+        
+       Axis yAxis = barModel.getAxis(AxisType.Y);
+       yAxis.setLabel("Pontuação %");
+       yAxis.setMin(0);
+       yAxis.setMax(100);   
+       
+       return model;
     }
      
     private void createBarModels() {
-           createBarModel();
+          initBarModel();
     }
      
-    private void createBarModel() {
-        barModel = initBarModel();
-
-        barModel.setTitle("Gráfico de Desempenho do Aluno "+nomeAluno);
-        barModel.setLegendPosition("box zero");
-        barModel.setAnimate(true);
-         
-        Axis xAxis = barModel.getAxis(AxisType.X);
-        xAxis.setLabel("Data do TAF");
-         
-        Axis yAxis = barModel.getAxis(AxisType.Y);
-        yAxis.setLabel("Pontuação %");
-        yAxis.setMin(0);
-        yAxis.setMax(100);         
-    }
     			
 	public List<TafExercicio> getTafexercicios() {
 		return tafexercicios;
