@@ -15,6 +15,7 @@ import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaQuery;
 
 import org.hibernate.Session;
+import org.primefaces.event.ItemSelectEvent;
 import org.primefaces.model.chart.Axis;
 import org.primefaces.model.chart.AxisType;
 import org.primefaces.model.chart.BarChartModel;
@@ -39,10 +40,12 @@ private static final long serialVersionUID = 1L;
 	
 	private List<TafAluno> tafalunos;
 	private List<TafExercicio> tafexercicios;
-	private List<Usuario> usuarios;
+	private List<Usuario> usuarios;	
+	private List<TafAluno> resultados; //Filtrar cada exercicio na taf;
 	
 	private BarChartModel barModel;
 	public String nomeAluno;
+	Taf tafselecionado;
 	
 	@PostConstruct
 	public void inicializa() {
@@ -78,6 +81,23 @@ private static final long serialVersionUID = 1L;
 			e.printStackTrace();
 		} 	
 		return tafsdoaluno;
+	}
+
+	//filtrar determinado aluno
+	public List<TafAluno> filtrarPorTaf(){
+		List<TafAluno> pontosdoaluno = new ArrayList<TafAluno>();
+		listarTodas();
+		pontosdoaluno = getTafalunos();
+		try {
+			if(tafselecionado != null && alunoselecionado != null) {
+				pontosdoaluno.removeIf(s -> s.getTafexercicio().getTaf().getId() != tafselecionado.getId());
+				pontosdoaluno.removeIf(s -> s.getUsuario().getId() != alunoselecionado.getId());
+			} else
+				System.out.println("Nenhum taf selecionado");
+		} catch (Exception e) {
+			e.printStackTrace();
+		} 	
+		return pontosdoaluno;
 	}
 
 	//Listar apenas os TAFExercicio da taf selecionada
@@ -144,8 +164,8 @@ private static final long serialVersionUID = 1L;
 			index++;
 		}	
 
-		for(Grafico d : dados) 
-			System.out.println(d.getTaf().getNome()+" - "+d.getAluno().getNome()+" - "+d.getTotal()+" - "+d.getPorcentagem());
+		//for(Grafico d : dados) 
+		//	System.out.println(d.getTaf().getNome()+" - "+d.getAluno().getNome()+" - "+d.getTotal()+" - "+d.getPorcentagem());
 
 		return dados;
 	}
@@ -164,8 +184,7 @@ private static final long serialVersionUID = 1L;
 		if(alunoselecionado != null) {
 			List<Grafico> dados = filtrarPorAluno();
 	        for(Grafico d : dados) {
-	        	aluno.set(d.getTaf().toString(), d.getPorcentagem());       
-	        	System.out.println(d.getTaf().toString()+" - "+d.getPorcentagem());	       
+	        	aluno.set(d.getTaf().toString(), d.getPorcentagem());            
 	        }
 		}else {
 			aluno.set("VAZIO", 0);
@@ -188,7 +207,11 @@ private static final long serialVersionUID = 1L;
        
        return model;
     }
-     
+	public void manterTaf(ItemSelectEvent event) {
+		List<Grafico> dados = filtrarPorAluno();
+		tafselecionado = dados.get(event.getItemIndex()).getTaf();
+	}
+	 
     private void createBarModels() {
           initBarModel();
     }
@@ -244,6 +267,22 @@ private static final long serialVersionUID = 1L;
 
 	public void setAlunoselecionado(Usuario alunoselecionado) {
 		this.alunoselecionado = alunoselecionado;
+	}
+	
+	public List<TafAluno> getResultados() {
+		return resultados;
+	}
+
+	public void setResultados(List<TafAluno> resultados) {
+		this.resultados = resultados;
+	}
+
+	public Taf getTafselecionado() {
+		return tafselecionado;
+	}
+
+	public void setTafselecionado(Taf tafselecionado) {
+		this.tafselecionado = tafselecionado;
 	}
 
 	public void addErro(String summary, String detail) {

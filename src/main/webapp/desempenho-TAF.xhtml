@@ -53,12 +53,42 @@
 					            <f:selectItems value="#{usuarioController.filtrarAlunos()}"/>
 					    </p:selectOneMenu>
 				    </h:panelGrid>
-				    <p:chart id="graph" type="bar" model="#{graficoController.barModel}" style="height:300px"/>
+				    <p:chart id="graph" type="bar" model="#{graficoController.barModel}" style="height:300px">
+				    	 <p:ajax event="itemSelect" listener="#{graficoController.manterTaf}" update="frmRank:tbl"
+				    	 oncomplete="PF('dlg').show();"  />
+				    </p:chart>
 					</p:panel>			
 				</div>
 			</div>
 		</h:form>
 	
+		<p:dialog header="Pontuação por exercício" widgetVar="dlg"
+		resizable="false" draggable="true" modal="false" closable="true" height="auto" width="100%" position="center">
+			<h:form id="frmRank" enctype="multipart/form-data">
+				<div class="box box-primary">
+				<div class="ui-g ui-fluid">  
+	
+					<p:dataTable id="tbl" var="r" value="#{graficoController.filtrarPorTaf()}"
+					 emptyMessage="Não há valores" rows="20" paginator="true" paginatorPosition="bottom" reflow="true">
+					 					 					    
+						<p:column style="font-size:15px" headerText="Exercício" filterBy="#{r.tafexercicio.exercicio.nome}" >
+							<h:outputText value="#{r.tafexercicio.exercicio.nome} - #{r.tafexercicio.modalidade}"  />
+						</p:column>
+						
+						<p:column style="font-size:15px" headerText="Pontuação" sortBy="#{r.pontuacao}"  >
+							<h:outputText value="#{r.pontuacao}" />
+						</p:column>
+						
+						<f:facet name="footer">
+							<p:commandButton value = "Fechar" styleClass="btn-info" oncomplete="PF('dlg').hide();" 
+			    			style="width:250px; margin: 0 auto 0 auto;"  icon="fa fa-times" /> 
+			    		</f:facet>							        				        		
+					</p:dataTable>		
+				</div>
+				</div>	
+	    	</h:form>
+		</p:dialog>	
+			
     </ui:define>
 
 </ui:composition>
