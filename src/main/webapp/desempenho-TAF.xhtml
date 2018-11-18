@@ -53,7 +53,7 @@
 					            <f:selectItems value="#{usuarioController.filtrarAlunos()}"/>
 					    </p:selectOneMenu>
 				    </h:panelGrid>
-				    <p:chart id="graph" type="bar" model="#{graficoController.barModel}" style="height:300px">
+				    <p:chart id="graph" type="bar" model="#{graficoController.barModel}" style="height:300px" responsive="true">
 				    	 <p:ajax event="itemSelect" listener="#{graficoController.manterTaf}" update="frmRank:tbl"
 				    	 oncomplete="PF('dlg').show();"  />
 				    </p:chart>
