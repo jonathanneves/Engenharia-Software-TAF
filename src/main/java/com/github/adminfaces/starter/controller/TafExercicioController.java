@@ -17,6 +17,7 @@ import javax.persistence.criteria.CriteriaQuery;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.omnifaces.util.Faces;
 
 import com.github.adminfaces.starter.model.Exercicio;
 import com.github.adminfaces.starter.model.Taf;
@@ -72,7 +73,8 @@ private static final long serialVersionUID = 1L;
 						tafexercicio = new TafExercicio();
 					}
 				}
-				addMessage("TAF", "Cadastrado com sucesso");		
+	    		//Faces.redirect("cadastro-taf.xhtml");
+				addMessage("TAF", "Cadastrado com sucesso");	
 			} catch(ArrayIndexOutOfBoundsException exception) {
 				addErro("ERRO", "Não foi possível cadastrar");
 			} catch(NullPointerException nullExc) {

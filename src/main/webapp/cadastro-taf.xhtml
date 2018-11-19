@@ -125,20 +125,18 @@
 	                 			<f:selectItem itemLabel="Vol. de treino" itemValue="vt" />
 			                </p:selectManyButton>              
 		                </p:column>   	
-		                				                	                	
-		           		<f:facet name="footer">		           		
-		           			  <p:commandButton value="Cadastrar" actionListener="#{tafExercicioController.salvar}" 
-					          update="frmTblTAF:multiExercicio" 
-							  icon="fa fa-plus" style="padding:5px; margin:5px" styleClass="btn-success"
-							  render="@all"/>  
-		           		</f:facet>	
-		           			                    	                                   			        		        
+		                         	                                   			        		        
                 </p:dataTable> 
                 
 		      <ui:repeat id="multiExercicio" value="#{tafExercicioController.exercicios}" var="e"/>
 	
+	        <p:commandButton value="Cadastrar" actionListener="#{tafExercicioController.salvar}" 
+          	update="frmTblTAF:multiExercicio" rendered="#{tafController.desativado}" 
+		  	icon="fa fa-plus" style="padding:5px; margin:5px" styleClass="btn-success"
+		  	render="@all"/> 
+		  	
         	</h:form>
-             
+		  	 
             </div>
         </div>
        

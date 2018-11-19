@@ -6,10 +6,6 @@ public class Ranking {
 	private String texto;
 	private int totalpontos;
 	
-	public Ranking(String texto, int totalpontos) {
-		this.texto = texto;
-		this.totalpontos = totalpontos;
-	}
 	public String getTexto() {
 		return texto;
 	}

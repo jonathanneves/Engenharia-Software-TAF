@@ -1,6 +1,7 @@
 package com.github.adminfaces.starter.controller;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -46,6 +47,7 @@ public class TafController implements Serializable {
 			addMessage("Cadastro", "Selecione os exercícios desejados e suas modalidades");
 			setDesativado(true);
 			listarTodas();
+			taf = new Taf();
 		} catch (Exception e) {
 			if(t!=null)
 				t.rollback();
@@ -102,6 +104,23 @@ public class TafController implements Serializable {
 		} finally {
 			sessao.close();
 		}
+	}
+
+	public List<Taf> tafsNaoRealizadas() {
+		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
+		List<Taf> tafsNaoRealizadas = new ArrayList<Taf>();
+		try {
+		
+			CriteriaQuery<Taf> cq = sessao.getCriteriaBuilder().createQuery(Taf.class);
+			cq.from(Taf.class);
+			tafsNaoRealizadas = sessao.createQuery(cq).getResultList();
+			tafsNaoRealizadas.removeIf(s -> s.getRealizado().equals("S"));
+		} catch (Exception e) {
+			addErro("ERRO", "ERRO ao listar tafs");
+		} finally {
+			sessao.close();
+		}
+		return tafsNaoRealizadas;
 	}
 
 	public void foiRealizado(Taf tafx) {

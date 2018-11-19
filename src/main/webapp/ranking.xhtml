@@ -57,7 +57,7 @@
 						<p:outputLabel value="Filtrar por TAF  " />
         				<p:selectOneMenu id="txtTAF" converter="entityConverter" style="width:auto;margin:5px" value="#{rankingController.tafselecionado}"
         					required="true" requiredMessage= "TAF Obrigatório" >
-        					<p:ajax listener="#{rankingController.manterTaf}" update="frmTotal:tbl txtExercicio frmRanking:ranking"/>   
+        					<p:ajax listener="#{rankingController.manterTaf}" update="frmTotal:tbl txtExercicio"/>   
         					<f:selectItem itemLabel="Selecione um TAF" itemValue="" />
 				            <f:selectItems value="#{rankingController.listarTafsRealizadas()}"/>
 				        </p:selectOneMenu>
@@ -74,8 +74,7 @@
     					
     					<p:commandButton id="btnExer" disabled="#{rankingController.desativadoExer}" icon="fa fa-search" update="frmExe:tbl"
     					oncomplete="PF('dlgExe').show();" styleClass="btn-info"  style=" width:45px; margin:5px"/>
-				        
-    					
+				        			
 				        <p:outputLabel value="Filtrar por pontuação  " />
 				        <p:selectOneMenu id="txtClassificacao" require="true" requiredMessage= "Filtro Obrigatório"
 				         value="#{rankingController.filtroSel}" style="width:auto;margin:5px">
@@ -117,8 +116,6 @@
 											        				        		
 				</p:dataTable>						
 			</h:form>
-			<p:commandButton styleClass="btn-success" oncomplete="PF('dlgAll').show();" 
-			    style="padding:5px; margin:5px; float: right;"  icon="fa fa-list-ol" /> 
 		</div>
 		
 	<p:dialog header="Ranking Filtrado" widgetVar="dlgRank"
@@ -204,31 +201,7 @@
 				</div>	
 			</h:form>    
 		</p:dialog>	
-		
-		<p:dialog header="Todos os pontos registrado por Aluno" widgetVar="dlgAll"
-		resizable="false" draggable="true" modal="false" closable="true" height="auto" width="100%" position="center">
-			<h:form id="frmRanking">
-				<div class="box box-primary">
-				<div class="ui-g ui-fluid">
-
-						<h:panelGrid columns="1" id="ranking" styleClass="my-panel-grid" style="margin: 15px">  
-				       		<p:outputLabel id="cabecalho" value="#{rankingController.criarCabecalho()}"
-				       		style="font-size:20px;"/>
-				       	
-				       		<c:forEach id="corpo" items="#{rankingController.rankinglista}" var="t" style="font-size:125%;">
-							       <p:outputLabel value="#{t.posicao} #{t.texto} #{t.totalpontos}" style="font-size:20px;"/>					               		
-							</c:forEach>
-		
-				        	<f:facet name="footer">
-								<p:commandButton value = "Fechar" styleClass="btn-info" oncomplete="PF('dlgAll').hide();" 
-			    				style="width:250px; margin: 0 auto 0 auto; text-align:center"  icon="fa fa-times" /> 
-			    			</f:facet>	
-				        </h:panelGrid>	
-		        </div>
-			    </div>
-		    </h:form>
-		</p:dialog>	
-			    	
+					    	
 		<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
 			<p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
 			<p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>

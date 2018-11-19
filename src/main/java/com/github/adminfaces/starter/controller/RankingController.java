@@ -1,6 +1,8 @@
 package com.github.adminfaces.starter.controller;
 
 import java.io.Serializable;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -12,10 +14,12 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaQuery;
 
 import org.hibernate.Session;
 
+import com.github.adminfaces.starter.model.Grafico;
 import com.github.adminfaces.starter.model.Ranking;
 import com.github.adminfaces.starter.model.Taf;
 import com.github.adminfaces.starter.model.TafAluno;
@@ -51,7 +55,6 @@ private static final long serialVersionUID = 1L;
 		tafselecionado = listarTafsRealizadas().get(listarTafsRealizadas().size() -1);
 		filtrarAlunosTaf();
 		listarTafExercicios();
-		rankinglista = ranqueandoAluno();
 	}
 	
 	//Listar apenas os TAFExercicio da taf selecionada
@@ -181,42 +184,69 @@ private static final long serialVersionUID = 1L;
 		} 
 		return alunosclassificados;
 	}
-	 
-	//Listando o ponto total de  todos alunos
+	
 	public List<Ranking> listarTotalPontos() {
-		  List<Ranking>listaTotal = new ArrayList<Ranking>();
-		  String texto="";
-		  int saida=0;
-		  boolean novoAluno = true;
-		  int total = 0; 
-		  List<TafAluno> alunos = filtrarAlunosTaf();
-		  Collections.sort(alunos, (o1, o2) -> o1.getUsuario().getId().compareTo(o2.getUsuario().getId()));
-		  
-		  for(TafAluno te : alunos) {
-			  if(novoAluno) {
-				  texto = te.getUsuario().getNome();
-			  	  novoAluno = false;
-			  }
-			  total += te.getPontuacao();
-			  saida++;
-			  if(tafexercicios.size() == saida) {
-				  Ranking rank = new Ranking(texto, total);
-				  listaTotal.add(rank);
-				  novoAluno = true;
-				  total=0; saida=0;
-			  }
-		  }
-		  listaTotal.sort(Comparator.comparing(Ranking::getTotalpontos).reversed());
-		  int pos = 0;
-		  for(Ranking m : listaTotal) {
-			  pos++;
-			  m.setPosicao(pos+"º"); 
-		  }
-		  return listaTotal;
-	  }
+		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
+		
+		String sql = "SELECT t.taf, a.usuario, SUM(a.pontuacao) as total FROM TafAluno a, TafExercicio t " + 
+				"WHERE a.tafexercicio = t.id " +
+				"AND t.taf.id = "+tafselecionado.getId() +
+				"GROUP BY t.taf, a.usuario " +
+				"ORDER BY t.taf, total DESC";
+		
+		Query query = sessao.createQuery(sql);
+		@SuppressWarnings("unchecked")
+		List<Object[]> resultados = query.getResultList();
+		
+		List<Ranking> dados = new ArrayList<Ranking>();
+		int pos = 1;
+		for(Object[]c:resultados) {
+			Ranking rank = new Ranking();
+			rank.setPosicao(pos+"º");
+			Usuario user = new Usuario();
+			user = (Usuario) c[1];
+			rank.setTexto(user.getNome());
+			rank.setTotalpontos(Math.round((Long) c[2]));
+			dados.add(rank);
+			pos++;
+		}		
+		for(Ranking r : dados)
+			System.out.println(r.getPosicao()+"-"+r.getTexto()+"-"+r.getTotalpontos());
+		
+		return dados;
+	}
 	  
-	  //TEXTO mostrando todos alunos e seus pontos
-	  public List<Ranking> ranqueandoAluno() {
+	 /* public List<Ranking> ranqueandoAluno() {
+
+		  Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
+			
+			String sql = "SELECT t.taf, a.usuario, SUM(a.pontuacao) as total FROM TafAluno a, TafExercicio t " + 
+					"WHERE a.tafexercicio = t.id " +
+					"AND t.taf.id = "+tafselecionado.getId() +
+					"GROUP BY t.taf, a.usuario " +
+					"ORDER BY t.taf, total DESC";
+			
+			Query query = sessao.createQuery(sql);
+			@SuppressWarnings("unchecked")
+			List<Object[]> resultados = query.getResultList();
+			
+			List<Ranking> dados = new ArrayList<Ranking>();
+			int pos = 1;
+			for(Object[]c:resultados) {
+				Ranking rank = new Ranking();
+				rank.setPosicao(pos+"º");
+				Usuario user = new Usuario();
+				user = (Usuario) c[1];
+				rank.setTexto(user.getNome());
+				rank.setTotalpontos(Math.round((Long) c[2]));
+				dados.add(rank);
+				pos++;
+			}		
+			for(Ranking r : dados)
+				System.out.println(r.getPosicao()+"-"+r.getTexto()+"-"+r.getTotalpontos());
+			
+			return dados;
+			
 		  List<Ranking>corpo = new ArrayList<Ranking>();
 		  String texto="";
 		  int saida=0;
@@ -234,7 +264,9 @@ private static final long serialVersionUID = 1L;
 			  total += te.getPontuacao();
 			  saida++;
 			  if(tafexercicios.size() == saida) {
-				  Ranking rank = new Ranking(texto, total);
+				  Ranking rank = new Ranking();
+				  rank.setTexto(texto);
+				  rank.setTotalpontos(total);
 				  corpo.add(rank);
 				  novoAluno = true;
 				  total=0; saida=0;
@@ -257,12 +289,12 @@ private static final long serialVersionUID = 1L;
 	    }
 	   cab += " Total";
 	   return cab;
-	} 
+	} */
 	    
 	public void manterTaf() {
 		System.out.println("Nome: "+getTafselecionado().getNome() +"  Data: "+ getTafselecionado().getData());
 		listarTafExercicios();
-		rankinglista = ranqueandoAluno();
+		listarTotalPontos();
 	}
 
 	public void manterExercicio() {
