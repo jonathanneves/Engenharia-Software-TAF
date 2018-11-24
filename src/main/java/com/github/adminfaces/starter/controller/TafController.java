@@ -1,9 +1,13 @@
 package com.github.adminfaces.starter.controller;
 
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -106,6 +110,25 @@ public class TafController implements Serializable {
 		}
 	}
 
+	public List<Taf> tafAtual(){
+		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
+		List<Taf> tafsAtuais = new ArrayList<Taf>();
+		try {
+		
+			CriteriaQuery<Taf> cq = sessao.getCriteriaBuilder().createQuery(Taf.class);
+			cq.from(Taf.class);
+			tafsAtuais = sessao.createQuery(cq).getResultList();
+			DateFormat out = new SimpleDateFormat("MM/dd/yyyy"); 
+			tafsAtuais.removeIf(s -> !out.format(s.getData()).equals(out.format(new Date())));
+		} catch (Exception e) {
+			addErro("ERRO", "ERRO ao listar tafs");
+		} finally {
+			sessao.close();
+		}
+		tafsAtuais.sort(Comparator.comparing(Taf::getData));
+		return tafsAtuais;
+	}
+	
 	public List<Taf> tafsNaoRealizadas() {
 		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
 		List<Taf> tafsNaoRealizadas = new ArrayList<Taf>();
@@ -120,6 +143,7 @@ public class TafController implements Serializable {
 		} finally {
 			sessao.close();
 		}
+		tafsNaoRealizadas.sort(Comparator.comparing(Taf::getData));
 		return tafsNaoRealizadas;
 	}
 

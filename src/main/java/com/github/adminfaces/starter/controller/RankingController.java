@@ -52,7 +52,11 @@ private static final long serialVersionUID = 1L;
 	     
 	@PostConstruct
 	public void inicializa() {
-		tafselecionado = listarTafsRealizadas().get(listarTafsRealizadas().size() -1);
+		List<Taf> tafs = listarTafsRealizadas();
+		if(!tafs.isEmpty())
+			tafselecionado = listarTafsRealizadas().get(listarTafsRealizadas().size() -1);
+		else
+			tafselecionado = null;
 		filtrarAlunosTaf();
 		listarTafExercicios();
 	}
@@ -77,8 +81,8 @@ private static final long serialVersionUID = 1L;
 		}
 		return tafexercicios;
 	}
-		
-	//Listar apenas TAF que foram realizadas
+	
+	//Listar Taf realizadas	
 	public List<Taf> listarTafsRealizadas() {
 		List<Taf> tafsrealizadas = new ArrayList<Taf>();
 		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
@@ -92,6 +96,7 @@ private static final long serialVersionUID = 1L;
 		} finally {
 			sessao.close();
 		}	
+		tafsrealizadas.sort(Comparator.comparing(Taf::getData));
 		return tafsrealizadas;
 	}
 	

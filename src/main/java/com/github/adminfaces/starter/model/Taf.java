@@ -1,7 +1,7 @@
 package com.github.adminfaces.starter.model;
 
 import java.io.Serializable;
-
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -35,7 +35,12 @@ public class Taf implements Serializable {
 
 	@Override
 	public String toString() {
-		return getNome() + " - " + getData();
+		return dataFormat() + " - " + getNome();
+	}
+	
+	public String dataFormat() {
+		SimpleDateFormat out = new SimpleDateFormat("dd/MM/yyyy");
+		return out.format(getData());
 	}
 	
 	public String getRealizado() {

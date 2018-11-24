@@ -57,7 +57,7 @@
 		    		<h3 style="margin-top:0">Próximos TAFs</h3>
 		    			<h:panelGrid id="frames" columns="2" styleClass="my-panel-grid" style="margin:0px;padding:0px;color:white;">
 					  		<c:forEach items="#{tafController.tafsNaoRealizadas()}" var="taf" update="frames">
-								<p:panel id="Usuario" header="#{taf.data} '#{taf.nome}'" footer=""
+								<p:panel id="Usuario" header="#{taf}" footer=""
 								toggleable="true" toggleSpeed="500" style="margin:10px; "
 								class="panel-heading">
 							  		<h:panelGrid id="items" columns="1">

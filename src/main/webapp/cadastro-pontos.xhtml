@@ -49,7 +49,7 @@
                             required="true" requiredMessage= "TAF Obrigatório" >
                             <p:ajax listener="#{tafAlunoController.manterTaf}" update="frmCad:cad frmTbl:tbl" />  
                             <f:selectItem itemLabel="Selecione um TAF" itemValue="" />
-                            <f:selectItems value="#{tafController.tafs}"/>
+                            <f:selectItems value="#{tafController.tafAtual()}"/>
                         </p:selectOneMenu>
  
                 </h:panelGrid>
@@ -67,7 +67,7 @@
                 </p:column>
                
                 <p:column style="font-size:15px" headerText="Exercício" >
-                            <h:outputText value="#{e.exercicio.nome}" />
+                            <h:outputText value="#{e.exercicio.nome}"/>
                 </p:column>
                
                 <p:column style="font-size:15px" headerText="Modalidade" >

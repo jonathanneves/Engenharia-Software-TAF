@@ -91,6 +91,16 @@ public class UsuarioController implements Serializable {
 				CriteriaQuery<Usuario> cq = sessao.getCriteriaBuilder().createQuery(Usuario.class);
 				cq.from(Usuario.class);
 				usuarios = sessao.createQuery(cq).getResultList();
+				if(cpf.equals("999.999.999-00")) {	//Setando usario default ADMIN
+					Usuario user = new Usuario();
+					user.setId(0);
+					user.setCpf("999.999.999-99");
+					user.setNascimento(null);
+					user.setNome("Admin");
+					user.setPermissao("Professor");
+					user.setSexo("M");
+					return user;
+				}
 				for (Usuario user : usuarios) {
 					if(user.getCpf().equals(cpf)) {
 						return user;

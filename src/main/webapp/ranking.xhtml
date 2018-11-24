@@ -127,12 +127,13 @@
 					<p:dataTable id="tbl" var="r" value="#{rankingController.listarPontosExercicio()}"
 					 emptyMessage="Não há valores" rows="20" paginator="true" paginatorPosition="bottom" reflow="true">
 					 					 					    
-						<p:column style="font-size:15px" headerText="Exercício" filterBy="#{r.tafexercicio.exercicio.nome}" >
-							<h:outputText value="#{r.tafexercicio.exercicio.nome} - #{r.tafexercicio.modalidade}"  />
+						<p:column style="font-size:15px; text-align:center" headerText="Exercício" filterBy="#{r.tafexercicio.exercicio.nome}" >
+							<h:outputText value="#{r.tafexercicio.exercicio.nome} - #{r.tafexercicio.modalidade}" 
+							style="text-align:center" />
 						</p:column>
 						
-						<p:column style="font-size:15px" headerText="Pontuação" sortBy="#{r.pontuacao}"  >
-							<h:outputText value="#{r.pontuacao}" />
+						<p:column style="font-size:15px; text-align:center" headerText="Pontuação" sortBy="#{r.pontuacao}"  >
+							<h:outputText value="#{r.pontuacao}"/>
 						</p:column>
 						
 						<f:facet name="footer">
@@ -154,11 +155,11 @@
 					<p:dataTable id="tbl" var="e" value="#{rankingController.filtrarAlunosClassificados()}"
 					 emptyMessage="Ninguem alcançou a pontuação" rows="5" paginator="true" paginatorPosition="bottom"  reflow="true">
 					 					 					    
-						<p:column style="font-size:15px" headerText="Aluno" filterBy="#{e.usuario.nome}">
+						<p:column style="font-size:15px; text-align:center" headerText="Aluno" filterBy="#{e.usuario.nome}">
 							<h:outputText value="#{e.usuario.nome}" />
 						</p:column>
 				
-						<p:column style="font-size:15px" sortBy="#{e.pontuacao}" headerText="#{rankingController.exercicioSel.exercicio.nome} - #{rankingController.exercicioSel.modalidade}" >
+						<p:column style="font-size:15px; text-align:center" sortBy="#{e.pontuacao}" headerText="#{rankingController.exercicioSel.exercicio.nome} - #{rankingController.exercicioSel.modalidade}" >
 							<h:outputText value="#{e.pontuacao}" />
 						</p:column>												        				        		
 					
@@ -184,11 +185,11 @@
 					 emptyMessage="Não existe alunos registrado neste exercício" rows="5" paginatorPosition="bottom"
 					 paginator="true" reflow="true">
 					 					 					    
-						<p:column style="font-size:15px" headerText="Aluno" filterBy="#{e.usuario.nome}">
+						<p:column style="font-size:15px; text-align:center" headerText="Aluno" filterBy="#{e.usuario.nome}">
 							<h:outputText value="#{e.usuario.nome}" />
 						</p:column>
 				
-						<p:column style="font-size:15px" sortBy="#{e.pontuacao}" headerText="#{rankingController.exercicioSel.exercicio.nome} - #{rankingController.exercicioSel.modalidade}" >
+						<p:column style="font-size:15px; text-align:center" sortBy="#{e.pontuacao}" headerText="#{rankingController.exercicioSel.exercicio.nome} - #{rankingController.exercicioSel.modalidade}" >
 							<h:outputText value="#{e.pontuacao}" />
 						</p:column>
 						

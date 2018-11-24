@@ -9,7 +9,7 @@
 
 		<!-- Configurações de Conexão com o Banco de Dados -->
 		<property name="connection.driver_class">com.mysql.jdbc.Driver</property>
-		<property name="connection.url">jdbc:mysql://localhost:3306/aula</property>
+		<property name="connection.url">jdbc:mysql://localhost/aula</property>
 		<property name="connection.username">root</property>
 		<property name="connection.password">root</property>
 
@@ -32,7 +32,6 @@
 		<property name="hbm2ddl.auto">validate</property>
 		
 		<!-- Mapeamento das entidades --> 
- 		<mapping class="model.Disciplina"/>
  		<mapping class="model.Exercico"/>
  		<mapping class="model.Taf"/>
  		<mapping class="model.TafExercicio"/>
