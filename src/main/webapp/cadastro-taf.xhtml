@@ -75,11 +75,11 @@
                                                         
                   <p:outputLabel for="txtData" value="Data de Realização:" style="margin:3px"/>
                   <p:calendar id="txtData" pattern="dd/MM/yyyy" mask="99/99/9999"
-                  required="true" navigator="true" style="margin:3px"
+                  required="true" navigator="true" style="margin:3px" yearRange="c+0:c+1"
                   requiredMessage="Data de Realização Obrigatório" value="#{tafController.taf.data}"/>  
                   
                   <p:commandButton value="Confirmar" actionListener="#{tafController.salvar}" 
-				    update="frmCadTAF:cad frmTbl:tbl frmTblTAF" style="margin:3px"
+				    update="frmCadTAF:cad frmTbl:tbl frmTblTAF" style="margin:3px" disabled="#{tafController.desativado}"
 				    icon="fa fa-check" styleClass="btn-primary"/>     
               
                	<p:commandButton value="Listar Tafs" oncomplete="PF('dlg').show();" style="margin:3px" 
@@ -99,7 +99,7 @@
 		</h:form>
 		<h:form id="frmTblTAF" enctype="multipart/form-data">  			     
                 <p:dataTable id="tblExercicio" var="e"  emptyMessage="Sem Registro" value="#{exercicioController.exercicios}"
-                reflow="true" rows="20" paginator="true"                                                                     
+                reflow="true" rows="10" paginator="true"                                                                     
                 paginatorPosition="bottom" rendered="#{tafController.desativado}"                                   
                 selection="#{tafExercicioController.exercicios}"
                 rowKey="#{e.id}">

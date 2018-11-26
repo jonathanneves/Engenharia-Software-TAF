@@ -18,7 +18,7 @@
           	color: white;
           	font-weight: bold;   
 		    font-size:125%; 
-          }
+         }
          .ui-panel {
         	 width: auto !important;
          }
@@ -55,7 +55,7 @@
 		    <div class="box-header with-border">
 				<h:form id="frm">
 		    		<h3 style="margin-top:0">Próximos TAFs</h3>
-		    			<h:panelGrid id="frames" columns="2" styleClass="my-panel-grid" style="margin:0px;padding:0px;color:white;">
+		    			<p:panelGrid id="frames" columns="5" layout="grid" style="color:white;">
 					  		<c:forEach items="#{tafController.tafsNaoRealizadas()}" var="taf" update="frames">
 								<p:panel id="Usuario" header="#{taf}" footer=""
 								toggleable="true" toggleSpeed="500" style="margin:10px; "
@@ -69,7 +69,7 @@
 							        </h:panelGrid>         
 						    	</p:panel>
 					    	</c:forEach>
-					    </h:panelGrid>				  
+					    </p:panelGrid>				  
 
 
     <p:commandButton value="Informações" icon="fa fa-info-circle"

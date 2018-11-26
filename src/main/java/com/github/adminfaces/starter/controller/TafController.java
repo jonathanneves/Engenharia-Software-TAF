@@ -32,7 +32,7 @@ public class TafController implements Serializable {
 	private List<Taf> tafs;
     
 	private boolean desativado = false;
-	
+
 	@PostConstruct
 	public void init() {
 		taf = new Taf();
