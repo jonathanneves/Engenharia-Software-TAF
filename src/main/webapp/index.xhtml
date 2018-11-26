@@ -55,10 +55,11 @@
 		    <div class="box-header with-border">
 				<h:form id="frm">
 		    		<h3 style="margin-top:0">Próximos TAFs</h3>
-		    			<p:panelGrid id="frames" columns="5" layout="grid" style="color:white;">
+		    			<p:panelGrid id="frames" columns="3" layout="grid" style="color:white;"
+		    			styleClass="ui-panelgrid-blank ui-fluid">
 					  		<c:forEach items="#{tafController.tafsNaoRealizadas()}" var="taf" update="frames">
 								<p:panel id="Usuario" header="#{taf}" footer=""
-								toggleable="true" toggleSpeed="500" style="margin:10px; "
+								toggleable="true" toggleSpeed="500" style="margin:auto; "
 								class="panel-heading">
 							  		<h:panelGrid id="items" columns="1">
 							  			<h:outputText value="Exercícios: " style="font-weight: bold; font-size:120%;"/>		

@@ -71,11 +71,11 @@
 					<p:dataTable id="tbl" var="r" value="#{graficoController.filtrarPorTaf()}"
 					 emptyMessage="Não há valores" rows="20" paginator="true" paginatorPosition="bottom" reflow="true">
 					 					 					    
-						<p:column style="font-size:15px" headerText="Exercício" filterBy="#{r.tafexercicio.exercicio.nome}" >
+						<p:column style="font-size:15px; text-align:center" headerText="Exercício" filterBy="#{r.tafexercicio.exercicio.nome}" >
 							<h:outputText value="#{r.tafexercicio.exercicio.nome} - #{r.tafexercicio.modalidade}"  />
 						</p:column>
 						
-						<p:column style="font-size:15px" headerText="Pontuação" sortBy="#{r.pontuacao}"  >
+						<p:column style="font-size:15px; text-align:center" headerText="Pontuação" sortBy="#{r.pontuacao}"  >
 							<h:outputText value="#{r.pontuacao}" />
 						</p:column>
 						

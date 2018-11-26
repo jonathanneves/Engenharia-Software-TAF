@@ -47,9 +47,7 @@ private static final long serialVersionUID = 1L;
 
 	private boolean desativadoPont = true;			//desativar Botao antes de selecionar 3 combo
 	private boolean desativadoExer = true;
-	private int desativarBotaoPont = 0;
-	private int desativarBotaoExer = 0;
-	     
+
 	@PostConstruct
 	public void inicializa() {
 		List<Taf> tafs = listarTafsRealizadas();
@@ -57,8 +55,8 @@ private static final long serialVersionUID = 1L;
 			tafselecionado = listarTafsRealizadas().get(listarTafsRealizadas().size() -1);
 		else
 			tafselecionado = null;
-		filtrarAlunosTaf();
 		listarTafExercicios();
+		rankinglista = listarTotalPontos();
 	}
 	
 	//Listar apenas os TAFExercicio da taf selecionada
@@ -183,7 +181,7 @@ private static final long serialVersionUID = 1L;
 					alunosclassificados.removeIf(s -> s.getTafexercicio().getExercicio().getVtForte() <= s.getPontuacao());
 				}
 			}
-			alunosclassificados.sort(Comparator.comparing(TafAluno::getPontuacao));
+			alunosclassificados.sort(Comparator.comparing(TafAluno::getPontuacao).reversed());
 		} catch (Exception e) {
 			addErro("ERRO", "Erro ao classficar alunos");
 		} 
@@ -192,7 +190,7 @@ private static final long serialVersionUID = 1L;
 	
 	public List<Ranking> listarTotalPontos() {
 		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
-		
+
 		String sql = "SELECT t.taf, a.usuario, SUM(a.pontuacao) as total FROM TafAluno a, TafExercicio t " + 
 				"WHERE a.tafexercicio = t.id " +
 				"AND t.taf.id = "+tafselecionado.getId() +
@@ -215,6 +213,7 @@ private static final long serialVersionUID = 1L;
 			dados.add(rank);
 			pos++;
 		}		
+		
 		for(Ranking r : dados)
 			System.out.println(r.getPosicao()+"-"+r.getTexto()+"-"+r.getTotalpontos());
 		
@@ -299,24 +298,17 @@ private static final long serialVersionUID = 1L;
 	public void manterTaf() {
 		System.out.println("Nome: "+getTafselecionado().getNome() +"  Data: "+ getTafselecionado().getData());
 		listarTafExercicios();
-		listarTotalPontos();
+		rankinglista = listarTotalPontos();
 	}
 
 	public void manterExercicio() {
 		System.out.println("Nome: "+getExercicioSel().getExercicio().getNome() +"  Modalidade: "+ getExercicioSel().getModalidade());
-		desativarBotaoExer++;
-		desativarBotaoPont++;
-		if(desativarBotaoPont == 2)
-			setDesativadoPont(false);
-		if(desativarBotaoExer == 1)
-			setDesativadoExer(false);
+		setDesativadoExer(false);
 	}
 	
 	public void manterFiltro() {
 		System.out.println("FILTRO: "+filtroSel);
-		desativarBotaoPont++;
-		if(desativarBotaoPont == 2)
-			setDesativadoPont(false);
+		setDesativadoPont(false);
 	}
 	
 	public void selecionarRanking(ActionEvent evt){
@@ -386,22 +378,6 @@ private static final long serialVersionUID = 1L;
 
 	public void setExercicioSel(TafExercicio exercicioSel) {
 		this.exercicioSel = exercicioSel;
-	}
-
-	public int getDesativarBotaoPont() {
-		return desativarBotaoPont;
-	}
-
-	public void setDesativarBotaoPont(int desativarBotaoPont) {
-		this.desativarBotaoPont = desativarBotaoPont;
-	}
-
-	public int getDesativarBotaoExer() {
-		return desativarBotaoExer;
-	}
-
-	public void setDesativarBotaoExer(int desativarBotaoExer) {
-		this.desativarBotaoExer = desativarBotaoExer;
 	}
 
 	public void addErro(String summary, String detail) {
