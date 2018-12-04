@@ -1,8 +1,8 @@
 package com.github.adminfaces.starter.controller;
 
 import java.io.Serializable;
-
 import java.util.List;
+
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -15,7 +15,6 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import com.github.adminfaces.starter.model.Exercicio;
-import com.github.adminfaces.starter.model.TafExercicio;
 import com.github.adminfaces.starter.util.HibernateUtil;
 
 @ManagedBean //Classe controladora

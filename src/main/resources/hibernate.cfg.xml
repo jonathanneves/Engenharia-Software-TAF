@@ -9,9 +9,9 @@
 
 		<!-- Configurações de Conexão com o Banco de Dados -->
 		<property name="connection.driver_class">com.mysql.jdbc.Driver</property>
-		<property name="connection.url">jdbc:mysql://localhost:3306/aula</property>
+		<property name="connection.url">jdbc:mysql://192.168.0.115:3306/aula</property>
 		<property name="connection.username">root</property>
-		<property name="connection.password">root</property>
+		<property name="connection.password">oracle</property>
 
 		<!-- Pool de Conexões -->
 		<property name="connection.pool_size">1</property>
@@ -33,6 +33,7 @@
 		
 		<!-- Mapeamento das entidades --> 
  		<mapping class="model.Exercico"/>
+ 		<mapping class="model.Usuario"/>
  		<mapping class="model.Taf"/>
  		<mapping class="model.TafExercicio"/>
  		<mapping class="model.TafAluno"/>

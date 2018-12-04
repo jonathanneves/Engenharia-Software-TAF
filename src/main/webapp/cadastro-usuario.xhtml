@@ -78,7 +78,7 @@
 						        <h:outputText value="#{u.cpf}" />
 						    </p:column>	
 						    
-							<p:column headerText="Opções" exportable="false" style="width:10%;text-align:center">
+							<p:column headerText="Opções" exportable="false" style="text-align:center">
 				    			<p:commandButton icon="ui-icon-pencil" actionListener="#{usuarioController.editar}" 
 				    	 		oncomplete="PF('dlg').show();" update="frmCad:cad" styleClass="btn-info" style="color:white;">
 				    				<f:attribute name="usuarioEdita" value="#{u}"/>		    		
@@ -105,32 +105,38 @@
 			    <div class="ui-g ui-fluid">
 					<h:panelGrid columns="2" id="cad" styleClass="my-panel-grid"> 
 						
-						<p:outputLabel for="txtNome" value="Nome:"/>
-						<p:inputText id="txtNome" value="#{usuarioController.usuario.nome}"
-						 required="true"
-						 requiredMessage="Nome Obrigatório"/>			 	
-	        			
-	        			<p:outputLabel for="txtPermissao" value="Permissão:" />
+						<p:outputLabel for="txtPermissao" value="Permissão:" />
         				<p:selectOneMenu id="txtPermissao" value="#{usuarioController.usuario.permissao}"
         					require="true" requiredMessage= "Permissão de Usuário Obrigatória">
+        					<p:ajax listener="#{usuarioController.manterPermissao}" update="frmCad"/>  
 				            <f:selectItem itemLabel="Selecione Permissão" itemValue="" />
 				            <f:selectItem itemLabel="Professor(a)" itemValue="Professor" />
 				            <f:selectItem itemLabel="Aluno(a)" itemValue="Aluno" />
 				        </p:selectOneMenu>	
 				        
+						<p:outputLabel for="txtNome" value="Nome:"/>
+						<p:inputText id="txtNome" value="#{usuarioController.usuario.nome}"
+						 required="true"
+						 requiredMessage="Nome Obrigatório"/>			 	
+	        							        
 				        <p:outputLabel for="txtCPF" value="CPF:"/>
 						<p:inputMask id="txtCPF" value="#{usuarioController.usuario.cpf}"
 						 mask="999.999.999-99"
 						 required="true"
 						 requiredMessage="CPF Obrigatório"/>		
-		        				
+		        		
+		        		<p:outputLabel for="txtSenha" value="Senha:" rendered="#{usuarioController.desativado}"/>	
+		        		<p:password  id="txtSenha" value="#{usuarioController.usuario.senha}"		        		
+		        		required="True" rendered="#{usuarioController.desativado}"
+		        		requiredMessage="Senha Obrigatório">	
+		        		</p:password>
+		        		
 	        			<p:outputLabel for="txtSexo" value="Sexo:" />
         				<p:selectOneMenu id="txtSexo" value="#{usuarioController.usuario.sexo}"
         					require="true" requiredMessage= "Sexo de Usuário Obrigatória">
 				            <f:selectItem itemLabel="Selecione o Sexo" itemValue="" />
 				            <f:selectItem itemLabel="Masculino" itemValue="M" />
 				            <f:selectItem itemLabel="Feminino" itemValue="F" />
-				            <f:selectItem itemLabel="Outros" itemValue="O" />
 				        </p:selectOneMenu>	
 		        			
 		        		<p:outputLabel for="txtNascimento" value="Data de Nascimento:" />

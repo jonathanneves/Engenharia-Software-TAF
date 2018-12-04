@@ -1,29 +1,19 @@
 package com.github.adminfaces.starter.infra.security;
 
-import com.github.adminfaces.starter.controller.UsuarioController;
-import com.github.adminfaces.starter.controller.GraficoController;
-import com.github.adminfaces.starter.model.Usuario;
-import com.github.adminfaces.starter.util.HibernateUtil;
-import com.github.adminfaces.template.session.AdminSession;
+import java.io.IOException;
+import java.io.Serializable;
 
-import org.hibernate.Session;
-import org.omnifaces.util.Faces;
-
-import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
 import javax.enterprise.inject.Specializes;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
-import javax.faces.model.SelectItem;
 import javax.inject.Named;
-import javax.persistence.criteria.CriteriaQuery;
 
-import java.io.IOException;
-import java.io.Serializable;
-import java.util.List;
+import org.omnifaces.util.Faces;
 
-import static com.github.adminfaces.starter.util.Utils.addDetailMessage;
+import com.github.adminfaces.starter.controller.UsuarioController;
+import com.github.adminfaces.starter.model.Usuario;
+import com.github.adminfaces.template.session.AdminSession;
 
 /**
  * Created by rmpestano on 12/20/14.
@@ -43,22 +33,26 @@ public class LogonMB extends AdminSession implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-    private String currentUser;
-    private String cpf;
-    private boolean remember;
+    private String currentUser = "Aluno";
+    private String cpf; 
+    private String senha;
+    
 	private UsuarioController userCont = new UsuarioController();
 	private Usuario user;
-
+	private boolean permissao = false;
+	
+	
     public void login() throws IOException {
     	try {
-    	user = userCont.validarUsuario(cpf);
+    	user = userCont.validarUsuario(cpf, senha);
     	if(user != null) {
     		currentUser = user.getNome();
     		//addMessage(currentUser, "Usuário logado com sucesso");
     		Faces.getExternalContext().getFlash().setKeepMessages(true);
+    		setPermissao(true);
     		Faces.redirect("index.xhtml");
     	}else {
-    		addErro("CPF não encontrado!!!","ERRO");
+    		addErro("CPF ou Senha incorreta!","ERRO");
     		Faces.getExternalContext().getFlash().setKeepMessages(true);
      		Faces.redirect("login.xhtml");
     	}
@@ -67,7 +61,25 @@ public class LogonMB extends AdminSession implements Serializable {
     	}
     }
 	
-    public boolean isProfessor() {
+	public void voltar() {
+		try {
+			currentUser = "Aluno";
+			Faces.redirect("index.xhtml");
+    	} catch (Exception e) {
+    		e.getMessage();
+    	}
+	}
+	
+	public void logar() {
+		try {
+			currentUser = null;
+			Faces.redirect("login.xhtml");
+    	} catch (Exception e) {
+    		e.getMessage();
+    	}
+	}
+	
+   /* public boolean isProfessor() {
     	if(user.getPermissao().equals("Professor")) 
     		return true;
     	else
@@ -79,7 +91,7 @@ public class LogonMB extends AdminSession implements Serializable {
     		return true;
     	else
     		return false;
-    }
+    }*/
     
 	public void addMessage(String summary, String detail) {
 		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail);
@@ -112,15 +124,7 @@ public class LogonMB extends AdminSession implements Serializable {
 		this.cpf = cpf;		
 	}
 
-	public boolean isRemember() {
-        return remember;
-    }
-
-    public void setRemember(boolean remember) {
-        this.remember = remember;
-    }
-
-    public String getCurrentUser() {
+	public String getCurrentUser() {
         return currentUser;
     }
 
@@ -131,8 +135,20 @@ public class LogonMB extends AdminSession implements Serializable {
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-    
-    
-    
-    
+
+	public String getSenha() {
+		return senha;
+	}
+
+	public void setSenha(String senha) {
+		this.senha = senha;
+	}
+
+	public boolean isPermissao() {
+		return permissao;
+	}
+
+	public void setPermissao(boolean permissao) {
+		this.permissao = permissao;
+	}
 }

@@ -47,19 +47,54 @@
                     <p:outputLabel for="txtTAF" value="Escolha um TAF:" />
                         <p:selectOneMenu id="txtTAF" converter="entityConverter" style="margin: 15px" value="#{tafAlunoController.tafselecionado}"
                             required="true" requiredMessage= "TAF Obrigatório" >
-                            <p:ajax listener="#{tafAlunoController.manterTaf}" update="frmCad:cad frmTbl:tbl" />  
+                            <p:ajax listener="#{tafAlunoController.manterTaf}" update="frmCad:cad frmTbl:tbl frmAlu" />  
                             <f:selectItem itemLabel="Selecione um TAF" itemValue="" />
                             <f:selectItems value="#{tafController.tafAtual()}"/>
                         </p:selectOneMenu>
  
                 </h:panelGrid>
-            </h:form>      
-       
-        <h:form id="frmTbl"  enctype="multipart/form-data">
-            <p:dataTable id="tbl" var="e" value="#{tafExercicioController.filtrarExercicios(tafAlunoController.tafselecionado)}" searching="true"
-             emptyMessage="Tabela vazia, Selecione uma TAF" reflow="true" rows="10" paginator="true" >
+            </h:form>   
+                   
+            <h:form id="frmAlu" enctype="multipart/form-data">    
+            <p:outputLabel value="Após confirmar o TAF, escolha os alunos participantes:" rendered="#{tafAlunoController.desativadoAlu}"/>             	
                
-                <p:column headerText="Selecionar" style="width:7%; text-align:center; font-size:15px" >
+           		<p:dataTable id="tblAlu" var="u" value="#{usuarioController.filtrarAlunos()}" 
+                     emptyMessage="Tabela Vaiza (Não existe alunos cadastrados)" rows="20" paginator="true" reflow="true"
+                     selection="#{tafAlunoController.usuarios}"
+                     rowKey="#{u.id}" rendered="#{tafAlunoController.desativadoAlu}">
+                                                                   
+                 		<p:column selectionMode="multiple" style="text-align:center" />
+                 		
+                        <p:column style="font-size:15px" headerText="Aluno" filterBy="#{u.nome}">
+                            <h:outputText value="#{u.nome}" />
+                        </p:column>
+                       
+                        <p:column headerText="Sexo" style="font-size:15px" >
+                            <h:outputText value="Masculino" rendered="#{u.sexo =='M'}" />  
+                            <h:outputText value="Feminino" rendered="#{u.sexo =='F'}" />  
+                        </p:column>
+                           
+                        <p:column headerText="Data de Nascimento" style="font-size:15px" >
+                            <h:outputText value="#{u.nascimento}">
+                                <f:convertDateTime pattern="dd/MM/yyyy"/>
+                            </h:outputText>
+                        </p:column>
+
+                    </p:dataTable> 
+                    
+                    <p:commandButton value = "Registrar Alunos" actionListener="#{tafAlunoController.armazenarUsuarios}"
+                    oncomplete="PF('dlg').hide();" style="padding:5px; margin:5px" styleClass="btn-primary" icon="fa fa-plus"
+                    rendered="#{tafAlunoController.desativadoAlu}"  update="frmTbl frmAlu frmMod:tblPontos"/> 
+                       
+                    <ui:repeat id="multiExercicio" value="#{tafAlunoController.usuarios}" var="u"/>                          
+		  	</h:form>
+		  	
+        <h:form id="frmTbl"  enctype="multipart/form-data">
+        <p:outputLabel value="Selecione os exercícios e cadastre os pontos de cada aluno:" rendered="#{tafAlunoController.desativadoTbl}"/>            
+            <p:dataTable id="tbl" var="e" value="#{tafExercicioController.filtrarExercicios(tafAlunoController.tafselecionado)}" searching="true"
+             emptyMessage="Tabela vazia, Selecione uma TAF" reflow="true" rows="10" paginator="true" rendered="#{tafAlunoController.desativadoTbl}">
+               
+                <p:column headerText="Selecionar" style="text-align:center; font-size:15px" >
                     <p:commandButton oncomplete="PF('dlg').show()" icon="ui-icon-circle-check"
                     actionListener="#{tafAlunoController.selecionarExercicio}">
                         <f:attribute name="exercicioSeleciona" value="#{e}" update="frmTbl:tbl" />
@@ -73,9 +108,7 @@
                 <p:column style="font-size:15px" headerText="Modalidade" >
                     <h:outputText value="#{e.modalidade}" />
                 </p:column>
-                           
-               
-               
+                                        
             </p:dataTable>
         </h:form>
        
@@ -84,34 +117,34 @@
  
         <h:form id="frmMod" enctype="multipart/form-data" >
         <p:dialog header="Registrando Pontuação" widgetVar="dlg"
-        resizable="false" draggable="false" modal="false" closable="true" height="auto" width="50%" position="center">
+        resizable="false" draggable="false" modal="false" closable="true" height="auto" width="100%" position="center">
                 <div class="ui-g ui-fluid">
                            
-                    <p:dataTable id="tblPontos" var="u" value="#{usuarioController.filtrarAlunos()}"
+                    <p:dataTable id="tblPontos" var="a" value="#{tafAlunoController.usuarios}"
                      emptyMessage="Tabela Vaiza (Não existe alunos cadastrados)" rows="5" paginator="true" reflow="true"
                      selection="#{tafAlunoController.tafexercicios}"
-                     rowKey="#{u.id}"
+                     rowKey="#{a.id}"
                      selectionMode="multiple">
                                
-                        <p:column style="font-size:15px" headerText="Aluno" filterBy="#{u.nome}">
-                            <h:outputText value="#{u.nome}" />
+                        <p:column style="font-size:15px" headerText="Aluno" filterBy="#{a.nome}">
+                            <h:outputText value="#{a.nome}" />
                         </p:column>
                        
                         <p:column headerText="Sexo" style="font-size:15px" >
-                            <h:outputText value="Masculino" rendered="#{u.sexo =='M'}" />  
-                            <h:outputText value="Feminino" rendered="#{u.sexo =='F'}" />  
-                            <h:outputText value="Outro" rendered="#{u.sexo =='O'}" />  
+                            <h:outputText value="Masculino" rendered="#{a.sexo =='M'}" />  
+                            <h:outputText value="Feminino" rendered="#{a.sexo =='F'}" />    
                         </p:column>
                            
                         <p:column headerText="Data de Nascimento" style="font-size:15px" >
-                            <h:outputText value="#{u.nascimento}">
+                            <h:outputText value="#{a.nascimento}">
                                 <f:convertDateTime pattern="dd/MM/yyyy"/>
                             </h:outputText>
                         </p:column>
                                                                                                      
                         <p:column headerText="Pontuação" style="font-size:15px" >            
-                            <p:inputText id="txtPontos" value="#{tafAlunoController.pontos}">
-                                <p:ajax listener="#{tafAlunoController.manterPontos(u)}"/>
+                            <p:inputText id="txtPontos" value="#{tafAlunoController.pontos}"
+                            placeholder="Registra a Pontuação" type="number">
+                                <p:ajax listener="#{tafAlunoController.manterPontos(a)}"/>
                           	</p:inputText>    		 
                         </p:column>  
     

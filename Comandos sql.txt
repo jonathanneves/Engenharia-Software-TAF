@@ -1,15 +1,12 @@
-insert into taf.exercicio values (1, "Peito", "Supino", 500, 100, 80, 30, 300, 100);
-insert into taf.exercicio values (2, "Perna", "Leg Press", 300, 100, 60, 20, 300, 70);
-insert into taf.exercicio values (3, "Braco", "Barra", 50, 10, 80, 30, 300, 100);
-insert into taf.exercicio values (4, "Braco", "rosca", 500, 100, 80, 30, 300, 100);
-insert into taf.exercicio values (5, "Triceps", "Triceps Supinado", 500, 100, 80, 30, 300, 100);
+insert into aula.Exercicio values (1, "Peito", "Supino", 500, 100, 80, 30, 300, 100);
+insert into aula.Exercicio values (2, "Perna", "Leg Press", 300, 100, 60, 20, 300, 70);
+insert into aula.Exercicio values (3, "Braco", "Barra", 50, 10, 80, 30, 300, 100);
+insert into aula.Exercicio values (4, "Braco", "rosca", 500, 100, 80, 30, 300, 100);
+insert into aula.Exercicio values (5, "Triceps", "Triceps Supinado", 500, 100, 80, 30, 300, 100);
 
-insert into taf.usuario values (1, "000.000.000-00", '1995-12-09', "John Neves", "Professor", "M");
-insert into taf.usuario values (3, "111.111.111-11", '1998-06-18', "Rovani", "Aluno", "M");
-insert into taf.usuario values (4, "222.222.222-22", '1998-07-20', "Gabriela", "Aluno", "F");
-insert into taf.usuario values (5, "333.333.333-33", '1996-10-29', "Fernanda", "Aluno", "F");
-insert into taf.usuario values (2, "444.444.444-44", '1998-06-23', "Peterson", "Aluno", "M");
-
-
-
+insert into aula.Usuario values (1, "000.000.000-00", '1995-12-09', "John Neves", "Professor", "myzeroadmin", "M");
+insert into aula.Usuario values (3, "111.111.111-11", '1998-06-18', "Rovani", "Aluno", null, "M");
+insert into aula.Usuario values (4, "222.222.222-22", '1998-07-20', "Gabriela", "Aluno", null, "F");
+insert into aula.Usuario values (5, "333.333.333-33", '1996-10-29', "Fernanda", "Aluno", null, "F");
+insert into aula.Usuario values (2, "444.444.444-44", '1998-06-23', "Peterson", "Aluno", null, "M");
 

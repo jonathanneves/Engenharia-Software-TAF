@@ -1,4 +1,4 @@
-package com.github.adminfaces.starter.controller;
+﻿package com.github.adminfaces.starter.controller;
  
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -14,7 +14,6 @@ import javax.persistence.criteria.CriteriaQuery;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.primefaces.event.SelectEvent;
 
 import com.github.adminfaces.starter.model.Taf;
 import com.github.adminfaces.starter.model.TafAluno;
@@ -36,19 +35,23 @@ private static final long serialVersionUID = 1L;
    
     private List<TafAluno> tafalunos;
     private List<TafExercicio> tafexercicios;
-    private List<Usuario> usuarios;
+    private List<Usuario> usuarios; 
     
-    public List<Usuario> alunosselecionados = new ArrayList<Usuario>();
+    public List<Usuario> alunosselecionados = new ArrayList<Usuario>();    
     public List<String> listapontos = new ArrayList<String>();
     
     private String pontos;
+    private boolean desativadoAlu = false;
+    private boolean desativadoTbl = false;
  
     UsuarioController tu = new UsuarioController();
    
     @PostConstruct
     public void inicializa() {
-    	usuarios = tu.filtrarAlunos();
         tafaluno = new TafAluno();
+        listarTodas();
+        setDesativadoAlu(false);
+        setDesativadoTbl(false);
     }
    
     public void salvar () {
@@ -100,7 +103,7 @@ private static final long serialVersionUID = 1L;
             sessao.close();
         }
     }
- 
+    
     public void listarTodas() {
         Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
         try {
@@ -130,9 +133,17 @@ private static final long serialVersionUID = 1L;
    
     public void manterTaf() {
         System.out.println("Nome: "+getTafselecionado().getNome() +"        Data: "+ getTafselecionado().getData());
+        setDesativadoAlu(true);
+
+        setDesativadoTbl(false);    }
+    
+    public void armazenarUsuarios() {
+    	setDesativadoAlu(false);
+    	setDesativadoTbl(true);
     }
     
     public void manterPontos(Usuario user) {
+    	try {
     	for(int i = 0; i<alunosselecionados.size(); i++) {
     		if(alunosselecionados.get(i).equals(user)) {
     			System.out.println("EDITADO: "+listapontos.get(i)+"--"+alunosselecionados.get(i));
@@ -143,6 +154,9 @@ private static final long serialVersionUID = 1L;
     	System.out.println("pontos"+getPontos() + " ID: "+user.getNome());
     	listapontos.add(getPontos());
     	alunosselecionados.add(user);
+    	}catch(Exception e){
+    		e.getMessage();
+    	}
     }
  
     public Taf getTafselecionado() {
@@ -193,8 +207,7 @@ private static final long serialVersionUID = 1L;
     public static long getSerialversionuid() {
         return serialVersionUID;
     }
-   
-    public TafExercicio getExercicioSel() {
+	public TafExercicio getExercicioSel() {
         return exercicioSel;
     }
  
@@ -216,6 +229,22 @@ private static final long serialVersionUID = 1L;
 
 	public void setAlunoatual(Usuario alunoatual) {
 		this.alunoatual = alunoatual;
+	}
+
+	public boolean isDesativadoAlu() {
+		return desativadoAlu;
+	}
+
+	public void setDesativadoAlu(boolean desativadoAlu) {
+		this.desativadoAlu = desativadoAlu;
+	}
+
+	public boolean isDesativadoTbl() {
+		return desativadoTbl;
+	}
+
+	public void setDesativadoTbl(boolean desativadoTbl) {
+		this.desativadoTbl = desativadoTbl;
 	}
 
 	public void addErro(String summary, String detail) {

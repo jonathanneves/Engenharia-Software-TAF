@@ -1,10 +1,7 @@
 package com.github.adminfaces.starter.controller;
 
 import java.io.Serializable;
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -19,7 +16,6 @@ import javax.persistence.criteria.CriteriaQuery;
 
 import org.hibernate.Session;
 
-import com.github.adminfaces.starter.model.Grafico;
 import com.github.adminfaces.starter.model.Ranking;
 import com.github.adminfaces.starter.model.Taf;
 import com.github.adminfaces.starter.model.TafAluno;
@@ -52,7 +48,7 @@ private static final long serialVersionUID = 1L;
 	public void inicializa() {
 		List<Taf> tafs = listarTafsRealizadas();
 		if(!tafs.isEmpty())
-			tafselecionado = listarTafsRealizadas().get(listarTafsRealizadas().size() -1);
+			tafselecionado = tafs.get(listarTafsRealizadas().size() -1);
 		else
 			tafselecionado = null;
 		listarTafExercicios();

@@ -62,7 +62,7 @@
 						        <h:outputText value="#{e.descricao}" />
 						    </p:column>
 						         
-						    <p:column headerText="Opcoes" width="10%;" style="text-align:center;" >
+						    <p:column headerText="Opcoes" style="text-align:center;" >
 				       			<p:commandButton icon="ui-icon-pencil"  oncomplete="PF('dlgEdita').show();"
 				       			 actionListener="#{exercicioController.edita}" update="frmEdita:edita" styleClass="btn-info">
 				       				<f:attribute name="exercicioEdita" value="#{e}" />
@@ -100,16 +100,22 @@
 								<p:outputLabel value="   "/>	<p:outputLabel value="Fraco "/><p:outputLabel value="Forte "/>
 								
 								<p:outputLabel value="1RM "/>
-								<p:inputText id="txtClassificacaoFraco1RM" value="#{exercicioController.exercicio.umrmFraco}"  />
-								<p:inputText id="txtClassificacaoForte1RM" value="#{exercicioController.exercicio.umrmForte}" />
+								<p:inputNumber id="txtClassificacaoFraco1RM" value="#{exercicioController.exercicio.umrmFraco}" 
+								type="number"/>
+								<p:inputText id="txtClassificacaoForte1RM" value="#{exercicioController.exercicio.umrmForte}" 
+								type="number"/>
 								
 								<p:outputLabel value="Rep MAX "/>
-								<p:inputText id="txtClassificacaoFracoRM"  value="#{exercicioController.exercicio.rmFraco}" />
-								<p:inputText id="txtClassificacaoForteRM" value="#{exercicioController.exercicio.rmForte}"  />
+								<p:inputText id="txtClassificacaoFracoRM"  value="#{exercicioController.exercicio.rmFraco}"
+								type="number"/>
+								<p:inputText id="txtClassificacaoForteRM" value="#{exercicioController.exercicio.rmForte}"
+								type="number" />
 								
 								<p:outputLabel value="VT "/>								
-								<p:inputText id="txtClassificacaoFracoVT"  value="#{exercicioController.exercicio.vtFraco}"  />
-								<p:inputText id="txtClassificacaoForteVT" value="#{exercicioController.exercicio.vtForte}"  />
+								<p:inputText id="txtClassificacaoFracoVT"  value="#{exercicioController.exercicio.vtFraco}"
+								type="number" />
+								<p:inputText id="txtClassificacaoForteVT" value="#{exercicioController.exercicio.vtForte}"
+								type="number"/>
 								
 							</h:panelGrid>
 						</h:panelGrid>

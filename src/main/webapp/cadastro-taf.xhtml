@@ -69,7 +69,7 @@
       	<h:form id="frmCadTAF" enctype="multipart/form-data">              	
               <h:panelGrid columns="6" id="cad" styleClass="my-panel-grid" style="width:auto;padding:5px;">   
                                           
-                  <p:outputLabel for="txtTAF" value="TAF:" style="margin:3px"/>
+                  <p:outputLabel for="txtTAF" value="TAF/Horário:" style="margin:3px"/>
                   <p:inputText id="txtTAF" required="true" style="margin:3px"
 					requiredMessage="Nome TAF Obrigatório" value="#{tafController.taf.nome}" />   
                                                         
@@ -104,9 +104,9 @@
                 selection="#{tafExercicioController.exercicios}"
                 rowKey="#{e.id}">
                
-                 <p:column selectionMode="multiple" style="width:5%;text-align:center" />
+                 <p:column selectionMode="multiple" style="text-align:center" />
                      
-                     	<p:column headerText="Id" style="width:5%;text-align:center;">
+                     	<p:column headerText="Id" style="text-align:center;">
 	                         <h:outputText value="#{e.id}" />
 	                     </p:column>
 	                  
@@ -118,7 +118,7 @@
 	                         <h:outputText value="#{e.descricao}" />
 	                     </p:column>
 	                    
-	       		         <p:column headerText="Modalidade" width="30%" style="text-align:center;padding:5px;">
+	       		         <p:column headerText="Modalidade" style="text-align:center;padding:5px;">
 	                        <p:selectManyButton id="tipos" value="#{e.modalidades}">
 	                		  	<f:selectItem itemLabel="1RM" itemValue="rm" />
 	                 			<f:selectItem itemLabel="Rept. Máx." itemValue="max" />

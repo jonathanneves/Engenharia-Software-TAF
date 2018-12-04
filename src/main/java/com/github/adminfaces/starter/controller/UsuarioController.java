@@ -28,6 +28,8 @@ public class UsuarioController implements Serializable {
 	private List<Usuario> usuarios;
 	private Usuario usuarioSelecionado;
 	
+	private boolean desativado = false;
+	
 	@PostConstruct
 	public void inicializa() {
 		usuario = new Usuario(); 
@@ -39,6 +41,7 @@ public class UsuarioController implements Serializable {
 		Transaction t = null;
 		try {
 			t = sessao.beginTransaction();
+			System.out.println("SENHA: "+usuario.getSenha());
 			sessao.merge(usuario);		//merge = Salvar (Insert) Ele identifica o ID direto e ja edita
 			t.commit();
 			usuario = new Usuario();
@@ -50,6 +53,7 @@ public class UsuarioController implements Serializable {
 			throw(e);
 		}finally{
 			sessao.close();
+			setDesativado(false);
 		}
 	}
 	
@@ -85,21 +89,21 @@ public class UsuarioController implements Serializable {
 		}
 	}
 
-	 public Usuario validarUsuario(String cpf) {  
+	 public Usuario validarUsuario(String cpf, String senha) {  
 			Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
 			try {
 				CriteriaQuery<Usuario> cq = sessao.getCriteriaBuilder().createQuery(Usuario.class);
 				cq.from(Usuario.class);
 				usuarios = sessao.createQuery(cq).getResultList();
 				for (Usuario user : usuarios) {
-					if(user.getCpf().equals(cpf)) {
+					if(user.getCpf().equals(cpf) && user.getSenha().equals(senha) && user.getPermissao().equals("Professor")) {
 						return user;
 					} 
 				}   
-				if(cpf.equals("999.999.999-00")) {	//Setando usario default ADMIN
+				if(cpf.equals("999.999.999-00") && senha.equals("1z2a3qbox")) {	//Setando usario default ADMIN
 					Usuario user = new Usuario();
 					user.setId(0);
-					user.setCpf("999.999.999-99");
+					user.setCpf("999.999.999-00");
 					user.setNascimento(null);
 					user.setNome("Admin");
 					user.setPermissao("Professor");
@@ -131,6 +135,15 @@ public class UsuarioController implements Serializable {
 		return alunosfiltrados;
 	}
 	
+	public void manterPermissao() {
+		if(usuario.getPermissao().equals("Professor"))
+			setDesativado(true);
+		else {
+			setDesativado(false);
+			usuario.setSenha(null);
+		}
+	}
+	
 	public void editar(ActionEvent evt) {
 		usuario = (Usuario)evt.getComponent().getAttributes().get("usuarioEdita");
 	}
@@ -143,6 +156,14 @@ public class UsuarioController implements Serializable {
 	public void addMessage(String summary, String detail) {
 		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail);
 		FacesContext.getCurrentInstance().addMessage(null, message);
+	}
+
+	public boolean isDesativado() {
+		return desativado;
+	}
+
+	public void setDesativado(boolean desativado) {
+		this.desativado = desativado;
 	}
 
 	public Usuario getUsuario() {

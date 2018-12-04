@@ -30,7 +30,8 @@ public class Usuario implements Serializable {
 	private String permissao;
 	@Column 
 	private String cpf;
-	
+	@Column
+	private String senha;	
 	
 	@Override
 	public String toString() {
@@ -67,12 +68,23 @@ public class Usuario implements Serializable {
 	public void setCpf(String cpf) {
 		this.cpf = cpf;
 	}
+	
 	public String getPermissao() {
 		return permissao;
 	}
+	
 	public void setPermissao(String permissao) {
 		this.permissao = permissao;
 	}
+	
+	public String getSenha() {
+		return senha;
+	}
+
+	public void setSenha(String senha) {
+		this.senha = senha;
+	}
+
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}

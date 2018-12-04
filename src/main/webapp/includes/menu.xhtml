@@ -23,28 +23,28 @@
             </p:link>
         </li>
         <li class="header">
-        	<h:outputText value="Cadastros" rendered="#{logonMB.isProfessor()}"/>
+        	<h:outputText value="Cadastros" rendered="#{logonMB.permissao}"/>
         </li>
         <li>
-            <p:link outcome="/cadastro-usuario.jsf" rendered="#{logonMB.isProfessor()}">
+            <p:link outcome="/cadastro-usuario.jsf" rendered="#{logonMB.permissao}">
                 <i class="fa fa-user"></i>
                 <span>Novo usuário</span>
             </p:link>
         </li>
         <li>
-            <p:link outcome="/cadastro-exercicio.jsf" rendered="#{logonMB.isProfessor()}">
+            <p:link outcome="/cadastro-exercicio.jsf" rendered="#{logonMB.permissao}">
                 <i class="fa fa-bicycle"></i>
                 <span>Novo Exercício</span>
             </p:link>
         </li>
         <li>
-            <p:link outcome="/cadastro-taf.jsf" rendered="#{logonMB.isProfessor()}">
+            <p:link outcome="/cadastro-taf.jsf" rendered="#{logonMB.permissao}">
                 <i class="fa fa-clock-o"></i>
                 <span>Novo TAF</span>
             </p:link>
         </li>
         <li>
-            <p:link outcome="/cadastro-pontos.jsf" rendered="#{logonMB.isProfessor()}">
+            <p:link outcome="/cadastro-pontos.jsf" rendered="#{logonMB.permissao}">
                 <i class="fa fa-users"></i>
                 <span>Pontuação por Aluno</span>
             </p:link>

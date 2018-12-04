@@ -21,7 +21,7 @@
             </p:link>
   	 	</li>
   	 	<li>
-  	 	    <p:link href="https://www.instagram.com/explore/locations/135238103750937/box-zero-ct/"  target="_blank" >
+  	 	    <p:link href="https://www.instagram.com/boxzeroct//"  target="_blank" >
                 <i class="fa fa-instagram fa-lg" ></i>
             </p:link>
   	 	</li>
@@ -41,15 +41,12 @@
                     <p>
                         #{logonMB.currentUser}
                     </p>
-                    <p>
-                        #{logonMB.cpf}
-                    </p>
                 </li>
                 <li class="user-footer">
                     <h:form prependId="false">
                         <div class="pull-right">                        
-                            <p:commandLink id="logout" action="#{logoutMB.doLogout}" title="Sair">
-                                <i class="fa fa-sign-out fa-2x"></i>
+                            <p:commandLink id="logout" action="#{logonMB.logar}" title="Logar como professor">
+                                <i class="fa fa-lock fa-2x"> </i>
                             </p:commandLink>
                         </div>
                     </h:form>

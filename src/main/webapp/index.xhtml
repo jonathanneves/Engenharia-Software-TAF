@@ -54,17 +54,18 @@
         <div class="box box-primary">
 		    <div class="box-header with-border">
 				<h:form id="frm">
-		    		<h3 style="margin-top:0">Próximos TAFs</h3>
+		    		<h2 style="margin-top:0">Próximos TAFs</h2>
+		    			<h:outputText value="Não tem TAF registrado no momento" style="margin-left:15px;font-size:17px;font-family:Arial" rendered="#{tafController.naotemtaf}"/>
 		    			<p:panelGrid id="frames" columns="3" layout="grid" style="color:white;"
 		    			styleClass="ui-panelgrid-blank ui-fluid">
-					  		<c:forEach items="#{tafController.tafsNaoRealizadas()}" var="taf" update="frames">
+					  		<c:forEach items="#{tafController.tafsnaorealizadas}" var="taf" update="frames">
 								<p:panel id="Usuario" header="#{taf}" footer=""
 								toggleable="true" toggleSpeed="500" style="margin:auto; "
 								class="panel-heading">
 							  		<h:panelGrid id="items" columns="1">
-							  			<h:outputText value="Exercícios: " style="font-weight: bold; font-size:120%;"/>		
+							  			<h:outputText value="Exercícios: " style="font-weight: bold; font-size:130%; font-family:Arial;"/>		
 							  			<c:forEach items="#{tafExercicioController.filtrarExercicios(taf)}" var="t" >
-						               		<h:outputText value="#{t.exercicio.nome} - #{t.modalidade}" style="font-size:120%"/>						               		
+						               		<h:outputText value="#{t.exercicio.nome} - #{t.modalidade}" style="font-size:130%; font-family:Arial;"/>						               		
 						                </c:forEach>
 						                
 							        </h:panelGrid>         
@@ -72,7 +73,7 @@
 					    	</c:forEach>
 					    </p:panelGrid>				  
 
-
+	<br/>
     <p:commandButton value="Informações" icon="fa fa-info-circle"
      oncomplete="PF('dlg').show();" styleClass="btn-info" />
  

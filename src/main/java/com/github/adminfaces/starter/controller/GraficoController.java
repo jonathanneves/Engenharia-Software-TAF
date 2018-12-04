@@ -183,9 +183,13 @@ private static final long serialVersionUID = 1L;
 	    
 		if(alunoselecionado != null) {
 			List<Grafico> dados = filtrarPorAluno();
-	        for(Grafico d : dados) {
-	        	aluno.set(d.getTaf().dataFormat(), d.getPorcentagem());            
-	        }
+			if(!dados.isEmpty()) {
+		        for(Grafico d : dados) {
+		        	aluno.set(d.getTaf().dataFormat(), d.getPorcentagem());            
+		        }
+			}else {
+				aluno.set("VAZIO", 0);
+			}
 		}else {
 			aluno.set("VAZIO", 0);
 		}

@@ -2,10 +2,7 @@ package com.github.adminfaces.starter.controller;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -17,7 +14,6 @@ import javax.persistence.criteria.CriteriaQuery;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.omnifaces.util.Faces;
 
 import com.github.adminfaces.starter.model.Exercicio;
 import com.github.adminfaces.starter.model.Taf;

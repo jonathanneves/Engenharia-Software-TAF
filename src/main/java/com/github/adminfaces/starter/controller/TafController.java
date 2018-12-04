@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
@@ -30,13 +31,16 @@ public class TafController implements Serializable {
 	
 	private Taf taf;
 	private List<Taf> tafs;
+	private List<Taf> tafsnaorealizadas;
     
 	private boolean desativado = false;
+	private boolean naotemtaf = false;
 
 	@PostConstruct
 	public void init() {
 		taf = new Taf();
 		listarTodas();
+		tafsNaoRealizadas();
 		setDesativado(false);
 	}
 	
@@ -129,22 +133,27 @@ public class TafController implements Serializable {
 		return tafsAtuais;
 	}
 	
-	public List<Taf> tafsNaoRealizadas() {
+	public void tafsNaoRealizadas() {
 		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
-		List<Taf> tafsNaoRealizadas = new ArrayList<Taf>();
 		try {
 		
 			CriteriaQuery<Taf> cq = sessao.getCriteriaBuilder().createQuery(Taf.class);
 			cq.from(Taf.class);
-			tafsNaoRealizadas = sessao.createQuery(cq).getResultList();
-			tafsNaoRealizadas.removeIf(s -> s.getRealizado().equals("S"));
+			tafsnaorealizadas = sessao.createQuery(cq).getResultList();	
+			Calendar calendar = Calendar.getInstance();
+			calendar.add(Calendar.DAY_OF_YEAR, -1);
+			Date ontem = calendar.getTime();
+			tafsnaorealizadas.removeIf(s -> s.getData().before(ontem));
 		} catch (Exception e) {
 			addErro("ERRO", "ERRO ao listar tafs");
 		} finally {
 			sessao.close();
 		}
-		tafsNaoRealizadas.sort(Comparator.comparing(Taf::getData));
-		return tafsNaoRealizadas;
+		tafsnaorealizadas.sort(Comparator.comparing(Taf::getData));
+		if(!tafsnaorealizadas.isEmpty())
+			setNaotemtaf(false);
+		else
+			setNaotemtaf(true);
 	}
 
 	public void foiRealizado(Taf tafx) {
@@ -193,9 +202,26 @@ public class TafController implements Serializable {
 		return tafs;
 	}
 
+	public List<Taf> getTafsnaorealizadas() {
+		return tafsnaorealizadas;
+	}
+
+
+	public void setTafsnaorealizadas(List<Taf> tafsnaorealizadas) {
+		this.tafsnaorealizadas = tafsnaorealizadas;
+	}
 
 	public void setTafs(List<Taf> tafs) {
 		this.tafs = tafs;
+	}
+
+	public boolean isNaotemtaf() {
+		return naotemtaf;
+	}
+
+
+	public void setNaotemtaf(boolean naotemtaf) {
+		this.naotemtaf = naotemtaf;
 	}
 
 
