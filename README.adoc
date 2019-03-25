@@ -1,36 +1,28 @@
-= AdminFaces Starter project
+# Sistema de TAF (Teste de Aptidão Física)
+
+## Introdução
+
+Se trata de um software para cadastramento e acompanhamento do progresso do Teste de Aptidão Física (TAF) para uma academia. O software apresenta cadastro de usuário (professor ou aluno), cadastro de exercícios, cadastro de TAF, Ranking dos alunos e acompanhamento de desempenho.
+
+Primeiramente, o Teste de Aptidão Física consiste em uma série de exercícios à serem realizados pelos seus participantes com objetivo de avaliar a capacidade física do indivíduo em desempenhar diferentes treinos, onde serão avaliados através de pontuações obtidas por cada exercício.
+
+Conforme a realização do TAF o professor responsável cadastrará no sistema a pontuação conquistada por cada aluno em determinado exercício e no final terá a pontuação total obtida durante o TAF, com isso os alunos terão um ranking com base em suas pontuações. Além disso, o aluno também poderá visualizar e acompanhar o seu desempenho de pontuação através de um gráfico.
+
+## Telas
+
+  -Tela de Login
+  -Cadastro de Usuário
+  -Cadastro de Exercício
+  -Criação de um novo TAF (Com conjunto de exercícios)
+  -Tela inicial com datas de futuras Tafs.
+  -Registro de pontuação dos alunos.
+  -Ranking dos alunos participantes da Taf. (Filtro por Taf, por exercício e categoria)
+  -Gráfico de desempenho geral do aluno 
 
 
-A simple project to get you started with https://github.com/adminfaces[AdminFaces^].
+Teste de Aptidão Física consiste em uma série de exercícios à serem realizados pelos seus participantes com objetivo de avaliar a capacidade física do indivíduo em desempenhar diferentes treinos, onde serão avaliados através de pontuações obtidas por cada exercício.
 
-== Building
+== AdminFaces Starter project
 
-This project uses https://maven.apache.org/[Maven^] for the build:
+Foi utilizado template do adminfaces https://github.com/adminfaces[AdminFaces^].
 
-----
-mvn clean package
-----
-
-== Running
-
-Just deploy `admin-starter.war` generated in previous step into apache tomcat.
-
-Tested on *Tomcat 8.5.3*
-
-== Demo
-
-A live demo is available on Openshift here: http://admin-starter-admin-starter.1d35.starter-us-east-1.openshiftapps.com/admin-starter/
-
-== Screenshots
-
-.Login page
-image:starter1.png[]
-
-.Car list
-image:starter2.png[]
-
-.Car form
-image:starter3.png[]
-
-.Car form responsive
-image:starter4.png[]
