@@ -19,8 +19,14 @@ Conforme a realização do TAF o professor responsável cadastrará no sistema a
   -Ranking dos alunos participantes da Taf. (Filtro por Taf, por exercício e categoria)
   -Gráfico de desempenho geral do aluno 
 
+## Tecnologias
 
-Teste de Aptidão Física consiste em uma série de exercícios à serem realizados pelos seus participantes com objetivo de avaliar a capacidade física do indivíduo em desempenhar diferentes treinos, onde serão avaliados através de pontuações obtidas por cada exercício.
+  -Hibernate
+  -Mysql
+  -Java
+  -JSF
+  -Primefaces
+
 
 == AdminFaces Starter project
 
