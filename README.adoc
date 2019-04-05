@@ -26,6 +26,13 @@ Conforme a realização do TAF o professor responsável cadastrará no sistema a
   -Java
   -JSF
   -Primefaces
+  
+## Caso de Uso
+![Caso de Uso](https://user-images.githubusercontent.com/33179938/55644878-855e0180-57ad-11e9-907a-52e7b7504474.PNG)
+
+## Diagrama de Classe
+![Diagrama de Classe](https://user-images.githubusercontent.com/33179938/55644930-a3c3fd00-57ad-11e9-9d68-fde73acbd456.JPG)
+
 
 
 == AdminFaces Starter project
