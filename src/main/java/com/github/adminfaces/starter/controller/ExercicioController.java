@@ -72,8 +72,7 @@ public class ExercicioController implements Serializable {
 	
 	public void listarTodas() {
 		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
-		try {
-		
+		try {		
 			CriteriaQuery<Exercicio> cq = sessao.getCriteriaBuilder().createQuery(Exercicio.class);
 			cq.from(Exercicio.class);
 			exercicios = sessao.createQuery(cq).getResultList();

@@ -68,7 +68,7 @@ private static final long serialVersionUID = 1L;
 		}
 	}
 	
-	//filtrar determinado aluno
+	/*//filtrar determinado aluno
 	public List<Grafico> filtrarPorAluno(){
 		List<Grafico> tafsdoaluno = new ArrayList<Grafico>();
 		tafsdoaluno = grupandoDados();
@@ -81,7 +81,7 @@ private static final long serialVersionUID = 1L;
 			e.printStackTrace();
 		} 	
 		return tafsdoaluno;
-	}
+	}*/
 
 	//filtrar determinado aluno
 	public List<TafAluno> filtrarPorTaf(){
@@ -93,7 +93,7 @@ private static final long serialVersionUID = 1L;
 				pontosdoaluno.removeIf(s -> s.getTafexercicio().getTaf().getId() != tafselecionado.getId());
 				pontosdoaluno.removeIf(s -> s.getUsuario().getId() != alunoselecionado.getId());
 			} else
-				System.out.println("Nenhum taf selecionado");
+				System.out.println("Nenhum aluno selecionado");
 		} catch (Exception e) {
 			e.printStackTrace();
 		} 	
@@ -126,6 +126,7 @@ private static final long serialVersionUID = 1L;
 		
 		String sql = "SELECT t.taf, a.usuario, SUM(a.pontuacao) as total FROM TafAluno a, TafExercicio t " + 
 				"WHERE a.tafexercicio = t.id " + 
+				"AND "+alunoselecionado.getId()+ "= a.usuario.id " +
 				"GROUP BY t.taf, a.usuario " +
 				"ORDER BY t.taf, total DESC";
 		
@@ -164,8 +165,8 @@ private static final long serialVersionUID = 1L;
 			index++;
 		}	
 
-		//for(Grafico d : dados) 
-		//	System.out.println(d.getTaf().getNome()+" - "+d.getAluno().getNome()+" - "+d.getTotal()+" - "+d.getPorcentagem());
+		for(Grafico d : dados) 
+			System.out.println(d.getTaf().getNome()+" - "+d.getAluno().getNome()+" - "+d.getTotal()+" - "+d.getPorcentagem());
 
 		return dados;
 	}
@@ -182,7 +183,7 @@ private static final long serialVersionUID = 1L;
         aluno.setLabel("Pontos em %"); 
 	    
 		if(alunoselecionado != null) {
-			List<Grafico> dados = filtrarPorAluno();
+			List<Grafico> dados = grupandoDados();
 			if(!dados.isEmpty()) {
 		        for(Grafico d : dados) {
 		        	aluno.set(d.getTaf().dataFormat(), d.getPorcentagem());            
@@ -212,7 +213,7 @@ private static final long serialVersionUID = 1L;
        return model;
     }
 	public void manterTaf(ItemSelectEvent event) {
-		List<Grafico> dados = filtrarPorAluno();
+		List<Grafico> dados = grupandoDados();
 		tafselecionado = dados.get(event.getItemIndex()).getTaf();
 	}
 	 

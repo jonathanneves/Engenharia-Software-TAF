@@ -90,11 +90,8 @@ public class UsuarioController implements Serializable {
 	}
 
 	 public Usuario validarUsuario(String cpf, String senha) {  
-			Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
 			try {
-				CriteriaQuery<Usuario> cq = sessao.getCriteriaBuilder().createQuery(Usuario.class);
-				cq.from(Usuario.class);
-				usuarios = sessao.createQuery(cq).getResultList();
+				listarUsuarios();
 				for (Usuario user : usuarios) {
 					if(user.getCpf().equals(cpf) && user.getSenha().equals(senha) && user.getPermissao().equals("Professor")) {
 						return user;
@@ -113,25 +110,18 @@ public class UsuarioController implements Serializable {
 				return null;
            } catch (Exception e) {
        		   return null;
-           } finally {
-        	   sessao.close();
-           }		
+           } 	
      }
 	
 	 public List<Usuario> filtrarAlunos() {
 		List<Usuario> alunosfiltrados = new ArrayList<Usuario>();
-		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
 		try {
-			CriteriaQuery<Usuario> cq = sessao.getCriteriaBuilder().createQuery(Usuario.class);
-			cq.from(Usuario.class);
-			alunosfiltrados = sessao.createQuery(cq).getResultList();
+			alunosfiltrados = usuarios;
 			alunosfiltrados.removeIf(s -> s.getPermissao().equals("Professor"));
 		} catch (Exception e) {
 			e.getMessage();
 			addMessage("ERRO", "Erro ao filtrar alunos");
-		} finally {
-			sessao.close();
-		}	
+		} 
 		return alunosfiltrados;
 	}
 	

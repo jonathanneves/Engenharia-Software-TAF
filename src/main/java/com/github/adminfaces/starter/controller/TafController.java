@@ -115,39 +115,27 @@ public class TafController implements Serializable {
 	}
 
 	public List<Taf> tafAtual(){
-		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
 		List<Taf> tafsAtuais = new ArrayList<Taf>();
 		try {
-		
-			CriteriaQuery<Taf> cq = sessao.getCriteriaBuilder().createQuery(Taf.class);
-			cq.from(Taf.class);
-			tafsAtuais = sessao.createQuery(cq).getResultList();
+			tafsAtuais = tafs;
 			DateFormat out = new SimpleDateFormat("MM/dd/yyyy"); 
 			tafsAtuais.removeIf(s -> !out.format(s.getData()).equals(out.format(new Date())));
 		} catch (Exception e) {
 			addErro("ERRO", "ERRO ao listar tafs");
-		} finally {
-			sessao.close();
 		}
 		tafsAtuais.sort(Comparator.comparing(Taf::getData));
 		return tafsAtuais;
 	}
 	
 	public void tafsNaoRealizadas() {
-		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
 		try {
-		
-			CriteriaQuery<Taf> cq = sessao.getCriteriaBuilder().createQuery(Taf.class);
-			cq.from(Taf.class);
-			tafsnaorealizadas = sessao.createQuery(cq).getResultList();	
+			tafsnaorealizadas = tafs;
 			Calendar calendar = Calendar.getInstance();
 			calendar.add(Calendar.DAY_OF_YEAR, -1);
 			Date ontem = calendar.getTime();
 			tafsnaorealizadas.removeIf(s -> s.getData().before(ontem));
 		} catch (Exception e) {
 			addErro("ERRO", "ERRO ao listar tafs");
-		} finally {
-			sessao.close();
 		}
 		tafsnaorealizadas.sort(Comparator.comparing(Taf::getData));
 		if(!tafsnaorealizadas.isEmpty())

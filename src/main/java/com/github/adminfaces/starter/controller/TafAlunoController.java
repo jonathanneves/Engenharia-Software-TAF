@@ -134,8 +134,8 @@ private static final long serialVersionUID = 1L;
     public void manterTaf() {
         System.out.println("Nome: "+getTafselecionado().getNome() +"        Data: "+ getTafselecionado().getData());
         setDesativadoAlu(true);
-
-        setDesativadoTbl(false);    }
+        setDesativadoTbl(false);   
+    }
     
     public void armazenarUsuarios() {
     	setDesativadoAlu(false);
