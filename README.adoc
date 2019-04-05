@@ -29,7 +29,9 @@ Conforme a realização do TAF o professor responsável cadastrará no sistema a
   
 ## Caso de Uso
 
-![Caso de Uso](https://user-images.githubusercontent.com/33179938/55644878-855e0180-57ad-11e9-907a-52e7b7504474.PNG)
+
+![Caso de Uso](https://user-images.githubusercontent.com/33179938/55645408-e20dec00-57ae-11e9-9ba0-7620b64af3ab.PNG)
+
 
 ## Diagrama de Classe
 
@@ -39,5 +41,5 @@ Conforme a realização do TAF o professor responsável cadastrará no sistema a
 
 == AdminFaces Starter project
 
-Foi utilizado template do adminfaces https://github.com/adminfaces[AdminFaces^].
+Foi utilizado o template do adminfaces https://github.com/adminfaces[AdminFaces^].
 
