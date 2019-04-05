@@ -29,13 +29,11 @@ Conforme a realização do TAF o professor responsável cadastrará no sistema a
   
 ## Caso de Uso
 
-![Image1](/Caso de Uso.PNG)
+![Caso de Uso](https://user-images.githubusercontent.com/33179938/55646392-75e0b780-57b1-11e9-9c6e-e704da4cdedd.PNG)
 
 ## Diagrama de Classe
 
-![Image2](/Diagrama de Classe.JPG)
-
-
+![Diagrama de Classe](https://user-images.githubusercontent.com/33179938/55646393-76794e00-57b1-11e9-8bd8-298beb4d2591.JPG)
 
 == AdminFaces Starter project
 
