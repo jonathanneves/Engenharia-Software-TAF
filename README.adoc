@@ -29,13 +29,11 @@ Conforme a realização do TAF o professor responsável cadastrará no sistema a
   
 ## Caso de Uso
 
-
-![Caso de Uso](https://user-images.githubusercontent.com/33179938/55645408-e20dec00-57ae-11e9-9ba0-7620b64af3ab.PNG)
-
+![Caso de Uso](https://imgur.com/a/W9o2QLi.PNG)
 
 ## Diagrama de Classe
 
-![Diagrama de Classe](https://user-images.githubusercontent.com/33179938/55644930-a3c3fd00-57ad-11e9-9d68-fde73acbd456.JPG)
+![Diagrama de Classe](https://imgur.com/a/ZT64sI9.JPG)
 
 
 
