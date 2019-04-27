@@ -1,4 +1,4 @@
-package com.github.adminfaces.starter.controller;
+﻿package com.github.adminfaces.starter.controller;
 
 import java.io.Serializable;
 import java.math.RoundingMode;
@@ -11,7 +11,9 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 
 import org.hibernate.Session;
@@ -34,7 +36,8 @@ public class GraficoController implements Serializable {
 
 private static final long serialVersionUID = 1L;
 
-
+	public Session sessao;
+	
 	private TafAluno tafaluno;
 	private Usuario alunoselecionado;
 	
@@ -49,126 +52,68 @@ private static final long serialVersionUID = 1L;
 	
 	@PostConstruct
 	public void inicializa() {
+		sessao = HibernateUtil.getFabricaDeSessoes().openSession();
 		listarTodas();
 		nomeAluno = " ";
 		createBarModels();
 	}
 
+	//LISTAR TODAS AS TAFALUNOS
 	public void listarTodas() {
-		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
-		try {
-			CriteriaQuery<TafAluno> cq = sessao.getCriteriaBuilder().createQuery(TafAluno.class);
-			cq.from(TafAluno.class);
-			tafalunos = sessao.createQuery(cq).getResultList();
-		} catch (Exception e) {
-			e.printStackTrace();
-			addErro("ERRO", "Erro ao listar alunos participantes");
-		} finally {
-			sessao.close();
-		}
+		String sql = "SELECT ta FROM TafAluno ta";
+		TypedQuery<TafAluno> query = sessao.createQuery(sql, TafAluno.class);
+		tafalunos = query.getResultList();
 	}
 	
-	/*//filtrar determinado aluno
-	public List<Grafico> filtrarPorAluno(){
-		List<Grafico> tafsdoaluno = new ArrayList<Grafico>();
-		tafsdoaluno = grupandoDados();
-		try {
-			if(alunoselecionado != null) {
-				tafsdoaluno.removeIf(s -> s.getAluno().getId() != alunoselecionado.getId());
-			} else
-				System.out.println("Nenhum aluno selecionado");
-		} catch (Exception e) {
-			e.printStackTrace();
-		} 	
-		return tafsdoaluno;
-	}*/
-
 	//filtrar determinado aluno
 	public List<TafAluno> filtrarPorTaf(){
-		List<TafAluno> pontosdoaluno = new ArrayList<TafAluno>();
-		listarTodas();
-		pontosdoaluno = getTafalunos();
-		try {
-			if(tafselecionado != null && alunoselecionado != null) {
-				pontosdoaluno.removeIf(s -> s.getTafexercicio().getTaf().getId() != tafselecionado.getId());
-				pontosdoaluno.removeIf(s -> s.getUsuario().getId() != alunoselecionado.getId());
-			} else
-				System.out.println("Nenhum aluno selecionado");
-		} catch (Exception e) {
-			e.printStackTrace();
-		} 	
-		return pontosdoaluno;
+		if(tafselecionado != null && alunoselecionado != null) {
+			String sql = "SELECT ta FROM TafAluno ta WHERE ta.tafexercicio.taf = " + tafselecionado.getId()+ 
+					" AND ta.usuario = " + alunoselecionado.getId();
+			TypedQuery<TafAluno> query = sessao.createQuery(sql, TafAluno.class);
+			return query.getResultList();
+		} else {
+			System.out.println("Nenhum aluno selecionado");
+			return null;
+		}
 	}
 
-	//Listar apenas os TAFExercicio da taf selecionada
-	public List<TafExercicio> listarTafExercicios(Taf tafAtual) {
-		List<TafExercicio> listaexercicios = new ArrayList<TafExercicio>();
-		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
-		try {
-			if(tafAtual != null) {
-				CriteriaQuery<TafExercicio> cq = sessao.getCriteriaBuilder().createQuery(TafExercicio.class);
-				cq.from(TafExercicio.class);
-				listaexercicios = sessao.createQuery(cq).getResultList();
-				listaexercicios.removeIf(s -> s.getTaf().getId() != tafAtual.getId());
-				tafexercicios = listaexercicios;	
-			}else
-				System.out.println("TAF SELECIONADO É NULO");
-		} catch (Exception e) {
-			addErro("ERRO", "Erro ao listar tafs exercicios");
-		} finally {
-			sessao.close();
-		}
-		return tafexercicios;
-	}
 	
+	//SOMANDO PONTOS DE CADA TAF OBTIDOS POR UM ALUNO 
 	public List<Grafico> grupandoDados() {
-		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
-		
 		String sql = "SELECT t.taf, a.usuario, SUM(a.pontuacao) as total FROM TafAluno a, TafExercicio t " + 
 				"WHERE a.tafexercicio = t.id " + 
 				"AND "+alunoselecionado.getId()+ "= a.usuario.id " +
 				"GROUP BY t.taf, a.usuario " +
-				"ORDER BY t.taf, total DESC";
-		
+				"ORDER BY t.taf, total DESC";		
 		Query query = sessao.createQuery(sql);
 		@SuppressWarnings("unchecked")
 		List<Object[]> resultados = query.getResultList();
 		
 		List<Grafico> dados = new ArrayList<Grafico>();
-		for(Object[]c:resultados) {
-			Grafico graf = new Grafico();
-			graf.setTaf((Taf) c[0]);
-			graf.setAluno((Usuario) c[1]);
-			graf.setTotal(Math.round((Long) c[2]));
-			dados.add(graf);
-		}
-		int index = 0;
-		boolean novaTaf = true;
-		Taf tafAux = null;
-		int max = 0;
-		
-		for(Grafico d : dados) {		
-			if(d.getTaf() != tafAux)	{	  
-				novaTaf = true;
-				max = 0;
-			}			  
-			if(novaTaf) {
-				tafAux = d.getTaf();
-				max = d.getTotal();
-				novaTaf = false;			  	
+	
+		if(!resultados.isEmpty()) {
+			for(Object[]c:resultados) {
+				Grafico graf = new Grafico();
+				graf.setTaf((Taf) c[0]);
+				graf.setAluno((Usuario) c[1]);
+				graf.setTotal(Math.round((Long) c[2]));
+				dados.add(graf);
 			}
-			DecimalFormat df = new DecimalFormat("#.#");
-			df.setRoundingMode(RoundingMode.CEILING);
-			double percentual = Double.parseDouble(df.format(((d.getTotal()*100)/max)));
-			d.setPorcentagem(percentual);
-			dados.set(index, d);
-			index++;
-		}	
-
-		for(Grafico d : dados) 
-			System.out.println(d.getTaf().getNome()+" - "+d.getAluno().getNome()+" - "+d.getTotal()+" - "+d.getPorcentagem());
-
-		return dados;
+			int index = 0;
+			int max = dados.get(0).getTotal();
+			
+			for(Grafico d : dados) {		 
+				DecimalFormat df = new DecimalFormat("#.#");
+				df.setRoundingMode(RoundingMode.CEILING);
+				double percentual = Double.parseDouble(df.format(((d.getTotal()*100)/max)));
+				d.setPorcentagem(percentual);
+				dados.set(index, d);
+				index++;
+			}	
+			return dados;
+		}
+		return null;
 	}
 	  
 	public void atualizarGrafico() {
@@ -184,16 +129,15 @@ private static final long serialVersionUID = 1L;
 	    
 		if(alunoselecionado != null) {
 			List<Grafico> dados = grupandoDados();
-			if(!dados.isEmpty()) {
-		        for(Grafico d : dados) {
-		        	aluno.set(d.getTaf().dataFormat(), d.getPorcentagem());            
-		        }
-			}else {
+			if(dados != null) {
+			    for(Grafico d : dados) {
+		        	aluno.set(d.getTaf().toString(), d.getPorcentagem());      
+		        	System.out.println(d.getTaf().getNome() + " - " + d.getPorcentagem() + " - " + d.getTotal());
+			    }
+			}else
 				aluno.set("VAZIO", 0);
-			}
-		}else {
+		}else 
 			aluno.set("VAZIO", 0);
-		}
  
        model.addSeries(aluno);
        barModel = model;
@@ -212,6 +156,7 @@ private static final long serialVersionUID = 1L;
        
        return model;
     }
+	
 	public void manterTaf(ItemSelectEvent event) {
 		List<Grafico> dados = grupandoDados();
 		tafselecionado = dados.get(event.getItemIndex()).getTaf();
