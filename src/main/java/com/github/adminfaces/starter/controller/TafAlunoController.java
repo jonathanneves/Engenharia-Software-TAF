@@ -27,6 +27,7 @@ public class TafAlunoController implements Serializable {
  
 private static final long serialVersionUID = 1L;
  
+	private Session sessao;
     private TafAluno tafaluno;
    
     private Taf tafselecionado;
@@ -48,6 +49,7 @@ private static final long serialVersionUID = 1L;
    
     @PostConstruct
     public void inicializa() {
+    	sessao = HibernateUtil.getFabricaDeSessoes().openSession();
         tafaluno = new TafAluno();
         listarTodas();
         setDesativadoAlu(false);
@@ -55,7 +57,6 @@ private static final long serialVersionUID = 1L;
     }
    
     public void salvar () {
-        Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
         Transaction t = null;
             try {
                 tafselecionado.setRealizado("S");
@@ -86,7 +87,6 @@ private static final long serialVersionUID = 1L;
         }
    
     public void exclui () {
-        Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
         Transaction t = null;
         try {
             t = sessao.beginTransaction();
@@ -105,7 +105,6 @@ private static final long serialVersionUID = 1L;
     }
     
     public void listarTodas() {
-        Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
         try {
             CriteriaQuery<TafAluno> cq = sessao.getCriteriaBuilder().createQuery(TafAluno.class);
             cq.from(TafAluno.class);
@@ -119,7 +118,6 @@ private static final long serialVersionUID = 1L;
     }
    
     public void listarTafExercicios() {
-        Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
         try {
             CriteriaQuery<TafExercicio> cq = sessao.getCriteriaBuilder().createQuery(TafExercicio.class);
             cq.from(TafExercicio.class);

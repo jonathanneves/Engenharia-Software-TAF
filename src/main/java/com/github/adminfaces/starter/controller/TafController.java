@@ -103,7 +103,6 @@ public class TafController implements Serializable {
 	public void listarTodas() {
 		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
 		try {
-		
 			CriteriaQuery<Taf> cq = sessao.getCriteriaBuilder().createQuery(Taf.class);
 			cq.from(Taf.class);
 			tafs = sessao.createQuery(cq).getResultList();
@@ -129,6 +128,7 @@ public class TafController implements Serializable {
 	
 	public void tafsNaoRealizadas() {
 		try {
+			
 			tafsnaorealizadas = tafs;
 			Calendar calendar = Calendar.getInstance();
 			calendar.add(Calendar.DAY_OF_YEAR, -1);

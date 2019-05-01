@@ -1,7 +1,6 @@
 package com.github.adminfaces.starter.controller;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -10,10 +9,12 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+
 import com.github.adminfaces.starter.model.Usuario;
 import com.github.adminfaces.starter.util.HibernateUtil;
 
@@ -24,6 +25,7 @@ public class UsuarioController implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 		
+	private Session sessao;
 	private Usuario usuario;
 	private List<Usuario> usuarios;
 	private Usuario usuarioSelecionado;
@@ -31,13 +33,13 @@ public class UsuarioController implements Serializable {
 	private boolean desativado = false;
 	
 	@PostConstruct
-	public void inicializa() {
+	public void inicializa() {	
+		sessao = HibernateUtil.getFabricaDeSessoes().openSession();
 		usuario = new Usuario(); 
 		listarUsuarios();
 	}
 	
 	public void salvar() {
-		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
 		Transaction t = null;
 		try {
 			t = sessao.beginTransaction();
@@ -58,7 +60,6 @@ public class UsuarioController implements Serializable {
 	}
 	
 	public void exclui() {
-		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
 		Transaction t = null;
 		try {
 			t = sessao.beginTransaction();
@@ -77,7 +78,6 @@ public class UsuarioController implements Serializable {
 	}
 	
 	public void listarUsuarios() {
-		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
 		try {
 			CriteriaQuery<Usuario> cq = sessao.getCriteriaBuilder().createQuery(Usuario.class);
 			cq.from(Usuario.class);
@@ -90,7 +90,7 @@ public class UsuarioController implements Serializable {
 	}
 
 	 public Usuario validarUsuario(String cpf, String senha) {  
-			try {
+			try {		
 				listarUsuarios();
 				for (Usuario user : usuarios) {
 					if(user.getCpf().equals(cpf) && user.getSenha().equals(senha) && user.getPermissao().equals("Professor")) {
@@ -114,15 +114,10 @@ public class UsuarioController implements Serializable {
      }
 	
 	 public List<Usuario> filtrarAlunos() {
-		List<Usuario> alunosfiltrados = new ArrayList<Usuario>();
-		try {
-			alunosfiltrados = usuarios;
-			alunosfiltrados.removeIf(s -> s.getPermissao().equals("Professor"));
-		} catch (Exception e) {
-			e.getMessage();
-			addMessage("ERRO", "Erro ao filtrar alunos");
-		} 
-		return alunosfiltrados;
+			String sql = "SELECT u FROM Usuario u WHERE u.permissao = 'Aluno'";
+			TypedQuery<Usuario> query = sessao.createQuery(sql, Usuario.class);
+			return query.getResultList();
+		
 	}
 	
 	public void manterPermissao() {

@@ -1,6 +1,7 @@
 package com.github.adminfaces.starter.controller;
 
 import java.io.Serializable;
+
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -12,7 +13,7 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.persistence.Query;
-import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.TypedQuery;
 
 import org.hibernate.Session;
 
@@ -28,6 +29,8 @@ import com.github.adminfaces.starter.util.HibernateUtil;
 public class RankingController implements Serializable {
 
 private static final long serialVersionUID = 1L;
+
+	private Session sessao;
 
 	private TafAluno tafaluno;
  
@@ -46,6 +49,7 @@ private static final long serialVersionUID = 1L;
 
 	@PostConstruct
 	public void inicializa() {
+		sessao = HibernateUtil.getFabricaDeSessoes().openSession();
 		List<Taf> tafs = listarTafsRealizadas();
 		if(!tafs.isEmpty())
 			tafselecionado = tafs.get(listarTafsRealizadas().size() -1);
@@ -57,98 +61,47 @@ private static final long serialVersionUID = 1L;
 	
 	//Listar apenas os TAFExercicio da taf selecionada
 	public List<TafExercicio> listarTafExercicios() {
-		List<TafExercicio> listaexercicios = new ArrayList<TafExercicio>();
-		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
-		try {
-			if(tafselecionado != null) {
-				CriteriaQuery<TafExercicio> cq = sessao.getCriteriaBuilder().createQuery(TafExercicio.class);
-				cq.from(TafExercicio.class);
-				listaexercicios = sessao.createQuery(cq).getResultList();
-				listaexercicios.removeIf(s -> s.getTaf().getId() != tafselecionado.getId());
-				tafexercicios = listaexercicios;	
-			}else
-				System.out.println("TAF SELECIONADO É NULO");
-		} catch (Exception e) {
-			addErro("ERRO", "Erro ao listar tafs exercicios");
-		} finally {
-			sessao.close();
-		}
+		String sql = "SELECT te FROM TafExercicio te WHERE te.taf = " + tafselecionado.getId();
+		TypedQuery<TafExercicio> query = sessao.createQuery(sql, TafExercicio.class);
+		tafexercicios = query.getResultList();
 		return tafexercicios;
 	}
 	
 	//Listar Taf realizadas	
 	public List<Taf> listarTafsRealizadas() {
-		List<Taf> tafsrealizadas = new ArrayList<Taf>();
-		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
-		try {
-			CriteriaQuery<Taf> cq = sessao.getCriteriaBuilder().createQuery(Taf.class);
-			cq.from(Taf.class);
-			tafsrealizadas = sessao.createQuery(cq).getResultList();
-			tafsrealizadas.removeIf(s -> s.getRealizado().equals("N"));
-		} catch (Exception e) {
-			addErro("ERRO", "Erro ao filtrar tafs");
-		} finally {
-			sessao.close();
-		}	
-		tafsrealizadas.sort(Comparator.comparing(Taf::getData));
-		return tafsrealizadas;
+		String sql = "SELECT t FROM Taf t WHERE t.realizado = 'S'";
+		TypedQuery<Taf> query = sessao.createQuery(sql, Taf.class);
+		return query.getResultList();
 	}
 	
 	//Listar todos os alunos que participaram do TAF
 	public List<TafAluno> filtrarAlunosTaf(){
-		List<TafAluno> alunosparticipantes = new ArrayList<TafAluno>();
-		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
-		try {
-			if(tafselecionado != null) {
-				CriteriaQuery<TafAluno> cq = sessao.getCriteriaBuilder().createQuery(TafAluno.class);
-				cq.from(TafAluno.class);
-				alunosparticipantes = sessao.createQuery(cq).getResultList();
-				alunosparticipantes.removeIf(s -> s.getTafexercicio().getTaf().getId() != tafselecionado.getId());
-			} else
-				System.out.println("Nenhuma taf selecionado");
-		} catch (Exception e) {
-			addErro("ERRO", "Erro ao filtrar tafs");
-		} finally {
-			sessao.close();
-		}	
-		return alunosparticipantes;
+		String sql = "SELECT ta FROM TafAluno ta WHERE ta.tafexercicio.taf = " + tafselecionado.getId();
+		TypedQuery<TafAluno> query = sessao.createQuery(sql, TafAluno.class);
+		tafalunos = query.getResultList();
+		return tafalunos;
 	}
 	 
 	//Listar apenas os TAFExercicio da taf selecionada
 	public List<TafAluno> listarPontosExercicio() {
-		List<TafAluno> listafiltrada = new ArrayList<TafAluno>();
-		try {
-			listafiltrada = filtrarAlunosTaf();
-			listafiltrada.removeIf(s -> !s.getUsuario().getNome().equals(rankingSel.getTexto()));
-		} catch (Exception e) {
-			addErro("ERRO", "Erro ao listar pontos por exercício");
-		} finally {
-		}
-		return listafiltrada;
+		String sql = "SELECT ta FROM TafAluno ta WHERE ta.tafexercicio.taf = " + tafselecionado.getId()+
+				" AND ta.usuario.nome != "+ rankingSel.getTexto();
+		TypedQuery<TafAluno> query = sessao.createQuery(sql, TafAluno.class);
+		return query.getResultList();
 	}
 	
 	//Filtrar todos os alunos que realizaram o exercicio
 	public List<TafAluno> filtrarPorExercicio(){
-		List<TafAluno> alunosporexercicio = new ArrayList<TafAluno>();
-		try {
-			if(tafselecionado != null) {
-				alunosporexercicio = filtrarAlunosTaf();
-				alunosporexercicio.removeIf(s -> s.getTafexercicio().getId() != exercicioSel.getId());
-				alunosporexercicio.sort(Comparator.comparing(TafAluno::getPontuacao).reversed());
-			} else
-				System.out.println("Nenhuma taf selecionado");
-		} catch (Exception e) {
-			addErro("ERRO", "Erro ao filtrar tafs");
-		}
-		return alunosporexercicio;
+		String sql = "SELECT ta FROM TafAluno ta WHERE ta.tafexercicio.exercicio = " + exercicioSel.getId()+ 
+				" AND ta.tafexercicio.taf = " + tafselecionado.getId();
+		TypedQuery<TafAluno> query = sessao.createQuery(sql, TafAluno.class);
+		return query.getResultList();
 	}
 	 
 	//Filtrar alunos por fraco forte e médio
 	public List<TafAluno> filtrarAlunosClassificados(){
-		List<TafAluno> alunosclassificados = new ArrayList<TafAluno>();
+		List<TafAluno> alunosclassificados = filtrarPorExercicio();
 		try {
-			alunosclassificados = filtrarAlunosTaf();
-			alunosclassificados.removeIf(s -> s.getTafexercicio().getId() != exercicioSel.getId());
 			if(filtroSel.equals("Fraco")) {
 				if(exercicioSel.getModalidade().equals("1RM"))
 					alunosclassificados.removeIf(s -> s.getTafexercicio().getExercicio().getUmrmFraco() < s.getPontuacao());
@@ -210,10 +163,11 @@ private static final long serialVersionUID = 1L;
 			pos++;
 		}		
 		
+		rankinglista = dados;
 		for(Ranking r : dados)
 			System.out.println(r.getPosicao()+"-"+r.getTexto()+"-"+r.getTotalpontos());
 		
-		return dados;
+		return rankinglista;
 	}
 	  
 	 /* public List<Ranking> ranqueandoAluno() {

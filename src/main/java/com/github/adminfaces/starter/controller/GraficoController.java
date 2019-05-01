@@ -11,10 +11,8 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaQuery;
 
 import org.hibernate.Session;
 import org.primefaces.event.ItemSelectEvent;
@@ -36,7 +34,7 @@ public class GraficoController implements Serializable {
 
 private static final long serialVersionUID = 1L;
 
-	public Session sessao;
+	private Session sessao;
 	
 	private TafAluno tafaluno;
 	private Usuario alunoselecionado;

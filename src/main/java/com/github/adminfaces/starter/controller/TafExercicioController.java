@@ -10,6 +10,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 
 import org.hibernate.Session;
@@ -17,6 +18,7 @@ import org.hibernate.Transaction;
 
 import com.github.adminfaces.starter.model.Exercicio;
 import com.github.adminfaces.starter.model.Taf;
+import com.github.adminfaces.starter.model.TafAluno;
 import com.github.adminfaces.starter.model.TafExercicio;
 import com.github.adminfaces.starter.util.HibernateUtil;
 
@@ -26,6 +28,7 @@ public class TafExercicioController implements Serializable {
 
 private static final long serialVersionUID = 1L;
 	
+	private Session sessao;
 	private TafExercicio tafexercicio;
 	private List<TafExercicio> tafexercicios;
 	
@@ -36,13 +39,13 @@ private static final long serialVersionUID = 1L;
 	
 	@PostConstruct
 	public void inicializa() {
+		sessao = HibernateUtil.getFabricaDeSessoes().openSession();
 		tafexercicio = new TafExercicio(); 
 		listarTodas();
 		listarTafs();
 	}
 	
 	public void salvar () {
-		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
 		Transaction t = null;
 			try {	
 				Taf tx = tc.ultimoTAF();
@@ -85,7 +88,6 @@ private static final long serialVersionUID = 1L;
 		}
 	
 	public void exclui () {
-		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
 		Transaction t = null;
 		try {
 			t = sessao.beginTransaction();
@@ -104,7 +106,6 @@ private static final long serialVersionUID = 1L;
 	}
 	
 	public void listarTodas() {
-		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
 		try {
 			CriteriaQuery<TafExercicio> cq = sessao.getCriteriaBuilder().createQuery(TafExercicio.class);
 			cq.from(TafExercicio.class);
@@ -117,7 +118,6 @@ private static final long serialVersionUID = 1L;
 	}
 	
 	public void listarExercicios() {
-		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
 		try {
 			CriteriaQuery<Exercicio> cq = sessao.getCriteriaBuilder().createQuery(Exercicio.class);
 			cq.from(Exercicio.class);
@@ -130,7 +130,6 @@ private static final long serialVersionUID = 1L;
 	}
 	
 	public void listarTafs() {
-		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
 		try {
 			CriteriaQuery<Taf> cq = sessao.getCriteriaBuilder().createQuery(Taf.class);
 			cq.from(Taf.class);
@@ -143,24 +142,14 @@ private static final long serialVersionUID = 1L;
 	}
 	
 	public List<TafExercicio> filtrarExercicios(Taf tafAux) {
-		List<TafExercicio> exerciciosfiltrados = new ArrayList<TafExercicio>();
- 		Session sessao = HibernateUtil.getFabricaDeSessoes().openSession();
-		try {
-			if(tafAux != null) {
-				CriteriaQuery<TafExercicio> cq = sessao.getCriteriaBuilder().createQuery(TafExercicio.class);
-				cq.from(TafExercicio.class);
-				exerciciosfiltrados = sessao.createQuery(cq).getResultList();
-				exerciciosfiltrados.removeIf(s -> s.getTaf().getId() != tafAux.getId());
-			} else
-				System.out.println("Sem Taf selecionado");	
-		} catch (Exception e) {
-			addErro("ERRO", "Erro ao filtrar tafs");
-		} finally {
-			sessao.close();
-		}	
-		return exerciciosfiltrados;
+		if(tafAux != null) {
+			String sql = "SELECT te FROM TafExercicio te WHERE te.taf = " + tafAux.getId();
+			TypedQuery<TafExercicio> query = sessao.createQuery(sql, TafExercicio.class);
+			return query.getResultList();
+		}else
+			System.out.println("Sem Taf selecionado");	
+		return null;
 	}
-
 	
 	public void editar(ActionEvent evt) {
 		tafexercicio = (TafExercicio)evt.getComponent().getAttributes().get("tafEdita");
